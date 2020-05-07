@@ -245,14 +245,15 @@ and/or `PLAYCANVAS_BAD_FOLDER_REG`.
 
 * Create your own PlayCanvas branch of your team's project
 * Create a git branch for your work, and make it your local target directory
+* Create a [`pcignore.txt`](#the-pcignoretxt-file) file, listing all files 
+you intend to keep in git, create a PlayCanvas checkpoint that includes your `pcignore.txt`
 * Launch `pcwatch`
 * Start editing/creating files locally in your own text editor
 * When necessary, merge in `git` the branch of another group member into your branch 
-directly or via a main `git` branch, as usual.
-* Merge the same branches in PlayCanvas. It does not matter how you resolve conflicts 
-in textual files during PlayCanvas merge (we will suppress them for `playcanvas-sync` users in the future).
-* Use `pcsync pushAll` to apply the `git` merge result to the PlayCanvas merge result.
-* Use `pcsync diffAll` to verify that local and remote files are in sync.
+* Use `pcsync pushAll` to update your remote branch after git merge
+* Merge the same branches in PlayCanvas. Because of your `pcignore.txt`,
+your remote copies of git merge result files will not be affected
+* Use `pcsync diffAll` to verify that local and remote files are still in sync
 
 ## Case 2: Multiple users working on the same PlayCanvas branch, with `git`
  
