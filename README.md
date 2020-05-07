@@ -153,7 +153,7 @@ that contain a slash.
 
 # Installation
 
-Download or clone https://github.sc-corp.net/PlayCanvas/local-scrip
+Download or clone https://github.com/playcanvas/playcanvas-sync
 
 On a Mac, install Command Line Tools. On Catalina, also do:
 ```
@@ -166,7 +166,7 @@ From the `playcanvas-sync` folder run:
 npm install
 ```
 
-After this, to install globally, run:
+After this, to install globally (this is optional), run:
 
 ```
 npm install -g
