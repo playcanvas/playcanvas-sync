@@ -1,0 +1,22 @@
+{
+  "name": "local-script",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "dependencies": {
+    "commander": "^4.1.1",
+    "diff": "^4.0.2",
+    "find-process": "^1.4.3",
+    "gitignore-parser": "0.0.2",
+    "mkdirp": "^1.0.3",
+    "nsfw": "^1.2.7",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.8"
+  },
+  "bin": {
+    "pcsync": "./pcsync.js",
+    "pcwatch": "./pcwatch.js"
+  }
+}
