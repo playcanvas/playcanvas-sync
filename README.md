@@ -160,7 +160,7 @@ On a Mac, install Command Line Tools. On Catalina, also do:
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 ```
 
-From the `local-script` folder run:
+From the `playcanvas-sync` folder run:
 
 ```
 npm install
@@ -178,7 +178,7 @@ To uninstall globally, run
 npm uninstall -g
 ```
 
-(all from the `local-script` folder).
+(all from the `playcanvas-sync` folder).
 
 # Config Variables
 
@@ -250,7 +250,7 @@ and/or `PLAYCANVAS_BAD_FOLDER_REG`.
 * When necessary, merge in `git` the branch of another group member into your branch 
 directly or via a main `git` branch, as usual.
 * Merge the same branches in PlayCanvas. It does not matter how you resolve conflicts 
-in textual files during PlayCanvas merge (we will suppress them for `local-script` users in the future).
+in textual files during PlayCanvas merge (we will suppress them for `playcanvas-sync` users in the future).
 * Use `pcsync pushAll` to apply the `git` merge result to the PlayCanvas merge result.
 * Use `pcsync diffAll` to verify that local and remote files are in sync.
 
