@@ -11,7 +11,7 @@
     "find-process": "^1.4.3",
     "gitignore-parser": "0.0.2",
     "mkdirp": "^1.0.3",
-    "nsfw": "^1.2.7",
+    "nsfw": "^2.0.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.8"
   },
