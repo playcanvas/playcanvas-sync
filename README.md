@@ -153,6 +153,10 @@ that contain a slash.
 
 # Installation
 
+We recommend using a recent stable version of `node`. Dependencies may
+not compile if your version of `node` is too old. `nvm` offers a
+convenient way to run multiple versions of `node` on your machine.
+
 Download or clone https://github.com/playcanvas/playcanvas-sync
 
 On a Mac, install Command Line Tools. On Catalina, also do:
