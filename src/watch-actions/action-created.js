@@ -1,5 +1,5 @@
 const path = require('path');
-const fs = require('fs-extra');
+const fs = require('fs');
 const CUtils = require('../utils/common-utils');
 
 class ActionCreated {
@@ -31,8 +31,8 @@ class ActionCreated {
     this.assetName = path.basename(this.fullPath);
   }
 
-  async createRemote() {
-    const stat = await fs.stat(this.fullPath);
+  createRemote() {
+    const stat = fs.statSync(this.fullPath);
 
     if (stat.isFile()) {
       return this.createFile();
