@@ -34,10 +34,11 @@ TEXTUAL_ASSET_TYPES.forEach(t => {
 });
 
 const TypeUtils = {
-  isTextualAsset: function(h, conf) {
-    return TypeUtils.isTextualType(h.type) &&
-        TypeUtils.isTextualFile(h.name) &&
-        conf.ignParser.isMatch(h.remotePath);
+  isActiveAsset: function(h, conf) {
+    return TypeUtils.isForceFile(h.remotePath, conf) ||
+        (TypeUtils.isTextualType(h.type) &&
+            TypeUtils.isTextualFile(h.name) &&
+            conf.ignParser.isMatch(h.remotePath));
   },
 
   isTextualType: function (t) {
@@ -48,6 +49,12 @@ const TypeUtils = {
     const ext = path.extname(s);
 
     return TEXTUAL_EXTENSIONS[ext];
+  },
+
+  isForceFile: function (remotePath, conf) {
+    const r = conf.PLAYCANVAS_FORCE_REG;
+
+    return r && r.test(remotePath);
   }
 };
 

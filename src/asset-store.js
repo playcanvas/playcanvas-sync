@@ -16,7 +16,7 @@ class AssetStore {
 
         this.folderAssets = [];
 
-        this.foldersWithTxt = {};
+        this.foldersWithActive = {};
     }
 
     async populate() {
@@ -26,7 +26,7 @@ class AssetStore {
 
         this.allAssets.forEach(this.addToPaths, this);
 
-        this.allAssets.forEach(this.addToTextual, this);
+        this.allAssets.forEach(this.addToActive, this);
 
         this.allAssets.forEach(h => this.addToFolder(h, true));
 
@@ -52,7 +52,7 @@ class AssetStore {
 
         this.addToPaths(h);
 
-        this.addToTextual(h);
+        this.addToActive(h);
 
         this.addToFolder(h, false);
     }
@@ -111,18 +111,18 @@ class AssetStore {
         this.idToPath[h.id] = p;
     }
 
-    addToTextual(h) {
-        if (TypeUtils.isTextualAsset(h, this.conf)) {
+    addToActive(h) {
+        if (TypeUtils.isActiveAsset(h, this.conf)) {
             this.activeAssets.push(h);
 
-            CUtils.addPathToFolders(h, this.idToAsset, this.foldersWithTxt);
+            CUtils.addPathToFolders(h, this.idToAsset, this.foldersWithActive);
         }
     }
 
-    addToFolder(h, checkTxt) {
-        const txtOk = !checkTxt || this.foldersWithTxt[h.id];
+    addToFolder(h, needCheck) {
+        const checkOk = !needCheck || this.foldersWithActive[h.id];
 
-        const shouldAdd = txtOk && h.type === 'folder';
+        const shouldAdd = checkOk && h.type === 'folder';
 
         if (shouldAdd) {
             this.folderAssets.push(h);
