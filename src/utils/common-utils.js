@@ -107,15 +107,22 @@ const CUtils = {
     },
 
     isBadFile: function (name, remotePath, conf) {
-        return conf.PLAYCANVAS_BAD_FILE_REG.test(name) ||
-            !TypeUtils.isTextualFile(name) ||
-            !conf.ignParser.isMatch(remotePath);
+        return !CUtils.isForceFile(remotePath, conf) &&
+            (conf.PLAYCANVAS_BAD_FILE_REG.test(name) ||
+                !TypeUtils.isTextualFile(name) ||
+                !conf.ignParser.isMatch(remotePath));
     },
 
     isBadDir: function (s, conf) {
         s = PathUtils.fullLocalToRemotePath(s, conf.PLAYCANVAS_TARGET_DIR);
 
         return conf.PLAYCANVAS_BAD_FOLDER_REG.test(s);
+    },
+
+    isForceFile: function (remotePath, conf) {
+        const r = conf.PLAYCANVAS_FORCE_REG;
+
+        return r && r.test(remotePath);
     },
 
     wrapUserErrors: async function (callback, args) {
@@ -296,6 +303,12 @@ const CUtils = {
         e.directory = e.newDirectory;
 
         e.file = e.newFile;
+    },
+
+    checkSetEnv: function (k, v) {
+        if (v) {
+            process.env[k] = v;
+        }
     }
 };
 
