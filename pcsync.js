@@ -26,6 +26,7 @@ program
 program
     .command('pushAll')
     .description('upload all local files, overwriting their remote counterparts')
+    .option('-r, --regexp', 'handle files matching the provided regular expression')
     .action(runOverwriteAllRemote);
 
 program
@@ -71,7 +72,9 @@ function runOverwriteAllLocal () {
     });
 }
 
-function runOverwriteAllRemote () {
+function runOverwriteAllRemote (cmdObj) {
+    CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', cmdObj.regexp);
+
     SyncUtils.compareAndPrompt(() => {
         return new OverwriteAllRemoteWithLocal().run();
     });

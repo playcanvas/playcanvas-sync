@@ -17,6 +17,7 @@ const requiredFields = [
 
 const optionalFields = [
     'PLAYCANVAS_INCLUDE_REG',
+    'PLAYCANVAS_FORCE_REG',
     'PLAYCANVAS_DRY_RUN',
     'PLAYCANVAS_VERBOSE'
 ];
@@ -38,6 +39,7 @@ const integerFields = [
 
 const regexFields = [
     'PLAYCANVAS_INCLUDE_REG',
+    'PLAYCANVAS_FORCE_REG',
     'PLAYCANVAS_BAD_FILE_REG',
     'PLAYCANVAS_BAD_FOLDER_REG'
 ];
