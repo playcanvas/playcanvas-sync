@@ -1,9 +1,7 @@
-const path = require('path');
 const ActionCreated = require('../watch-actions/action-created');
 const CUtils = require('../utils/common-utils');
 const WatchUtils = require('../watch-actions/watch-utils');
 const ComputeDiffAll = require('./compute-diff-all');
-const SyncUtils = require('./sync-utils');
 
 class OverwriteAllRemoteWithLocal {
   constructor(limitToItems) {
