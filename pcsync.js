@@ -11,6 +11,7 @@ const program = require('commander');
 program
     .command('diffAll')
     .description('compare all local and remote files and folders')
+    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
     .action(runCompAll);
 
 program
@@ -21,12 +22,13 @@ program
 program
     .command('pullAll')
     .description('download all remote files, overwriting their local counterparts')
+    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
     .action(runOverwriteAllLocal);
 
 program
     .command('pushAll')
     .description('upload all local files, overwriting their remote counterparts')
-    .option('-r, --regexp', 'handle files matching the provided regular expression')
+    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
     .action(runOverwriteAllRemote);
 
 program
@@ -54,7 +56,9 @@ program
     .description('list assets matched by pcignore.txt')
     .action(runParse);
 
-function runCompAll () {
+function runCompAll (cmdObj) {
+    CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', cmdObj.regexp);
+
     CUtils.wrapUserErrors(() => {
         return SyncUtils.reportDiffAll();
     });
@@ -66,7 +70,9 @@ function runDiff (filePath) {
     });
 }
 
-function runOverwriteAllLocal () {
+function runOverwriteAllLocal (cmdObj) {
+    CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', cmdObj.regexp);
+
     SyncUtils.compareAndPrompt(() => {
         return new OverwriteAllLocalWithRemote().run();
     });
