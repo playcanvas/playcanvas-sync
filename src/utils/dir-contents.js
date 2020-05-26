@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const PathUtils = require('./path-utils');
 const CUtils = require('./common-utils');
+const TypeUtils = require('./type-utils');
 
 class DirContents {
   constructor(conf) {
@@ -59,7 +60,7 @@ class DirContents {
   }
 
   isGoodFile(stat, name, remotePath) {
-    return stat.isFile() && !CUtils.isBadFile(name, remotePath, this.conf);
+    return stat.isFile() && !TypeUtils.isBadFile(name, remotePath, this.conf);
   }
 
   isGoodDir(stat, fullPath) {

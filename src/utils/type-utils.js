@@ -34,6 +34,14 @@ TEXTUAL_ASSET_TYPES.forEach(t => {
 });
 
 const TypeUtils = {
+  isBadFile: function (name, remotePath, conf) {
+    return !TypeUtils.isForceFile(remotePath, conf) &&
+        (conf.PLAYCANVAS_BAD_FILE_REG.test(name) ||
+            !TypeUtils.isTextualFile(name) ||
+            !conf.ignParser.isMatch(remotePath));
+  },
+
+
   isActiveAsset: function(h, conf) {
     return TypeUtils.isForceFile(h.remotePath, conf) ||
         (TypeUtils.isTextualType(h.type) &&

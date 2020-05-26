@@ -106,13 +106,6 @@ const CUtils = {
         });
     },
 
-    isBadFile: function (name, remotePath, conf) {
-        return !TypeUtils.isForceFile(remotePath, conf) &&
-            (conf.PLAYCANVAS_BAD_FILE_REG.test(name) ||
-                !TypeUtils.isTextualFile(name) ||
-                !conf.ignParser.isMatch(remotePath));
-    },
-
     isBadDir: function (s, conf) {
         s = PathUtils.fullLocalToRemotePath(s, conf.PLAYCANVAS_TARGET_DIR);
 
