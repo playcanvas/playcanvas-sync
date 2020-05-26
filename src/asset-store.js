@@ -12,7 +12,7 @@ class AssetStore {
 
         this.idToPath = {};
 
-        this.textAssets = [];
+        this.activeAssets = [];
 
         this.folderAssets = [];
 
@@ -60,7 +60,7 @@ class AssetStore {
     handleDeletedAsset(id) {
         this.allAssets = CUtils.rmObjById(this.allAssets, id);
 
-        this.textAssets = CUtils.rmObjById(this.textAssets, id);
+        this.activeAssets = CUtils.rmObjById(this.activeAssets, id);
 
         this.folderAssets = CUtils.rmObjById(this.folderAssets, id);
 
@@ -113,7 +113,7 @@ class AssetStore {
 
     addToTextual(h) {
         if (TypeUtils.isTextualAsset(h, this.conf)) {
-            this.textAssets.push(h);
+            this.activeAssets.push(h);
 
             CUtils.addPathToFolders(h, this.idToAsset, this.foldersWithTxt);
         }

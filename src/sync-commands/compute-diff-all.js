@@ -51,7 +51,7 @@ class ComputeDiffAll {
 
     this.remote = {
       folders: this.conf.store.folderAssets,
-      files: this.conf.store.textAssets
+      files: this.conf.store.activeAssets
     };
 
     this.local = new DirContents(this.conf).run();
