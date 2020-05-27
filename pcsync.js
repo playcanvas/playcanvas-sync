@@ -87,12 +87,16 @@ function runOverwriteAllRemote (cmdObj) {
 }
 
 function runDownloadSingle (filePath) {
+    CUtils.setForceEnv(filePath);
+
     CUtils.wrapUserErrors(() => {
         return SCUtils.downloadSingleFile(filePath);
     });
 }
 
 function runUploadSingle (filePath) {
+    CUtils.setForceEnv(filePath);
+
     CUtils.wrapUserErrors(() => {
         return SCUtils.uploadSingleFile(filePath);
     });

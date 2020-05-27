@@ -296,6 +296,20 @@ const CUtils = {
         if (v) {
             process.env[k] = v;
         }
+    },
+
+    setForceEnv: function(remotePath) {
+        let s = PathUtils.rmFirstSlash(remotePath);
+
+        s = CUtils.escapeRegExp(s);
+
+        s = `^${s}$`;
+
+        CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', s);
+    },
+
+    escapeRegExp: function(s) { // from MDN
+        return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 };
 
