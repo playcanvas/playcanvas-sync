@@ -118,9 +118,9 @@ class ComputeDiffAll {
   setAnyDiffFound() {
     const allResArrays = [
       this.res.filesThatDiffer,
-      this.res.extraItems.local.folders,
+      // this.res.extraItems.local.folders,
       this.res.extraItems.local.files,
-      this.res.extraItems.remote.folders,
+      // this.res.extraItems.remote.folders,
       this.res.extraItems.remote.files
     ];
 
