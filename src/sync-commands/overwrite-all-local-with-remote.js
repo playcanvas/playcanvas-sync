@@ -15,6 +15,8 @@ class OverwriteAllLocalWithRemote {
     }
 
     async init() {
+        global.OPERATION_TYPE = 'overwrite_local';
+
         this.diff = await new ComputeDiffAll(this.limitToItems).run();
 
         this.conf = this.diff.conf;

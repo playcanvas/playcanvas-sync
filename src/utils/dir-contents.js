@@ -17,7 +17,9 @@ class DirContents {
   run() {
     this.recursiveCall([]);
 
-    PathUtils.rmEmptyFolders(this.result);
+    if (global.OPERATION_TYPE !== 'overwrite_local') {
+      PathUtils.rmEmptyFolders(this.result);
+    }
 
     return this.result;
   }

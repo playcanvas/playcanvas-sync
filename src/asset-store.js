@@ -120,7 +120,9 @@ class AssetStore {
     }
 
     addToFolder(h, needCheck) {
-        const checkOk = !needCheck || this.foldersWithActive[h.id];
+        const checkOk = !needCheck ||
+            this.foldersWithActive[h.id] ||
+            global.OPERATION_TYPE === 'overwrite_remote';
 
         const shouldAdd = checkOk && h.type === 'folder';
 
