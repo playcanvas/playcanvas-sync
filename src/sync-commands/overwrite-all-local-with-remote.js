@@ -1,6 +1,5 @@
 const CUtils = require('../utils/common-utils');
 const ComputeDiffAll = require('./compute-diff-all');
-const SyncUtils = require('./sync-utils');
 
 class OverwriteAllLocalWithRemote {
   constructor(limitToItems) {
