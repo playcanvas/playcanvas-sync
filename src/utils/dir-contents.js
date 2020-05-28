@@ -17,7 +17,7 @@ class DirContents {
   run() {
     this.recursiveCall([]);
 
-    if (global.OPERATION_TYPE !== 'overwrite_local') {
+    if (!CUtils.isOperationType('overwrite_local')) {
       PathUtils.rmEmptyFolders(this.result);
     }
 
