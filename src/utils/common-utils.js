@@ -318,6 +318,25 @@ const CUtils = {
 
     isOperationType: function (v) {
         return global.OPERATION_TYPE === v;
+    },
+
+    handleForceRegOpts: function (cmdObj) {
+        const ext = cmdObj.extensions;
+
+        const v = cmdObj.regexp ||
+            (ext && CUtils.extToReg(ext));
+
+        CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', v);
+    },
+
+    extToReg: function (extensions) {
+        let a = extensions.split(',');
+
+        a = a.map(s => '\\.' + s);
+
+        const reg = a.join('|');
+
+        return `(${reg})$`;
     }
 };
 

@@ -12,6 +12,7 @@ program
     .command('diffAll')
     .description('compare all local and remote files and folders')
     .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'handle files with provided extensions')
     .action(runCompAll);
 
 program
@@ -23,12 +24,14 @@ program
     .command('pullAll')
     .description('download all remote files, overwriting their local counterparts')
     .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'handle files with provided extensions')
     .action(runOverwriteAllLocal);
 
 program
     .command('pushAll')
     .description('upload all local files, overwriting their remote counterparts')
     .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'handle files with provided extensions')
     .action(runOverwriteAllRemote);
 
 program
@@ -57,7 +60,7 @@ program
     .action(runParse);
 
 function runCompAll (cmdObj) {
-    CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', cmdObj.regexp);
+    CUtils.handleForceRegOpts(cmdObj);
 
     CUtils.wrapUserErrors(() => {
         return SyncUtils.reportDiffAll();
@@ -71,7 +74,7 @@ function runDiff (filePath) {
 }
 
 function runOverwriteAllLocal (cmdObj) {
-    CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', cmdObj.regexp);
+    CUtils.handleForceRegOpts(cmdObj);
 
     SyncUtils.compareAndPrompt(() => {
         return new OverwriteAllLocalWithRemote().run();
@@ -79,7 +82,7 @@ function runOverwriteAllLocal (cmdObj) {
 }
 
 function runOverwriteAllRemote (cmdObj) {
-    CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', cmdObj.regexp);
+    CUtils.handleForceRegOpts(cmdObj);
 
     SyncUtils.compareAndPrompt(() => {
         return new OverwriteAllRemoteWithLocal().run();
