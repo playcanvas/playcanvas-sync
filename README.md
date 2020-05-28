@@ -4,6 +4,9 @@ The `pcsync` and `pcwatch` utilities allow editing copies of
 JavaScript and other textual files of a PlayCanvas project
 locally, on your own computer, in a text editor of your choice.
 
+`pcsync` also allows pushing and pulling [non-text](#non-text-files), such as
+images and models, between your machine and PlayCanvas, individually or all at once.
+
 In addition, if your project has a file called [`pcignore.txt`](#the-pcignoretxt-file),
 PlayCanvas merge will not affect the files listed in it,
 and the operation of `pcsync` and `pcwatch` will be restricted only to those files.
@@ -109,7 +112,7 @@ for most workflows.
 In some rare cases you may need `pcsync` and `pcwatch` to
 work with more files than listed in `pcignore.txt`. This can be accomplished with
 the `PLAYCANVAS_INCLUDE_REG` config variable, which is a regular expression to
-compare with each file's full path from the root of the target directory, including
+test each file's full path from the root of the target directory, including
 the file name.
 
 Before a PlayCanvas merge, make sure that the latest checkpoint of the destination
@@ -126,7 +129,7 @@ The PlayCanvas merge will ignore the files in `pcignore.txt`
 and thus your merge result checkpoint will have the correctly merged
 versions of both your locally- and PlayCanvas-managed assets.
 
-# `pcignore.txt` Syntax
+## `pcignore.txt` Syntax
 
 `pcignore.txt` consists of one or more lines, each of which is
 either a path (with the same syntax as .gitignore), or one of the following:
@@ -150,6 +153,27 @@ It will list all existing files that match your current `pcignore.txt`.
 Because of some limitations in the node library used to parse lines with gitignore syntax, 
 use a space and not * or ? to match a space in a file or folder name in gitignore lines
 that contain a slash.
+
+# Non-text Files
+
+`push`, `pull` (single file) and `rm` work with non-text file arguments without any special options.
+
+`pushAll`, `pullAll` and `diffAll` have two options that make them work with matching
+files only (including non-text):
+
+```
+  -e, --ext <extensions>  handle files with provided extensions
+  -r, --regexp <regexp>   handle files matching the provided regular expression
+```
+
+For instance:
+
+```
+pcsync diffAll -e jpeg,png
+pcsync pushAll -r "\\.(png|jpeg)"
+```
+
+The regular expression tests each file's full path from the root of the target directory.
 
 # Installation
 
