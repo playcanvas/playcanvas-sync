@@ -310,6 +310,14 @@ const CUtils = {
 
     escapeRegExp: function(s) { // from MDN
         return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    },
+
+    setOperationType: function (v) {
+        global.OPERATION_TYPE = v;
+    },
+
+    isOperationType: function (v) {
+        return global.OPERATION_TYPE === v;
     }
 };
 
