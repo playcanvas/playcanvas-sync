@@ -109,6 +109,8 @@ function runRename (oldPath, newPath) {
 }
 
 function runDelete (filePath) {
+    CUtils.setForceEnv(filePath);
+
     CUtils.wrapUserErrors(() => {
         return SCUtils.deleteItem(filePath);
     });
