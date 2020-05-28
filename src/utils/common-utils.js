@@ -321,10 +321,8 @@ const CUtils = {
     },
 
     handleForceRegOpts: function (cmdObj) {
-        const ext = cmdObj.extensions;
-
         const v = cmdObj.regexp ||
-            (ext && CUtils.extToReg(ext));
+            (cmdObj.ext && CUtils.extToReg(cmdObj.ext));
 
         CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', v);
     },
