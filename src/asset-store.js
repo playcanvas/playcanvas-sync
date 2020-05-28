@@ -28,7 +28,7 @@ class AssetStore {
 
         this.allAssets.forEach(this.addToActive, this);
 
-        this.allAssets.forEach(h => this.addToFolder(h, true));
+        this.allAssets.forEach(this.checkAddFolder, this);
 
         return this;
     }
@@ -54,7 +54,7 @@ class AssetStore {
 
         this.addToActive(h);
 
-        this.addToFolder(h, false);
+        this.addToFolder(h);
     }
 
     handleDeletedAsset(id) {
@@ -119,16 +119,18 @@ class AssetStore {
         }
     }
 
-    addToFolder(h, needCheck) {
-        const checkOk = !needCheck ||
-            this.foldersWithActive[h.id] ||
-            CUtils.isOperationType('overwrite_remote');
-
-        const shouldAdd = checkOk && h.type === 'folder';
+    checkAddFolder(h) {
+        const shouldAdd = h.type === 'folder' &&
+            (this.foldersWithActive[h.id] ||
+                CUtils.isOperationType('overwrite_remote'));
 
         if (shouldAdd) {
-            this.folderAssets.push(h);
+            this.addToFolder(h);
         }
+    }
+
+    addToFolder(h) {
+        this.folderAssets.push(h);
     }
 
     assertNew(id) {
