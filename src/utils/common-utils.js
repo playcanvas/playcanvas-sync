@@ -106,12 +106,6 @@ const CUtils = {
         });
     },
 
-    isBadFile: function (name, remotePath, conf) {
-        return conf.PLAYCANVAS_BAD_FILE_REG.test(name) ||
-            !TypeUtils.isTextualFile(name) ||
-            !conf.ignParser.isMatch(remotePath);
-    },
-
     isBadDir: function (s, conf) {
         s = PathUtils.fullLocalToRemotePath(s, conf.PLAYCANVAS_TARGET_DIR);
 
@@ -296,6 +290,51 @@ const CUtils = {
         e.directory = e.newDirectory;
 
         e.file = e.newFile;
+    },
+
+    checkSetEnv: function (k, v) {
+        if (v) {
+            process.env[k] = v;
+        }
+    },
+
+    setForceEnv: function(remotePath) {
+        let s = PathUtils.rmFirstSlash(remotePath);
+
+        s = CUtils.escapeRegExp(s);
+
+        s = `^${s}$`;
+
+        CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', s);
+    },
+
+    escapeRegExp: function(s) { // from MDN
+        return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    },
+
+    setOperationType: function (v) {
+        global.OPERATION_TYPE = v;
+    },
+
+    isOperationType: function (v) {
+        return global.OPERATION_TYPE === v;
+    },
+
+    handleForceRegOpts: function (cmdObj) {
+        const v = cmdObj.regexp ||
+            (cmdObj.ext && CUtils.extToReg(cmdObj.ext));
+
+        CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', v);
+    },
+
+    extToReg: function (extensions) {
+        let a = extensions.split(',');
+
+        a = a.map(s => '\\.' + s);
+
+        const reg = a.join('|');
+
+        return `(${reg})$`;
     }
 };
 

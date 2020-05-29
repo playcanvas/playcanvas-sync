@@ -34,12 +34,30 @@ TEXTUAL_ASSET_TYPES.forEach(t => {
 });
 
 const TypeUtils = {
-  isTextualAsset: function(h, conf) {
+  isBadFile: function (name, remotePath, conf) {
+    return TypeUtils.hasForceReg(conf) ?
+        !TypeUtils.isForceFile(remotePath, conf) :
+        TypeUtils.isBadTextual(name, remotePath, conf);
+  },
+
+  isBadTextual: function (name, remotePath, conf) {
+    return conf.PLAYCANVAS_BAD_FILE_REG.test(name) ||
+        !TypeUtils.isTextualFile(name) ||
+        !conf.ignParser.isMatch(remotePath);
+  },
+
+  isActiveAsset: function(h, conf) {
+    return TypeUtils.hasForceReg(conf) ?
+        TypeUtils.isForceFile(h.remotePath, conf) :
+        TypeUtils.isActiveTextual(h, conf);
+  },
+
+  isActiveTextual: function(h, conf) {
     return TypeUtils.isTextualType(h.type) &&
         TypeUtils.isTextualFile(h.name) &&
         conf.ignParser.isMatch(h.remotePath);
   },
-
+  
   isTextualType: function (t) {
     return TEXTUAL_ASSET_TYPES.includes(t);
   },
@@ -48,6 +66,14 @@ const TypeUtils = {
     const ext = path.extname(s);
 
     return TEXTUAL_EXTENSIONS[ext];
+  },
+
+  hasForceReg: function (conf) {
+    return conf.PLAYCANVAS_FORCE_REG;
+  },
+
+  isForceFile: function (remotePath, conf) {
+    return conf.PLAYCANVAS_FORCE_REG.test(remotePath);
   }
 };
 

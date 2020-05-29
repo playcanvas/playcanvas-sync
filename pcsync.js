@@ -11,6 +11,8 @@ const program = require('commander');
 program
     .command('diffAll')
     .description('compare all local and remote files and folders')
+    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'handle files with provided extensions')
     .action(runCompAll);
 
 program
@@ -21,11 +23,15 @@ program
 program
     .command('pullAll')
     .description('download all remote files, overwriting their local counterparts')
+    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'handle files with provided extensions')
     .action(runOverwriteAllLocal);
 
 program
     .command('pushAll')
     .description('upload all local files, overwriting their remote counterparts')
+    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'handle files with provided extensions')
     .action(runOverwriteAllRemote);
 
 program
@@ -53,7 +59,9 @@ program
     .description('list assets matched by pcignore.txt')
     .action(runParse);
 
-function runCompAll () {
+function runCompAll (cmdObj) {
+    CUtils.handleForceRegOpts(cmdObj);
+
     CUtils.wrapUserErrors(() => {
         return SyncUtils.reportDiffAll();
     });
@@ -65,25 +73,33 @@ function runDiff (filePath) {
     });
 }
 
-function runOverwriteAllLocal () {
+function runOverwriteAllLocal (cmdObj) {
+    CUtils.handleForceRegOpts(cmdObj);
+
     SyncUtils.compareAndPrompt(() => {
         return new OverwriteAllLocalWithRemote().run();
     });
 }
 
-function runOverwriteAllRemote () {
+function runOverwriteAllRemote (cmdObj) {
+    CUtils.handleForceRegOpts(cmdObj);
+
     SyncUtils.compareAndPrompt(() => {
         return new OverwriteAllRemoteWithLocal().run();
     });
 }
 
 function runDownloadSingle (filePath) {
+    CUtils.setForceEnv(filePath);
+
     CUtils.wrapUserErrors(() => {
         return SCUtils.downloadSingleFile(filePath);
     });
 }
 
 function runUploadSingle (filePath) {
+    CUtils.setForceEnv(filePath);
+
     CUtils.wrapUserErrors(() => {
         return SCUtils.uploadSingleFile(filePath);
     });
@@ -96,6 +112,8 @@ function runRename (oldPath, newPath) {
 }
 
 function runDelete (filePath) {
+    CUtils.setForceEnv(filePath);
+
     CUtils.wrapUserErrors(() => {
         return SCUtils.deleteItem(filePath);
     });

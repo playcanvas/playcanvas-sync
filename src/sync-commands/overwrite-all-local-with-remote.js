@@ -1,51 +1,52 @@
 const CUtils = require('../utils/common-utils');
 const ComputeDiffAll = require('./compute-diff-all');
-const SyncUtils = require('./sync-utils');
 
 class OverwriteAllLocalWithRemote {
-  constructor(limitToItems) {
-    this.limitToItems = limitToItems;
-  }
+    constructor(limitToItems) {
+        this.limitToItems = limitToItems;
+    }
 
-  async run() {
-    await this.init();
+    async run() {
+        await this.init();
 
-    this.handleAllFolders();
+        this.handleAllFolders();
 
-    await this.handleAllFiles();
-  }
+        await this.handleAllFiles();
+    }
 
-  async init() {
-    this.diff = await new ComputeDiffAll(this.limitToItems).run();
+    async init() {
+        CUtils.setOperationType('overwrite_local');
 
-    this.conf = this.diff.conf;
-  }
+        this.diff = await new ComputeDiffAll(this.limitToItems).run();
 
-  async handleAllFolders() {
-    CUtils.sortByStrField(this.diff.extraItems.remote.folders, 'remotePath');
+        this.conf = this.diff.conf;
+    }
 
-    this.diff.extraItems.remote.folders.forEach(h => {
-      CUtils.makeLocalFolder(h, this.conf);
+    async handleAllFolders() {
+        CUtils.sortByStrField(this.diff.extraItems.remote.folders, 'remotePath');
 
-      CUtils.syncMsg(`Created ${h.remotePath}`);
-    });
-  }
+        this.diff.extraItems.remote.folders.forEach(h => {
+            CUtils.makeLocalFolder(h, this.conf);
 
-  handleAllFiles() {
-    const promises1 = this.diff.filesThatDiffer.map(h => this.fetchFile(h, 'Updated'));
+            CUtils.syncMsg(`Created ${h.remotePath}`);
+        });
+    }
 
-    const promises2 = this.diff.extraItems.remote.files.map(h => this.fetchFile(h, 'Created'));
+    handleAllFiles() {
+        const promises1 = this.diff.filesThatDiffer.map(h => this.fetchFile(h, 'Updated'));
 
-    return Promise.all(promises1.concat(promises2));
-  }
+        const promises2 = this.diff.extraItems.remote.files.map(h => this.fetchFile(h, 'Created'));
 
-  async fetchFile(h, action) {
-    const asset = this.conf.store.pathToAsset[h.remotePath];
+        return Promise.all(promises1.concat(promises2));
+    }
 
-    await this.conf.client.loadAssetToFile(asset, this.conf);
+    async fetchFile(h, action) {
+        const asset = this.conf.store.pathToAsset[h.remotePath];
 
-    CUtils.syncMsg(`${action} ${h.remotePath}`);
-  }
+        await this.conf.client.loadAssetToFile(asset, this.conf);
+
+        CUtils.syncMsg(`${action} ${h.remotePath}`);
+    }
 }
 
 module.exports = OverwriteAllLocalWithRemote;

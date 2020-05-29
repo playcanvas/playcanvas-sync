@@ -58,7 +58,7 @@ const SCUtils = {
 
     const conf = await new GetConfig().run();
 
-    SyncUtils.reportList(conf.store.textAssets, 'Assets matched by pcignore.txt');
+    SyncUtils.reportList(conf.store.activeAssets, 'Assets matched by pcignore.txt');
   }
 };
 

@@ -1,5 +1,6 @@
 const path = require('path');
 const CUtils = require('../utils/common-utils');
+const TypeUtils = require('../utils/type-utils');
 const PathUtils = require('../utils/path-utils');
 const fs = require('fs');
 const nsfw = require('nsfw');
@@ -71,7 +72,7 @@ class IsGoodEvent {
     }
 
     isGoodFile() {
-        return !CUtils.isBadFile(this.evFile, this.remotePath, this.conf);
+        return !TypeUtils.isBadFile(this.evFile, this.remotePath, this.conf);
     }
 
     isGoodDir() {

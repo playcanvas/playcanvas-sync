@@ -51,7 +51,7 @@ class ComputeDiffAll {
 
     this.remote = {
       folders: this.conf.store.folderAssets,
-      files: this.conf.store.textAssets
+      files: this.conf.store.activeAssets
     };
 
     this.local = new DirContents(this.conf).run();
@@ -118,9 +118,9 @@ class ComputeDiffAll {
   setAnyDiffFound() {
     const allResArrays = [
       this.res.filesThatDiffer,
-      this.res.extraItems.local.folders,
+      // this.res.extraItems.local.folders,
       this.res.extraItems.local.files,
-      this.res.extraItems.remote.folders,
+      // this.res.extraItems.remote.folders,
       this.res.extraItems.remote.files
     ];
 
