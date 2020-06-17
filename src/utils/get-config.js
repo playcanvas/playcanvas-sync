@@ -59,6 +59,8 @@ class GetConfig {
       return h.id;
 
     } catch (e) {
+      console.log(e.message);
+
       CUtils.throwFatalError('Failed to retrieve your current PlayCanvas branch. Use your personal api token');
     }
   }

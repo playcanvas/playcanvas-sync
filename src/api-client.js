@@ -3,6 +3,7 @@ const CUtils = require('./utils/common-utils')
 
 const ASSETS_PREF = '/api';
 const EDITOR_PREF = '/editor';
+const HTTPS_PREF_REG = /^https:\/\//;
 
 class ApiClient {
   constructor(baseUrl, apiKey) {
@@ -46,7 +47,7 @@ class ApiClient {
     url = this.fullUrl(url, pref);
 
     if (addToken) {
-      url = `${url}?access_token=${this.apiKey}`; // ok with https
+      url = this.checkAndAddAuth(url);
     }
 
     return request({
@@ -108,6 +109,12 @@ class ApiClient {
     const resp = await this.methodGet(url, EDITOR_PREF, true);
 
     return JSON.parse(resp);
+  }
+
+  checkAndAddAuth (url) {
+    return HTTPS_PREF_REG.test(url) ?
+        `${url}?access_token=${this.apiKey}` :
+        CUtils.throwFatalError(`Non-https url specified: ${url}`);
   }
 }
 
