@@ -3,7 +3,6 @@ const CUtils = require('./utils/common-utils')
 
 const ASSETS_PREF = '/api';
 const EDITOR_PREF = '/editor';
-const HTTPS_PREF_REG = /^https:\/\//;
 
 class ApiClient {
   constructor(baseUrl, apiKey) {
@@ -14,6 +13,8 @@ class ApiClient {
     this.headers = {
       Authorization: `Bearer ${apiKey}`
     };
+
+    CUtils.checkHttps(baseUrl);
   }
 
   postForm (url, data) {
@@ -47,7 +48,7 @@ class ApiClient {
     url = this.fullUrl(url, pref);
 
     if (addToken) {
-      url = this.checkAndAddAuth(url);
+      url = `${url}?access_token=${this.apiKey}`;
     }
 
     return request({
@@ -109,12 +110,6 @@ class ApiClient {
     const resp = await this.methodGet(url, EDITOR_PREF, true);
 
     return JSON.parse(resp);
-  }
-
-  checkAndAddAuth (url) {
-    return HTTPS_PREF_REG.test(url) ?
-        `${url}?access_token=${this.apiKey}` :
-        CUtils.throwFatalError(`Non-https url specified: ${url}`);
   }
 }
 

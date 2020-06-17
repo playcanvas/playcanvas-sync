@@ -7,6 +7,8 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 const TypeUtils = require('./type-utils');
 
+const HTTPS_PREF_REG = /^https:\/\//;
+
 const CUtils = {
     pushArToAr: function(a1, a2) {
         Array.prototype.push.apply(a1, a2);
@@ -335,6 +337,12 @@ const CUtils = {
         const reg = a.join('|');
 
         return `(${reg})$`;
+    },
+
+    checkHttps: function (url) {
+        if (!HTTPS_PREF_REG.test(url)) {
+            CUtils.throwFatalError(`Non-https url specified: ${url}`);
+        }
     }
 };
 
