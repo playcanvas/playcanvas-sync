@@ -1,6 +1,6 @@
 const CUtils = require('./utils/common-utils');
 const TypeUtils = require('./utils/type-utils');
-const LoadAssets = require('./load-assets');
+const CacheUtils = require('./utils/cache-utils');
 
 class AssetStore {
     constructor(conf) {
@@ -20,7 +20,7 @@ class AssetStore {
     }
 
     async populate() {
-        this.allAssets = await new LoadAssets(this.conf).run();
+        this.allAssets = await CacheUtils.fetchAssets(this.conf);
 
         this.allAssets.forEach(this.addToIds, this);
 
