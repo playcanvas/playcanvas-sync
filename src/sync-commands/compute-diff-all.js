@@ -1,6 +1,6 @@
 const GetConfig = require('../utils/get-config');
-const DirContents = require('../utils/dir-contents');
 const CUtils = require('../utils/common-utils');
+const CacheUtils = require('../utils/cache-utils');
 
 class ComputeDiffAll {
   constructor(limitToItems) {
@@ -54,7 +54,7 @@ class ComputeDiffAll {
       files: this.conf.store.activeAssets
     };
 
-    this.local = new DirContents(this.conf).run();
+    this.local = await CacheUtils.getCached(this.conf, 'local_items');
 
     this.applyLimit();
   }

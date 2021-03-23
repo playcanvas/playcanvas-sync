@@ -1,12 +1,24 @@
 const LoadAssets = require('../load-assets');
+const DirContents = require('./dir-contents');
 
 const CacheUtils = {
-    fetchAssets: async function(conf) {
-        if (!CacheUtils.loadedAssets) {
-            CacheUtils.loadedAssets = await new LoadAssets(conf).run();
+    cachedData: {},
+
+    getCached: async function(conf, type) {
+        if (!CacheUtils.cachedData[type]) {
+            CacheUtils.cachedData[type] = await CacheUtils.loadData(conf, type);
         }
 
-        return CacheUtils.loadedAssets;
+        return CacheUtils.cachedData[type];
+    },
+
+    loadData: function(conf, type) {
+        if (type === 'remote_assets') {
+            return new LoadAssets(conf).run();
+
+        } else if (type === 'local_items') {
+            return new DirContents(conf).run();
+        }
     }
 };
 

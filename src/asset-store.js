@@ -20,7 +20,7 @@ class AssetStore {
     }
 
     async populate() {
-        this.allAssets = await CacheUtils.fetchAssets(this.conf);
+        this.allAssets = await CacheUtils.getCached(this.conf, 'remote_assets');
 
         this.allAssets.forEach(this.addToIds, this);
 
