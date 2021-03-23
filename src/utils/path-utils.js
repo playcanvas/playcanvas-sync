@@ -16,10 +16,6 @@ const PathUtils = {
     return s.split('/');
   },
 
-  splitOnOSDelimiter: function (s) {
-    return s.split(path.delimiter);
-  },
-
   rmFirstSlash: function (s) {
     return s.replace(/^[\\/]/, '');
   },
