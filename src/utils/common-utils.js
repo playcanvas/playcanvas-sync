@@ -5,7 +5,6 @@ const UserError = require('./user-error');
 const FatalError = require('./fatal-error');
 const mkdirp = require('mkdirp');
 const path = require('path');
-const TypeUtils = require('./type-utils');
 
 const HTTPS_PREF_REG = /^https:\/\//;
 
@@ -86,10 +85,6 @@ const CUtils = {
 
     replaceCarriage: function (s) { // for windows
         return s.replace(/\r\n?/g, '\n');
-    },
-
-    strToMd5Hash: function (s) {
-        return crypto.createHash('md5').update(s, 'latin1').digest('hex');
     },
 
     fileToMd5Hash: function(file) {
@@ -237,10 +232,6 @@ const CUtils = {
         console.log(s);
     },
 
-    capFirst: function (s) {
-        return s.charAt(0).toUpperCase() + s.slice(1);
-    },
-
     applyItemLimit: function(data, limit) {
         data.folders = data.folders.filter(h => {
             return limit.folders.includes(h.remotePath);
@@ -262,18 +253,8 @@ const CUtils = {
         }
     },
 
-    prettyJson: function (h) {
-        return JSON.stringify(h, null, 2);
-    },
-
     shallowClone: function (h) {
         return Object.assign({}, h);
-    },
-
-    matchFromRegex: function(s, r) {
-        const match = r.exec(s);
-
-        return match ? match[1] : match;
     },
 
     jsonFileToMap: function (p) {
