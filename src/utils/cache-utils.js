@@ -1,5 +1,6 @@
 const LoadAssets = require('../load-assets');
-const DirContents = require('./dir-contents');
+const LocalContents = require('./local-contents');
+const LocalTraversal = require('./local-traversal');
 
 const CacheUtils = {
     cachedData: {},
@@ -17,8 +18,17 @@ const CacheUtils = {
             return new LoadAssets(conf).run();
 
         } else if (type === 'local_items') {
-            return new DirContents(conf).run();
+            return CacheUtils.loadLocalItems(conf);
         }
+    },
+
+    loadLocalItems: function (conf) {
+        const handler = new LocalContents(conf);
+
+        return new LocalTraversal(
+            conf.PLAYCANVAS_TARGET_DIR,
+            handler
+        ).run();
     }
 };
 
