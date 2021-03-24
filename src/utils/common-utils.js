@@ -159,11 +159,7 @@ const CUtils = {
     },
 
     eventHasAsset: function(e, conf) {
-        const fullPath = path.join(e.directory, e.oldFile || e.file);
-
-        const p = PathUtils.fullLocalToRemotePath(fullPath, conf.PLAYCANVAS_TARGET_DIR);
-
-        return conf.store.pathToAsset[p];
+        return conf.store.pathToAsset[e.remotePath];
     },
 
     makeDirP: function(s) {
