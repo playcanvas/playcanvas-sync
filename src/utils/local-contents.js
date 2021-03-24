@@ -8,11 +8,12 @@ class LocalContents {
 
     this.result = {
       files: [],
-      folders: []
+      folders: [],
+      locPathToData: {}
     };
   }
 
-  prepRes() {
+  onTravEnd() {
     if (!CUtils.isOperationType('overwrite_local')) {
       PathUtils.rmEmptyFolders(this.result);
     }
@@ -39,6 +40,8 @@ class LocalContents {
 
   addToRes(field, h) {
     this.result[field].push(h);
+
+    this.result.locPathToData[h.fullPath] = h;
   }
 }
 

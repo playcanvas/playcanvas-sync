@@ -11,7 +11,7 @@ class LocalTraversal {
   async run() {
     await this.recursiveCall([]);
 
-    return this.handler.prepRes();
+    return this.handler.onTravEnd();
   }
 
   async recursiveCall(pathAr) {
