@@ -61,9 +61,6 @@ async function handleGoodEvent(e, conf) {
     if (e.action === nsfw.actions.MODIFIED) {
         await eventModified(e, conf);
 
-    } else if (e.action === nsfw.actions.RENAMED) {
-        await eventRenamed(e, conf);
-
     } else if (e.action === nsfw.actions.DELETED) {
         const remotePath = await WatchUtils.actionDeleted(e, conf);
 
@@ -82,19 +79,6 @@ async function eventModified(e, conf) {
         WatchUtils.reportWatchAction(id, 'Updated', conf);
 
     } else {
-        await eventCreated(e, conf);
-    }
-}
-
-async function eventRenamed(e, conf) {
-    if (CUtils.eventHasAsset(e, conf)) {
-        const id = await new ActionRenamed(e, conf).run();
-
-        WatchUtils.reportWatchAction(id, 'New name', conf);
-
-    } else {
-        CUtils.renameToCreateEvent(e);
-
         await eventCreated(e, conf);
     }
 }
