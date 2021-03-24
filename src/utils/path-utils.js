@@ -117,14 +117,14 @@ const PathUtils = {
 
     return {
       itemName: name,
-      pathArray: pathAr,
-      parentFull: PathUtils.pathArToFullLocal(rootDir, parentAr),
-      parentRemote: PathUtils.arToSlashForwPath(parentAr),
-      remotePath: PathUtils.arToSlashForwPath(pathAr),
       fullPath: fullPath,
+      remotePath: PathUtils.arToSlashForwPath(pathAr),
       isFile: stat.isFile(),
       isDirectory: stat.isDirectory(),
-      modTime: stat.mtime.getTime()
+      modTime: stat.mtime.getTime(),
+      pathArray: pathAr,
+      parentFull: PathUtils.pathArToFullLocal(rootDir, parentAr),
+      parentRemote: PathUtils.arToSlashForwPath(parentAr)
     }
   }
 };
