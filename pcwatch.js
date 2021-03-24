@@ -34,30 +34,30 @@ async function startWatcher() {
 
     const local = await CacheUtils.getCached(conf, 'local_items');
 
-    const rootDir = conf.PLAYCANVAS_TARGET_DIR;
-
-    const handler = new LocalWatcher(rootDir, local, handleEvents);
+    let pathToData = local.locPathToData;
 
     while(true) {
-        await new LocalTraversal(rootDir, handler).run();
-
-        await CUtils.waitMs(1000); // todo
+        pathToData = await watchIteration(conf.PLAYCANVAS_TARGET_DIR, pathToData);
     }
 }
 
-async function handleEvents(events, conf) {
-    const a = WatchUtils.filterEvents(events, conf);
+async function watchIteration(rootDir, pathToData) {
+    const handler = new LocalWatcher(pathToData, handleEvent);
 
-    if (conf.PLAYCANVAS_DRY_RUN) {
-        return;
-    }
+    pathToData = await new LocalTraversal(rootDir, handler).run();
 
-    for (const e of a) {
-        await handleFileEvent(e, conf);
-    }
+    await CUtils.waitMs(1000); // todo
+
+    return pathToData;
 }
 
-async function handleFileEvent(e, conf) {
+async function handleEvent(e, conf) {
+    return WatchUtils.shouldKeepEvent(e, conf) &&
+        !conf.PLAYCANVAS_DRY_RUN &&
+        handleGoodEvent(e, conf);
+}
+
+async function handleGoodEvent(e, conf) {
     if (e.action === nsfw.actions.MODIFIED) {
         await eventModified(e, conf);
 

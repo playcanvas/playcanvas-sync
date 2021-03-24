@@ -52,32 +52,26 @@ const WatchUtils = {
     CUtils.watchMsg(s);
   },
 
-  verboseEvents: function (a, tag, conf) {
+  verboseEvent: function (tag, v, conf) {
     if (conf.PLAYCANVAS_VERBOSE) {
-      CUtils.watchMsg(tag);
+      console.log('------------------');
 
-      a = a.map(WatchUtils.cloneWithActionStr);
+      console.log(tag);
 
-      console.log(a);
+      console.log(v);
+
+      console.log('------------------');
     }
   },
 
-  cloneWithActionStr: function (h) {
-    h = CUtils.shallowClone(h);
+  shouldKeepEvent: function (h, conf) {
+    WatchUtils.verboseEvent('ORIGINAL EVENT:', h, conf);
 
-    h.action = ACTION_TO_NAME[h.action];
+    const res = new IsGoodEvent(h, conf).run();
 
-    return h;
-  },
+    WatchUtils.verboseEvent('SHOULD KEEP:', res, conf);
 
-  filterEvents: function (a, conf) {
-    WatchUtils.verboseEvents(a, 'ALL EVENTS:', conf);
-
-    a = a.filter(h => new IsGoodEvent(h, conf).run());
-
-    WatchUtils.verboseEvents(a, 'EVENTS AFTER BAD REMOVED:', conf);
-
-    return a;
+    return res;
   }
 };
 
