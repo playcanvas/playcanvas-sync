@@ -34,11 +34,9 @@ const SCUtils = {
   deleteItem: async function(filePath) {
     const conf = await new GetConfig().run();
 
-    const p = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, filePath);
+    const fullPath = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, filePath);
 
-    const e = CUtils.fullPathToEventData(p);
-
-    await WatchUtils.actionDeleted(e, conf);
+    await WatchUtils.actionDeleted(fullPath, conf);
 
     CUtils.syncMsg(`Deleted ${filePath}`);
   },

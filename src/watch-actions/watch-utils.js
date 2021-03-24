@@ -19,9 +19,7 @@ const WatchUtils = {
     return assetId;
   },
 
-  actionDeleted: async function (e, conf) {
-    const fullPath = PathUtils.eventToFullPath(e);
-
+  actionDeleted: async function (fullPath, conf) {
     const assetId = CUtils.getAssetId(fullPath, conf);
 
     const remotePath = conf.store.idToPath[assetId];
