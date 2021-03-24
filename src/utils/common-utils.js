@@ -324,6 +324,10 @@ const CUtils = {
         if (!HTTPS_PREF_REG.test(url)) {
             CUtils.throwFatalError(`Non-https url specified: ${url}`);
         }
+    },
+
+    waitMs: function (ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 };
 
