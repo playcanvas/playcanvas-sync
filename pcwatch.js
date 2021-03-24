@@ -7,7 +7,6 @@ const program = require('commander');
 const CUtils = require('./src/utils/common-utils');
 const WatchUtils = require('./src/watch-actions/watch-utils');
 const ActionCreated = require('./src/watch-actions/action-created');
-const ActionRenamed = require('./src/watch-actions/action-renamed');
 const SyncUtils = require('./src/sync-commands/sync-utils');
 const LocalWatcher = require('./src/utils/local-watcher');
 const CacheUtils = require('./src/utils/cache-utils');
