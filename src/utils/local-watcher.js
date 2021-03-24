@@ -27,7 +27,7 @@ class LocalWatcher {
     });
 
     for (const s of removed) {
-      await this.triggerEvent(1, this.origPathToData[s]);
+      await this.triggerEvent('ACTION_DELETED', this.origPathToData[s]);
     }
   }
 
@@ -36,14 +36,14 @@ class LocalWatcher {
 
     const data = this.origPathToData[h.fullPath];
 
-    return data ? this.handleKnownFile(h, data) : this.triggerEvent(0, h);
+    return data ? this.handleKnownFile(h, data) : this.triggerEvent('ACTION_CREATED', h);
   }
 
   async visitDir(h) {
     this.addToCur(h);
 
     if (!this.origPathToData[h.fullPath]) {
-      await this.triggerEvent(0, h)
+      await this.triggerEvent('ACTION_CREATED', h)
     }
 
     return true;
@@ -51,7 +51,7 @@ class LocalWatcher {
 
   handleKnownFile(h, data) {
     if (h.modTime !== data.modTime) {
-      return this.triggerEvent(2, h);
+      return this.triggerEvent('ACTION_MODIFIED', h);
     }
   }
 

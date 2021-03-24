@@ -1,6 +1,7 @@
 const fs = require('fs');
 const CUtils = require('../utils/common-utils');
 const PathUtils = require('../utils/path-utils');
+const TypeUtils = require('../utils/type-utils');
 
 const WatchUtils = {
   actionModified: async function (e, conf) {
@@ -52,7 +53,9 @@ const WatchUtils = {
 
       console.log(h);
 
-      console.log(`SHOULD APPLY TO REMOTE: ${shouldKeep}`);
+      const s = shouldKeep ? 'YES' : 'NO';
+
+      console.log(`SHOULD APPLY TO REMOTE: ${s}`);
 
       console.log('------------------');
     }
