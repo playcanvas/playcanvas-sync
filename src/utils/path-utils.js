@@ -119,6 +119,7 @@ const PathUtils = {
       itemName: name,
       pathArray: pathAr,
       parentFull: PathUtils.pathArToFullLocal(rootDir, parentAr),
+      parentRemote: PathUtils.arToSlashForwPath(parentAr),
       remotePath: PathUtils.arToSlashForwPath(pathAr),
       fullPath: fullPath,
       isFile: stat.isFile(),
