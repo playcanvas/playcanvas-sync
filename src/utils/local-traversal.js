@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const path = require('path');
+const PathUtils = require('./path-utils');
 
 class LocalTraversal {
   constructor(rootDir, handler) {
@@ -15,7 +15,7 @@ class LocalTraversal {
   }
 
   async recursiveCall(pathAr) {
-    const fullPath = this.makeFullPath(pathAr);
+    const fullPath = PathUtils.pathArToFullLocal(this.rootDir, pathAr);
 
     const items = await fs.readdir(fullPath);
 
@@ -24,16 +24,10 @@ class LocalTraversal {
     }
   }
 
-  makeFullPath(pathAr) {
-    const a = [ this.rootDir ].concat(pathAr);
-
-    return path.join.apply(null, a);
-  }
-
   async handleItem(name, pathAr) {
     pathAr = pathAr.concat([name]);
 
-    const fullPath = this.makeFullPath(pathAr);
+    const fullPath = PathUtils.pathArToFullLocal(this.rootDir, pathAr);
 
     const stat = await fs.stat(fullPath);
 

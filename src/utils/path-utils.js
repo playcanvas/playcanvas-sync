@@ -6,6 +6,12 @@ const PathUtils = {
     return a.join('/');
   },
 
+  pathArToFullLocal: function (r, pathAr) {
+    const a = [ r ].concat(pathAr);
+
+    return path.join.apply(null, a);
+  },
+
   fullPathToLocalFile: function (part1, part2) {
     p = path.join(part1, part2);
 

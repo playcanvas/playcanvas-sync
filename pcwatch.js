@@ -9,12 +9,13 @@ const WatchUtils = require('./src/watch-actions/watch-utils');
 const ActionCreated = require('./src/watch-actions/action-created');
 const ActionRenamed = require('./src/watch-actions/action-renamed');
 const SyncUtils = require('./src/sync-commands/sync-utils');
+const LocalWatcher = require('./src/utils/local-watcher');
+const CacheUtils = require('./src/utils/cache-utils');
+const LocalTraversal = require('./src/utils/local-traversal');
 
 program.option('-f, --force', 'skip local/remote equality check');
 
 program.parse(process.argv);
-
-const WATCH_OPTS = { debounceMS: 1000 };
 
 async function run() {
     if (!program.force) {
@@ -27,19 +28,21 @@ async function run() {
 }
 
 async function startWatcher() {
+    CUtils.watchMsg('Started');
+
     const conf = await new GetConfig().run();
 
-    const watcher = await nsfw(
-        conf.PLAYCANVAS_TARGET_DIR,
-        function (events) {
-            CUtils.wrapUserErrors(handleEvents, [events, conf]);
-        },
-        WATCH_OPTS
-    );
+    const local = await CacheUtils.getCached(conf, 'local_items');
 
-    await watcher.start();
+    const rootDir = conf.PLAYCANVAS_TARGET_DIR;
 
-    CUtils.watchMsg('Started');
+    const handler = new LocalWatcher(rootDir, local, handleEvents);
+
+    while(true) {
+        await new LocalTraversal(rootDir, handler).run();
+
+        await CUtils.waitMs(1000); // todo
+    }
 }
 
 async function handleEvents(events, conf) {
