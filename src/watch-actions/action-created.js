@@ -3,8 +3,8 @@ const fs = require('fs');
 const CUtils = require('../utils/common-utils');
 
 class ActionCreated {
-  constructor(event, conf) {
-    this.event = event;
+  constructor(fullPath, conf) {
+    this.fullPath = fullPath;
 
     this.conf = conf;
   }
@@ -22,8 +22,6 @@ class ActionCreated {
   }
 
   init() {
-    this.fullPath = path.join(this.event.directory, this.event.file);
-
     const fullParent = path.dirname(this.fullPath);
 
     this.parentId = CUtils.getAssetId(fullParent, this.conf);

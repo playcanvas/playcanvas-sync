@@ -79,7 +79,7 @@ async function eventModified(e, conf) {
 
 async function eventCreated(e, conf) {
     if (!CUtils.eventHasAsset(e, conf)) {
-        const id = await new ActionCreated(e, conf).run();
+        const id = await new ActionCreated(e.fullPath, conf).run();
 
         WatchUtils.reportWatchAction(id, 'Created', conf);
     }

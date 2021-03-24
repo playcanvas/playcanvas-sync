@@ -39,9 +39,7 @@ class OverwriteAllRemoteWithLocal {
   }
 
   async createItem(h) {
-    const event = CUtils.fullPathToEventData(h.fullPath);
-
-    await new ActionCreated(event, this.conf).run();
+    await new ActionCreated(h.fullPath, this.conf).run();
 
     CUtils.syncMsg(`Created ${h.remotePath}`);
   }
