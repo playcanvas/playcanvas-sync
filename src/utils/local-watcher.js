@@ -62,7 +62,6 @@ class LocalWatcher {
   triggerEvent(action, h) {
     const event = {
       action: action,
-      directory: h.parentFull,
       file: h.itemName
     };
 
