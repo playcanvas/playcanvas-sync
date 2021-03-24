@@ -22,13 +22,13 @@ class LocalContents {
   }
 
   visitFile(h) {
-    if (!TypeUtils.isBadFile(h.locName, h.remotePath, this.conf)) {
+    if (!TypeUtils.isBadFile(h.itemName, h.remotePath, this.conf)) {
       this.addToRes('files', h);
     }
   }
 
   visitDir(h) {
-    if (CUtils.isBadDir(h.fullPath, this.conf)) {
+    if (CUtils.isBadDir(h.remotePath, this.conf)) {
       return false;
 
     } else {

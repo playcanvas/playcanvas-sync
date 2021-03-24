@@ -1,14 +1,6 @@
 const fs = require('fs');
 const CUtils = require('../utils/common-utils');
 const PathUtils = require('../utils/path-utils');
-const nsfw = require('nsfw');
-const IsGoodEvent = require('./is-good-event');
-
-const ACTION_TO_NAME = {};
-ACTION_TO_NAME[nsfw.actions.CREATED] = 'CREATED';
-ACTION_TO_NAME[nsfw.actions.MODIFIED] = 'MODIFIED';
-ACTION_TO_NAME[nsfw.actions.RENAMED] = 'RENAMED';
-ACTION_TO_NAME[nsfw.actions.DELETED] = 'DELETED';
 
 const WatchUtils = {
   actionModified: async function (e, conf) {
@@ -67,7 +59,10 @@ const WatchUtils = {
   },
 
   shouldKeepEvent: function (h, conf) {
-    const res = new IsGoodEvent(h, conf).run();
+    let res = (h.isFile && !TypeUtils.isBadFile(h.itemName, h.remotePath, conf)) ||
+        (h.isDir && !CUtils.isBadDir(h.fullPath, conf));
+
+    res = res && !CUtils.isBadDir(h.parentFull, conf);
 
     WatchUtils.verboseEvent(h, res, conf);
 

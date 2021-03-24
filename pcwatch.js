@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const nsfw = require('nsfw');
 const GetConfig = require('./src/utils/get-config');
 const program = require('commander');
 
@@ -57,15 +56,15 @@ async function handleEvent(e, conf) {
 }
 
 async function handleGoodEvent(e, conf) {
-    if (e.action === nsfw.actions.MODIFIED) {
+    if (e.action === 'ACTION_MODIFIED') {
         await eventModified(e, conf);
 
-    } else if (e.action === nsfw.actions.DELETED) {
+    } else if (e.action === 'ACTION_DELETED') {
         const remotePath = await WatchUtils.actionDeleted(e, conf);
 
         CUtils.watchMsg(`Deleted ${remotePath}`);
 
-    } else if (e.action === nsfw.actions.CREATED) {
+    } else if (e.action === 'ACTION_CREATED') {
         await eventCreated(e, conf);
     }
 }

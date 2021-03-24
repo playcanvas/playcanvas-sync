@@ -27,10 +27,10 @@ class LocalTraversal {
   async handleItem(name, pathAr) {
     const h = await PathUtils.makeLocItemData(name, pathAr, this.rootDir);
 
-    if (h.isLocFile) {
+    if (h.isFile) {
       await this.handler.visitFile(h);
 
-    } else if (h.isLocDir) {
+    } else if (h.isDirectory) {
       await this.handleDir(h);
     }
   }
@@ -39,7 +39,7 @@ class LocalTraversal {
     const needRecur = await this.handler.visitDir(h);
 
     if (needRecur) {
-      await this.recursiveCall(h.locPathAr);
+      await this.recursiveCall(h.pathArray);
     }
   }
 }

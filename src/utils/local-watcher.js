@@ -1,3 +1,5 @@
+const CUtils = require('./common-utils');
+
 class LocalWatcher {
   constructor(conf, origPathToData, callback) {
     this.conf = conf;
@@ -61,8 +63,10 @@ class LocalWatcher {
     const event = {
       action: action,
       directory: h.parentFull,
-      file: h.locName
+      file: h.itemName
     };
+
+    Object.assign(event, h);
 
     return this.callback(event, this.conf);
   }

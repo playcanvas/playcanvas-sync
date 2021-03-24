@@ -116,13 +116,13 @@ const PathUtils = {
     const stat = await fs.stat(fullPath);
 
     return {
-      locName: name,
-      locPathAr: pathAr,
+      itemName: name,
+      pathArray: pathAr,
       parentFull: PathUtils.pathArToFullLocal(rootDir, parentAr),
       remotePath: PathUtils.arToSlashForwPath(pathAr),
       fullPath: fullPath,
-      isLocFile: stat.isFile(),
-      isLocDir: stat.isDirectory(),
+      isFile: stat.isFile(),
+      isDirectory: stat.isDirectory(),
       modTime: stat.mtime.getTime()
     }
   }

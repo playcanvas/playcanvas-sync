@@ -104,8 +104,6 @@ const CUtils = {
     },
 
     isBadDir: function (s, conf) {
-        s = PathUtils.fullLocalToRemotePath(s, conf.PLAYCANVAS_TARGET_DIR);
-
         return conf.PLAYCANVAS_BAD_FOLDER_REG.test(s);
     },
 
@@ -267,12 +265,6 @@ const CUtils = {
         const s = fs.readFileSync(p);
 
         return JSON.parse(s);
-    },
-
-    renameToCreateEvent: function (e) {
-        e.directory = e.newDirectory;
-
-        e.file = e.newFile;
     },
 
     checkSetEnv: function (k, v) {
