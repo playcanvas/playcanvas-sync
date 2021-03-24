@@ -9,23 +9,19 @@ class LocalTraversal {
   }
 
   async run() {
-    await this.recursiveCall([]);
+    await this.handleDir('', [], this.rootDir);
 
     return this.handler.prepRes();
   }
 
   async recursiveCall(pathAr) {
-    const items = await this.listItems(pathAr);
+    const fullPath = this.makeFullPath(pathAr);
+
+    const items = await fs.readdir(fullPath);
 
     for (const s of items) {
       await this.handleItem(s, pathAr);
     }
-  }
-
-  listItems(pathAr) {
-    const fullPath = this.makeFullPath(pathAr);
-
-    return fs.readdir(fullPath);
   }
 
   makeFullPath(pathAr) {
@@ -47,16 +43,18 @@ class LocalTraversal {
       await this.handler.visitFile(name, pathAr, fullPath, mtime);
 
     } else if (stat.isDirectory()) {
-      await this.handleDir(name, pathAr, fullPath, mtime);
+      await this.handleDir(name, pathAr, fullPath);
     }
   }
 
-  async handleDir(name, pathAr, fullPath, mtime) {
-    const needRecur = await this.handler.visitDir(name, pathAr, fullPath, mtime);
+  async handleDir(name, pathAr, fullPath) {
+    const needRecur = await this.handler.previsitDir(name, pathAr, fullPath);
 
     if (needRecur) {
-      return this.recursiveCall(pathAr);
+      await this.recursiveCall(pathAr);
     }
+
+    await this.handler.postvisitDir(fullPath);
   }
 }
 

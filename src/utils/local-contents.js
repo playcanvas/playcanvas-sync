@@ -28,15 +28,22 @@ class LocalContents {
     }
   }
 
-  visitDir(name, pathAr, fullPath, mtime) {
-    if (CUtils.isBadDir(fullPath, this.conf)) {
+  previsitDir(name, pathAr, fullPath) {
+    if (!pathAr.length) {
+      return true;
+
+    } else if (CUtils.isBadDir(fullPath, this.conf)) {
       return false;
 
     } else {
-      this.addToRes('folders', pathAr, fullPath, mtime);
+      this.addToRes('folders', pathAr, fullPath, null);
 
       return true;
     }
+  }
+
+  postvisitDir() {
+    // nothing
   }
 
   addToRes(field, pathAr, fullPath, mtime) {
