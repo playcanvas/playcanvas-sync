@@ -60,7 +60,7 @@ const WatchUtils = {
 
       console.log(h);
 
-      console.log(`SHOULD KEEP: ${shouldKeep}`);
+      console.log(`SHOULD APPLY TO REMOTE: ${shouldKeep}`);
 
       console.log('------------------');
     }
