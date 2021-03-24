@@ -73,30 +73,6 @@ class AssetStore {
         delete this.pathToAsset[p];
     }
 
-    handleRenamedAsset(id, name, parent) {
-        const a = this.idToAsset[id];
-
-        a.name = name;
-
-        a.parent = parent;
-
-        const oldPath = this.idToPath[id];
-
-        delete this.pathToAsset[oldPath];
-
-        const newPath = CUtils.assetPathStr(a, this.idToAsset);
-
-        this.idToAsset[id].remotePath = newPath;
-
-        this.idToPath[id] = newPath;
-
-        this.pathToAsset[newPath] = a;
-    }
-
-    updateAllPaths() {
-        this.allAssets.forEach(h => this.handleRenamedAsset(h.id, h.name, h.parent));
-    }
-
     addToIds(h) {
         this.idToAsset[h.id] = h;
     }

@@ -15,8 +15,6 @@ class ActionRenamed {
 
         await this.callApi();
 
-        this.updateStore();
-
         return this.assetId;
     }
 
@@ -40,14 +38,6 @@ class ActionRenamed {
         };
 
         return this.conf.client.putForm(url, h);
-    }
-
-    updateStore() {
-        this.conf.store.handleRenamedAsset(this.assetId, this.newName, this.parentId);
-
-        if (this.event.isDirEvent) {
-            this.conf.store.updateAllPaths();
-        }
     }
 }
 
