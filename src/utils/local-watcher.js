@@ -60,10 +60,7 @@ class LocalWatcher {
   }
 
   triggerEvent(action, h) {
-    const event = {
-      action: action,
-      file: h.itemName
-    };
+    const event = { action: action };
 
     Object.assign(event, h);
 
