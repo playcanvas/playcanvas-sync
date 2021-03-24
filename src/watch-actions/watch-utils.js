@@ -4,9 +4,7 @@ const PathUtils = require('../utils/path-utils');
 const TypeUtils = require('../utils/type-utils');
 
 const WatchUtils = {
-  actionModified: async function (e, conf) {
-    const fullPath = PathUtils.eventToFullPath(e);
-
+  actionModified: async function (fullPath, conf) {
     const assetId = CUtils.getAssetId(fullPath, conf);
 
     const url = `/assets/${assetId}`;

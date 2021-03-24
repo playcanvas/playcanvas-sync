@@ -71,7 +71,7 @@ async function handleGoodEvent(e, conf) {
 
 async function eventModified(e, conf) {
     if (CUtils.eventHasAsset(e, conf)) {
-        const id = await WatchUtils.actionModified(e, conf);
+        const id = await WatchUtils.actionModified(e.fullPath, conf);
 
         WatchUtils.reportWatchAction(id, 'Updated', conf);
     }

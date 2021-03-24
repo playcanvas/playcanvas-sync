@@ -47,9 +47,7 @@ class OverwriteAllRemoteWithLocal {
   }
 
   async updateItem(h) {
-    const event = CUtils.fullPathToEventData(h.fullPath);
-
-    await WatchUtils.actionModified(event, this.conf);
+    await WatchUtils.actionModified(h.fullPath, this.conf);
 
     CUtils.syncMsg(`Updated ${h.remotePath}`);
   }
