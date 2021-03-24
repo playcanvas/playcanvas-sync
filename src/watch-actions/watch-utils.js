@@ -52,24 +52,24 @@ const WatchUtils = {
     CUtils.watchMsg(s);
   },
 
-  verboseEvent: function (tag, v, conf) {
+  verboseEvent: function (h, shouldKeep, conf) {
     if (conf.PLAYCANVAS_VERBOSE) {
       console.log('------------------');
 
-      console.log(tag);
+      console.log('EVENT:');
 
-      console.log(v);
+      console.log(h);
+
+      console.log(`SHOULD KEEP: ${shouldKeep}`);
 
       console.log('------------------');
     }
   },
 
   shouldKeepEvent: function (h, conf) {
-    WatchUtils.verboseEvent('ORIGINAL EVENT:', h, conf);
-
     const res = new IsGoodEvent(h, conf).run();
 
-    WatchUtils.verboseEvent('SHOULD KEEP:', res, conf);
+    WatchUtils.verboseEvent(h, res, conf);
 
     return res;
   }

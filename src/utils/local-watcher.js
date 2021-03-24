@@ -1,5 +1,7 @@
 class LocalWatcher {
-  constructor(origPathToData, callback) {
+  constructor(conf, origPathToData, callback) {
+    this.conf = conf;
+
     this.origPathToData = origPathToData;
 
     this.callback = callback;
@@ -23,7 +25,7 @@ class LocalWatcher {
     });
 
     for (const s of removed) {
-      await this.handleRemoved(this.origPathToData[s]);
+      await this.triggerEvent(1, this.origPathToData[s]);
     }
   }
 
@@ -32,14 +34,14 @@ class LocalWatcher {
 
     const data = this.origPathToData[h.fullPath];
 
-    return data ? this.handleKnownFile(h, data) : this.handleNew(h);
+    return data ? this.handleKnownFile(h, data) : this.triggerEvent(0, h);
   }
 
   async visitDir(h) {
     this.addToCur(h);
 
     if (!this.origPathToData[h.fullPath]) {
-      await this.handleNew(h)
+      await this.triggerEvent(0, h)
     }
 
     return true;
@@ -47,12 +49,22 @@ class LocalWatcher {
 
   handleKnownFile(h, data) {
     if (h.modTime !== data.modTime) {
-      return this.handleModified(h);
+      return this.triggerEvent(2, h);
     }
   }
 
   addToCur(h) {
     this.curPathToData[h.fullPath] = h;
+  }
+
+  triggerEvent(action, h) {
+    const event = {
+      action: action,
+      directory: h.parentFull,
+      file: h.locName
+    };
+
+    return this.callback(event, this.conf);
   }
 }
 

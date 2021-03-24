@@ -37,14 +37,14 @@ async function startWatcher() {
     let pathToData = local.locPathToData;
 
     while(true) {
-        pathToData = await watchIteration(conf.PLAYCANVAS_TARGET_DIR, pathToData);
+        pathToData = await watchIteration(conf, pathToData);
     }
 }
 
-async function watchIteration(rootDir, pathToData) {
-    const handler = new LocalWatcher(pathToData, handleEvent);
+async function watchIteration(conf, pathToData) {
+    const handler = new LocalWatcher(conf, pathToData, handleEvent);
 
-    pathToData = await new LocalTraversal(rootDir, handler).run();
+    pathToData = await new LocalTraversal(conf.PLAYCANVAS_TARGET_DIR, handler).run();
 
     await CUtils.waitMs(1000); // todo
 
