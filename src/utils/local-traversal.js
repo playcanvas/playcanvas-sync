@@ -9,7 +9,7 @@ class LocalTraversal {
   }
 
   async run() {
-    await this.handleDir('', [], this.rootDir);
+    await this.recursiveCall([]);
 
     return this.handler.prepRes();
   }
@@ -25,30 +25,22 @@ class LocalTraversal {
   }
 
   async handleItem(name, pathAr) {
-    pathAr = pathAr.concat([name]);
+    const h = await PathUtils.makeLocItemData(name, pathAr, this.rootDir);
 
-    const fullPath = PathUtils.pathArToFullLocal(this.rootDir, pathAr);
+    if (h.isLocFile) {
+      await this.handler.visitFile(h);
 
-    const stat = await fs.stat(fullPath);
-
-    const mtime = stat.mtime.getTime();
-
-    if (stat.isFile()) {
-      await this.handler.visitFile(name, pathAr, fullPath, mtime);
-
-    } else if (stat.isDirectory()) {
-      await this.handleDir(name, pathAr, fullPath);
+    } else if (h.isLocDir) {
+      await this.handleDir(h);
     }
   }
 
-  async handleDir(name, pathAr, fullPath) {
-    const needRecur = await this.handler.previsitDir(name, pathAr, fullPath);
+  async handleDir(h) {
+    const needRecur = await this.handler.visitDir(h);
 
     if (needRecur) {
-      await this.recursiveCall(pathAr);
+      await this.recursiveCall(h.locPathAr);
     }
-
-    await this.handler.postvisitDir(fullPath);
   }
 }
 

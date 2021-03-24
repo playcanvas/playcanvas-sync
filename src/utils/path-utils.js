@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs').promises;
 
 const PathUtils = {
   // no leading slash
@@ -104,6 +105,25 @@ const PathUtils = {
       const s = PathUtils.arToSlashForwPath(a);
 
       dst[s] = 1;
+    }
+  },
+
+  makeLocItemData: async function (name, parentAr, rootDir) {
+    const pathAr = parentAr.concat([name]);
+
+    const fullPath = PathUtils.pathArToFullLocal(rootDir, pathAr);
+
+    const stat = await fs.stat(fullPath);
+
+    return {
+      locName: name,
+      locPathAr: pathAr,
+      parentFull: PathUtils.pathArToFullLocal(rootDir, parentAr),
+      remotePath: PathUtils.arToSlashForwPath(pathAr),
+      fullPath: fullPath,
+      isLocFile: stat.isFile(),
+      isLocDir: stat.isDirectory(),
+      modTime: stat.mtime.getTime()
     }
   }
 };

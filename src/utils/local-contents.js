@@ -20,39 +20,24 @@ class LocalContents {
     return this.result;
   }
 
-  visitFile(name, pathAr, fullPath, mtime) {
-    const remotePath = PathUtils.arToSlashForwPath(pathAr);
-
-    if (!TypeUtils.isBadFile(name, remotePath, this.conf)) {
-      this.addToRes('files', pathAr, fullPath, mtime);
+  visitFile(h) {
+    if (!TypeUtils.isBadFile(h.locName, h.remotePath, this.conf)) {
+      this.addToRes('files', h);
     }
   }
 
-  previsitDir(name, pathAr, fullPath) {
-    if (!pathAr.length) {
-      return true;
-
-    } else if (CUtils.isBadDir(fullPath, this.conf)) {
+  visitDir(h) {
+    if (CUtils.isBadDir(h.fullPath, this.conf)) {
       return false;
 
     } else {
-      this.addToRes('folders', pathAr, fullPath, null);
+      this.addToRes('folders', h);
 
       return true;
     }
   }
 
-  postvisitDir() {
-    // nothing
-  }
-
-  addToRes(field, pathAr, fullPath, mtime) {
-    const h = {
-      remotePath: PathUtils.arToSlashForwPath(pathAr),
-      fullPath: fullPath,
-      modTime: mtime
-    };
-
+  addToRes(field, h) {
     this.result[field].push(h);
   }
 }
