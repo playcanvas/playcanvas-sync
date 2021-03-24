@@ -3,6 +3,7 @@ const ComputeDiffAll = require('./compute-diff-all');
 const PathUtils = require('../utils/path-utils');
 const readline = require('readline');
 const FindProcess = require('find-process');
+const path = require('path');
 
 const SyncUtils = {
     reportDiffAll: async function() {
@@ -45,20 +46,15 @@ const SyncUtils = {
         });
     },
 
-    makeRenameEvent: function (oldPath, newPath, conf) {
+    makeRenameData: function (oldPath, newPath, conf) {
         const p1 = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, oldPath);
 
         const p2 = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, newPath);
 
-        const h1 = CUtils.fullPathToEventData(p1);
-
-        const h2 = CUtils.fullPathToEventData(p2);
-
         return {
-            directory: h1.directory,
-            oldFile: h1.file,
-            newDirectory: h2.directory,
-            newFile: h2.file
+            fullOldPath: p1,
+            newDirectory: path.dirname(p2),
+            newFileName: path.basename(p2)
         }
     },
 

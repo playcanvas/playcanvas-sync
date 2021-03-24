@@ -4,8 +4,8 @@ const CUtils = require('../utils/common-utils');
 const NO_PARENT_TOKEN = 'null';
 
 class ActionRenamed {
-    constructor(event, conf) {
-        this.event = event;
+    constructor(data, conf) {
+        this.data = data;
 
         this.conf = conf;
     }
@@ -19,13 +19,9 @@ class ActionRenamed {
     }
 
     init() {
-        this.newName = this.event.newFile;
+        this.assetId = CUtils.getAssetId(this.data.fullOldPath, this.conf);
 
-        const fullOldPath = path.join(this.event.directory, this.event.oldFile);
-
-        this.assetId = CUtils.getAssetId(fullOldPath, this.conf);
-
-        this.parentId = CUtils.getAssetId(this.event.newDirectory, this.conf);
+        this.parentId = CUtils.getAssetId(this.data.newDirectory, this.conf);
     }
 
     callApi() {
@@ -33,7 +29,7 @@ class ActionRenamed {
 
         const h = {
             branchId: this.conf.PLAYCANVAS_BRANCH_ID,
-            name: this.newName,
+            name: this.data.newFileName,
             parent: this.parentId || NO_PARENT_TOKEN
         };
 

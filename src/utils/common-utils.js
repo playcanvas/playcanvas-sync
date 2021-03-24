@@ -244,13 +244,6 @@ const CUtils = {
         ar.sort((a, b) => a[field].localeCompare(b[field]));
     },
 
-    fullPathToEventData: function (s) {
-        return {
-            directory: path.dirname(s),
-            file: path.basename(s)
-        }
-    },
-
     jsonFileToMap: function (p) {
         return fs.existsSync(p) ?
             CUtils.readJson(p) :

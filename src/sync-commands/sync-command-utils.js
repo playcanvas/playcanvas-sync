@@ -24,7 +24,7 @@ const SCUtils = {
   renameItem: async function(oldPath, newPath) {
     const conf = await new GetConfig().run();
 
-    const e = SyncUtils.makeRenameEvent(oldPath, newPath, conf);
+    const e = SyncUtils.makeRenameData(oldPath, newPath, conf);
 
     await new ActionRenamed(e, conf).run();
 

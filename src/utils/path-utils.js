@@ -78,10 +78,6 @@ const PathUtils = {
     return res;
   },
 
-  eventToFullPath: function (e) {
-    return path.join(e.directory, e.file);
-  },
-
   rmEmptyFolders: function (data) {
     const paths = PathUtils.allFilePaths(data.files);
 
