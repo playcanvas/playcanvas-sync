@@ -251,10 +251,6 @@ const CUtils = {
         }
     },
 
-    shallowClone: function (h) {
-        return Object.assign({}, h);
-    },
-
     jsonFileToMap: function (p) {
         return fs.existsSync(p) ?
             CUtils.readJson(p) :

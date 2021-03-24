@@ -69,15 +69,11 @@ async function handleGoodEvent(e, conf) {
     }
 }
 
-// sometimes file move appears as modified
 async function eventModified(e, conf) {
     if (CUtils.eventHasAsset(e, conf)) {
         const id = await WatchUtils.actionModified(e, conf);
 
         WatchUtils.reportWatchAction(id, 'Updated', conf);
-
-    } else {
-        await eventCreated(e, conf);
     }
 }
 
