@@ -76,7 +76,7 @@ function runDiff (filePath) {
 function runOverwriteAllLocal (cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
-    Utils.checkSetEnv('OPERATION_TYPE', 'overwrite_all_local');
+    CUtils.checkSetEnv('OPERATION_TYPE', 'overwrite_all_local');
 
     SyncUtils.compareAndPrompt(() => {
         return new OverwriteAllLocalWithRemote().run();
