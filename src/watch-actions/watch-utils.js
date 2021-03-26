@@ -4,7 +4,7 @@ const TypeUtils = require('../utils/type-utils');
 
 const WatchUtils = {
   actionModified: async function (data, conf) {
-    const assetId = conf.store.getAssetAtPath(data.remotePath);
+    const assetId = conf.store.getAssetId(data.remotePath);
 
     const url = `/assets/${assetId}`;
 
@@ -19,7 +19,7 @@ const WatchUtils = {
   },
 
   actionDeleted: async function (remotePath, conf) {
-    const assetId = conf.store.getAssetAtPath(remotePath);
+    const assetId = conf.store.getAssetId(remotePath);
 
     conf.store.handleDeletedAsset(assetId);
 

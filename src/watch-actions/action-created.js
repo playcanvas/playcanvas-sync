@@ -10,7 +10,7 @@ class ActionCreated {
 
   async run() {
     this.parentId = this.data.parentRemote &&
-        this.conf.store.getAssetAtPath(this.data.parentRemote);
+        this.conf.store.getAssetId(this.data.parentRemote);
 
     const response = await this.createRemote();
 

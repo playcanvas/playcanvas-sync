@@ -18,9 +18,9 @@ class ActionRenamed {
     }
 
     init() {
-        this.assetId = this.conf.store.getAssetAtPath(this.data.remoteOldPath);
+        this.assetId = this.conf.store.getAssetId(this.data.remoteOldPath);
 
-        this.parentId = this.conf.store.getAssetAtPath(this.data.remoteNewDir);
+        this.parentId = this.conf.store.getAssetId(this.data.remoteNewDir);
     }
 
     callApi() {

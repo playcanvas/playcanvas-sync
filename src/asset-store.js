@@ -33,9 +33,15 @@ class AssetStore {
         return this;
     }
 
-    getAssetAtPath(p) {
-        return this.pathToAsset[p] ||
-            CUtils.throwUserError(`Could not find asset at ${p}`);
+    getAssetId(remotePath) {
+        const a = this.getAssetAtPath(remotePath);
+
+        return a.id
+    }
+
+    getAssetAtPath(remotePath) {
+        return this.pathToAsset[remotePath] ||
+            CUtils.throwUserError(`Could not find asset at ${remotePath}`);
     }
 
     handleAddedAsset(h) {
