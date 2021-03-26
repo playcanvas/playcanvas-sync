@@ -128,11 +128,11 @@ const CUtils = {
     },
 
     throwUserError: function (msg) {
-        throw new UserError('Error: ' + msg);
+        throw new UserError(msg);
     },
 
     throwFatalError: function (msg) {
-        throw new FatalError('Fatal Error: ' + msg);
+        throw new FatalError('Fatal: ' + msg);
     },
 
     addKeyVal: function (h, k, v) {
