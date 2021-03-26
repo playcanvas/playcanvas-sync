@@ -18,9 +18,7 @@ class OverwriteAllLocalWithRemote {
     async init() {
         this.conf = await new GetConfig().run();
 
-        const opts = { keepEmptyFolders: true };
-
-        this.diff = await new ComputeDiffAll(this.limitToItems, opts).run();
+        this.diff = await new ComputeDiffAll(this.limitToItems).run();
     }
 
     async handleAllFolders() {

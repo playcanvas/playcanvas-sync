@@ -20,7 +20,7 @@ class OverwriteAllRemoteWithLocal {
   async init() {
     this.conf = await new GetConfig().run();
 
-    this.diff = await new ComputeDiffAll(this.limitToItems, {}).run();
+    this.diff = await new ComputeDiffAll(this.limitToItems).run();
   }
 
   async handleAllFolders() {

@@ -3,10 +3,8 @@ const CUtils = require('../utils/common-utils');
 const CacheUtils = require('../utils/cache-utils');
 
 class ComputeDiffAll {
-  constructor(limitToItems, opts) {
+  constructor(limitToItems) {
     this.limitToItems = limitToItems;
-
-    this.opts = opts;
 
     this.commonPaths = {
       folders: {},
@@ -54,7 +52,7 @@ class ComputeDiffAll {
       files: this.conf.store.activeAssets
     };
 
-    this.local = await CacheUtils.getCached(this.conf, 'local_items', this.opts);
+    this.local = await CacheUtils.getCached(this.conf, 'local_items');
 
     this.applyLimit();
   }
