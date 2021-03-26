@@ -3,8 +3,10 @@ const CUtils = require('./common-utils');
 const TypeUtils = require('./type-utils');
 
 class LocalContents {
-  constructor(conf) {
+  constructor(conf, keepEmptyFolders) {
     this.conf = conf;
+
+    this.keepEmptyFolders = keepEmptyFolders;
 
     this.result = {
       files: [],
@@ -14,7 +16,7 @@ class LocalContents {
   }
 
   onTravEnd() {
-    if (!CUtils.isOperationType('overwrite_local')) {
+    if (!this.keepEmptyFolders) {
       PathUtils.rmEmptyFolders(this.result);
     }
 
