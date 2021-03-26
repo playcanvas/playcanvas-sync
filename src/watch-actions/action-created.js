@@ -9,7 +9,8 @@ class ActionCreated {
   }
 
   async run() {
-    this.parentId = this.conf.store.getAssetAtPath(this.data.parentRemote);
+    this.parentId = this.data.parentRemote &&
+        this.conf.store.getAssetAtPath(this.data.parentRemote);
 
     const response = await this.createRemote();
 
@@ -21,12 +22,10 @@ class ActionCreated {
   }
 
   createRemote() {
-    const stat = fs.statSync(this.data.fullPath);
-
-    if (stat.isFile()) {
+    if (this.data.isFile) {
       return this.createFile();
 
-    } else if (stat.isDirectory()) {
+    } else if (this.data.isDirectory) {
       return this.createDirectory();
     }
   }
