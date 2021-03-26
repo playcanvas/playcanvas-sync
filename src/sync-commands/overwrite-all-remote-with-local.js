@@ -2,6 +2,7 @@ const ActionCreated = require('../watch-actions/action-created');
 const CUtils = require('../utils/common-utils');
 const WatchUtils = require('../watch-actions/watch-utils');
 const ComputeDiffAll = require('./compute-diff-all');
+const GetConfig = require('../utils/get-config');
 
 class OverwriteAllRemoteWithLocal {
   constructor(limitToItems) {
@@ -19,9 +20,9 @@ class OverwriteAllRemoteWithLocal {
   async init() {
     CUtils.setOperationType('overwrite_remote');
 
-    this.diff = await new ComputeDiffAll(this.limitToItems).run();
+    this.conf = await new GetConfig().run();
 
-    this.conf = this.diff.conf;
+    this.diff = await new ComputeDiffAll(this.limitToItems).run();
   }
 
   async handleAllFolders() {

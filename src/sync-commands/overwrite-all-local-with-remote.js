@@ -1,4 +1,5 @@
 const CUtils = require('../utils/common-utils');
+const GetConfig = require('../utils/get-config');
 const ComputeDiffAll = require('./compute-diff-all');
 
 class OverwriteAllLocalWithRemote {
@@ -17,9 +18,9 @@ class OverwriteAllLocalWithRemote {
     async init() {
         CUtils.setOperationType('overwrite_local');
 
-        this.diff = await new ComputeDiffAll(this.limitToItems).run();
+        this.conf = await new GetConfig().run();
 
-        this.conf = this.diff.conf;
+        this.diff = await new ComputeDiffAll(this.limitToItems).run();
     }
 
     async handleAllFolders() {

@@ -1,6 +1,5 @@
 const CUtils = require('../utils/common-utils');
 const ComputeDiffAll = require('./compute-diff-all');
-const PathUtils = require('../utils/path-utils');
 const readline = require('readline');
 const FindProcess = require('find-process');
 const path = require('path');
@@ -11,11 +10,7 @@ const SyncUtils = {
 
         SyncUtils.reportList(h.filesThatDiffer, 'Files that Differ');
 
-        // SyncUtils.reportList(h.extraItems.local.folders, 'Local Folders Missing on Remote');
-
         SyncUtils.reportList(h.extraItems.local.files, 'Local Files Missing on Remote');
-
-        // SyncUtils.reportList(h.extraItems.remote.folders, 'Remote Folders Missing on Local');
 
         SyncUtils.reportList(h.extraItems.remote.files, 'Remote Files Missing on Local');
 
