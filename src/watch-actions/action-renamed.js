@@ -1,4 +1,3 @@
-const path = require('path');
 const CUtils = require('../utils/common-utils');
 
 const NO_PARENT_TOKEN = 'null';

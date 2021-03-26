@@ -4,7 +4,6 @@ const crypto = require('crypto');
 const UserError = require('./user-error');
 const FatalError = require('./fatal-error');
 const mkdirp = require('mkdirp');
-const path = require('path');
 
 const HTTPS_PREF_REG = /^https:\/\//;
 

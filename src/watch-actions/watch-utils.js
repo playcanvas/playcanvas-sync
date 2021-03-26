@@ -1,17 +1,16 @@
 const fs = require('fs');
 const CUtils = require('../utils/common-utils');
-const PathUtils = require('../utils/path-utils');
 const TypeUtils = require('../utils/type-utils');
 
 const WatchUtils = {
-  actionModified: async function (fullPath, conf) {
-    const assetId = CUtils.getAssetId(fullPath, conf);
+  actionModified: async function (data, conf) {
+    const assetId = conf.store.getAssetAtPath(data.remotePath);
 
     const url = `/assets/${assetId}`;
 
     const h = {
       branchId: conf.PLAYCANVAS_BRANCH_ID,
-      file: fs.createReadStream(fullPath)
+      file: fs.createReadStream(data.fullPath)
     };
 
     await conf.client.putForm(url, h);

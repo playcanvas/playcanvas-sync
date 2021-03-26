@@ -39,13 +39,13 @@ class OverwriteAllRemoteWithLocal {
   }
 
   async createItem(h) {
-    await new ActionCreated(h.fullPath, this.conf).run();
+    await new ActionCreated(h, this.conf).run();
 
     CUtils.syncMsg(`Created ${h.remotePath}`);
   }
 
   async updateItem(h) {
-    await WatchUtils.actionModified(h.fullPath, this.conf);
+    await WatchUtils.actionModified(h, this.conf);
 
     CUtils.syncMsg(`Updated ${h.remotePath}`);
   }

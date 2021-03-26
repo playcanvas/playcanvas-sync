@@ -71,7 +71,7 @@ async function handleGoodEvent(e, conf) {
 
 async function eventModified(e, conf) {
     if (CUtils.eventHasAsset(e, conf)) {
-        const id = await WatchUtils.actionModified(e.fullPath, conf);
+        const id = await WatchUtils.actionModified(e, conf);
 
         WatchUtils.reportWatchAction(id, 'Updated', conf);
     }
@@ -79,7 +79,7 @@ async function eventModified(e, conf) {
 
 async function eventCreated(e, conf) {
     if (!CUtils.eventHasAsset(e, conf)) {
-        const id = await new ActionCreated(e.fullPath, conf).run();
+        const id = await new ActionCreated(e, conf).run();
 
         WatchUtils.reportWatchAction(id, 'Created', conf);
     }
