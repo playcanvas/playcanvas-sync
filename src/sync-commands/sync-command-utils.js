@@ -44,12 +44,12 @@ const SCUtils = {
         CUtils.syncMsg(`Deleted ${remotePath}`);
     },
 
-    diffSingleFile: async function(filePath) {
+    diffSingleFile: async function(remotePath) {
         const conf = await new GetConfig().run();
 
-        const remoteStr = await SyncUtils.remoteFileStr(filePath, conf);
+        const remoteStr = await SyncUtils.remoteFileStr(remotePath, conf);
 
-        const localStr = SyncUtils.localFileStr(filePath, conf);
+        const localStr = SyncUtils.localFileStr(remotePath, conf);
 
         new DiffStrings(remoteStr, localStr).run();
     },

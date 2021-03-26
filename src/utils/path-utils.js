@@ -33,12 +33,6 @@ const PathUtils = {
         return s.replace(/^[\\/]/, '');
     },
 
-    relativeLocalToRemotePath: function(p) {
-        p = PathUtils.rmFirstSlash(p);
-
-        return PathUtils.replaceBackSlash(p);
-    },
-
     replaceBackSlash: function (s) {
         return s.replace(/\\/g, '/');
     },

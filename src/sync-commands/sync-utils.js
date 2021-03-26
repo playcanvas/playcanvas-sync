@@ -71,18 +71,16 @@ const SyncUtils = {
         });
     },
 
-    remoteFileStr: async function (filePath, conf) {
-        const p = PathUtils.relativeLocalToRemotePath(filePath);
-
-        const asset = conf.store.getAssetAtPath(p);
+    remoteFileStr: async function (remotePath, conf) {
+        const asset = conf.store.getAssetAtPath(remotePath);
 
         const s = await conf.client.loadAssetToStr(asset, conf.PLAYCANVAS_BRANCH_ID);
 
         return CUtils.replaceCarriage(s);
     },
 
-    localFileStr: function (filePath, conf) {
-        const p = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, filePath);
+    localFileStr: function (remotePath, conf) {
+        const p = path.join(conf.PLAYCANVAS_TARGET_DIR, remotePath);
 
         const s = CUtils.fileToStr(p);
 
