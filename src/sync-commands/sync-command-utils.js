@@ -9,55 +9,55 @@ const WatchUtils = require('../watch-actions/watch-utils');
 const DiffStrings = require('../diff/diff-strings');
 
 const SCUtils = {
-  downloadSingleFile: function(remotePath) {
-    const limitToItems = PathUtils.remotePathToData(remotePath);
+    downloadSingleFile: function(remotePath) {
+        const limitToItems = PathUtils.remotePathToData(remotePath);
 
-    return new OverwriteAllLocalWithRemote(limitToItems).run();
-  },
+        return new OverwriteAllLocalWithRemote(limitToItems).run();
+    },
 
-  uploadSingleFile: function(remotePath) {
-    const limitToItems = PathUtils.remotePathToData(remotePath);
+    uploadSingleFile: function(remotePath) {
+        const limitToItems = PathUtils.remotePathToData(remotePath);
 
-    return new OverwriteAllRemoteWithLocal(limitToItems).run();
-  },
+        return new OverwriteAllRemoteWithLocal(limitToItems).run();
+    },
 
-  renameItem: async function(oldPath, newPath) {
-    const conf = await new GetConfig().run();
+    renameItem: async function(oldPath, newPath) {
+        const conf = await new GetConfig().run();
 
-    const e = SyncUtils.makeRenameData(oldPath, newPath, conf);
+        const e = SyncUtils.makeRenameData(oldPath, newPath, conf);
 
-    await new ActionRenamed(e, conf).run();
+        await new ActionRenamed(e, conf).run();
 
-    CUtils.syncMsg(`Renamed ${oldPath} to ${newPath}`);
-  },
+        CUtils.syncMsg(`Renamed ${oldPath} to ${newPath}`);
+    },
 
-  deleteItem: async function(filePath) {
-    const conf = await new GetConfig().run();
+    deleteItem: async function(filePath) {
+        const conf = await new GetConfig().run();
 
-    const fullPath = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, filePath);
+        const fullPath = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, filePath);
 
-    await WatchUtils.actionDeleted(fullPath, conf);
+        await WatchUtils.actionDeleted(fullPath, conf);
 
-    CUtils.syncMsg(`Deleted ${filePath}`);
-  },
+        CUtils.syncMsg(`Deleted ${filePath}`);
+    },
 
-  diffSingleFile: async function(filePath) {
-    const conf = await new GetConfig().run();
+    diffSingleFile: async function(filePath) {
+        const conf = await new GetConfig().run();
 
-    const remoteStr = await SyncUtils.remoteFileStr(filePath, conf);
+        const remoteStr = await SyncUtils.remoteFileStr(filePath, conf);
 
-    const localStr = SyncUtils.localFileStr(filePath, conf);
+        const localStr = SyncUtils.localFileStr(filePath, conf);
 
-    new DiffStrings(remoteStr, localStr).run();
-  },
+        new DiffStrings(remoteStr, localStr).run();
+    },
 
-  reportIgnoredAssets: async function () {
-    await SyncUtils.errorIfDifferent(false);
+    reportIgnoredAssets: async function () {
+        await SyncUtils.errorIfDifferent(false);
 
-    const conf = await new GetConfig().run();
+        const conf = await new GetConfig().run();
 
-    SyncUtils.reportList(conf.store.activeAssets, 'Assets matched by pcignore.txt');
-  }
+        SyncUtils.reportList(conf.store.activeAssets, 'Assets matched by pcignore.txt');
+    }
 };
 
 module.exports = SCUtils;
