@@ -46,18 +46,6 @@ const SyncUtils = {
         });
     },
 
-    makeRenameData: function (oldPath, newPath, conf) {
-        const p1 = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, oldPath);
-
-        const p2 = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, newPath);
-
-        return {
-            fullOldPath: p1,
-            newDirectory: path.dirname(p2),
-            newFileName: path.basename(p2)
-        }
-    },
-
     compareAndPrompt: async function(callback) {
         const h = await CUtils.wrapUserErrors(SyncUtils.reportDiffAll);
 

@@ -18,9 +18,9 @@ class ActionRenamed {
     }
 
     init() {
-        this.assetId = CUtils.getAssetId(this.data.fullOldPath, this.conf);
+        this.assetId = this.conf.store.getAssetAtPath(this.data.remoteOldPath);
 
-        this.parentId = CUtils.getAssetId(this.data.newDirectory, this.conf);
+        this.parentId = this.conf.store.getAssetAtPath(this.data.remoteNewDir);
     }
 
     callApi() {

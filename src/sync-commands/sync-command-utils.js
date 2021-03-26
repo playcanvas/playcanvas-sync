@@ -7,6 +7,7 @@ const GetConfig = require('../utils/get-config');
 const CUtils = require('../utils/common-utils');
 const WatchUtils = require('../watch-actions/watch-utils');
 const DiffStrings = require('../diff/diff-strings');
+const path = require('path');
 
 const SCUtils = {
     downloadSingleFile: function(remotePath) {
@@ -24,9 +25,13 @@ const SCUtils = {
     renameItem: async function(oldPath, newPath) {
         const conf = await new GetConfig().run();
 
-        const e = SyncUtils.makeRenameData(oldPath, newPath, conf);
+        const h = {
+            remoteOldPath: oldPath,
+            remoteNewDir: path.dirname(newPath),
+            newFileName: path.basename(newPath)
+        }
 
-        await new ActionRenamed(e, conf).run();
+        await new ActionRenamed(h, conf).run();
 
         CUtils.syncMsg(`Renamed ${oldPath} to ${newPath}`);
     },
