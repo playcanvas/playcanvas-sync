@@ -17,7 +17,7 @@ class LocalTraversal {
   async recursiveCall(pathAr) {
     const fullPath = PathUtils.pathArToFullLocal(this.rootDir, pathAr);
 
-    const items = await fs.readdir(fullPath);
+    const items = await PathUtils.fsWrap('readdir', fullPath) || [];
 
     for (const s of items) {
       await this.handleItem(s, pathAr);

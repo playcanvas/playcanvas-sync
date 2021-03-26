@@ -89,9 +89,9 @@ const PathUtils = {
 
         const fullPath = PathUtils.pathArToFullLocal(rootDir, pathAr);
 
-        const stat = await fs.stat(fullPath);
+        const stat = await PathUtils.fsWrap('stat', fullPath);
 
-        return {
+        return stat ? {
             itemName: name,
             fullPath: fullPath,
             remotePath: PathUtils.arToSlashForwPath(pathAr),
@@ -101,6 +101,17 @@ const PathUtils = {
             pathArray: pathAr,
             parentFull: PathUtils.pathArToFullLocal(rootDir, parentAr),
             parentRemote: PathUtils.arToSlashForwPath(parentAr)
+        } : {};
+    },
+
+    fsWrap: async function (method, fullPath) {
+        try {
+            const res = await fs[method](fullPath);
+
+            return res;
+
+        } catch (e) {
+            return null;
         }
     }
 };
