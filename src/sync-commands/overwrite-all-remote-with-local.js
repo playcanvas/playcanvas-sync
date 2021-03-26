@@ -18,8 +18,6 @@ class OverwriteAllRemoteWithLocal {
   }
 
   async init() {
-    CUtils.setOperationType('overwrite_remote');
-
     this.conf = await new GetConfig().run();
 
     this.diff = await new ComputeDiffAll(this.limitToItems, {}).run();

@@ -99,7 +99,7 @@ class AssetStore {
     checkAddFolder(h) {
         const shouldAdd = h.type === 'folder' &&
             (this.foldersWithActive[h.id] ||
-                CUtils.isOperationType('overwrite_remote'));
+                (this.conf.OPERATION_TYPE === 'overwrite_all_remote'));
 
         if (shouldAdd) {
             this.addToFolder(h);

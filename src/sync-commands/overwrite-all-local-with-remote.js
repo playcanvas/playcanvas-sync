@@ -16,8 +16,6 @@ class OverwriteAllLocalWithRemote {
     }
 
     async init() {
-        CUtils.setOperationType('overwrite_local');
-
         this.conf = await new GetConfig().run();
 
         const opts = { keepEmptyFolders: true };

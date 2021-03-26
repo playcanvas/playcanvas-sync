@@ -259,14 +259,6 @@ const CUtils = {
         return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     },
 
-    setOperationType: function (v) {
-        global.OPERATION_TYPE = v;
-    },
-
-    isOperationType: function (v) {
-        return global.OPERATION_TYPE === v;
-    },
-
     handleForceRegOpts: function (cmdObj) {
         const v = cmdObj.regexp ||
             (cmdObj.ext && CUtils.extToReg(cmdObj.ext));

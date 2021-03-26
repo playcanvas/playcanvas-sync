@@ -84,6 +84,8 @@ function runOverwriteAllLocal (cmdObj) {
 function runOverwriteAllRemote (cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
+    CUtils.checkSetEnv('OPERATION_TYPE', 'overwrite_all_remote');
+
     SyncUtils.compareAndPrompt(() => {
         return new OverwriteAllRemoteWithLocal().run();
     });
