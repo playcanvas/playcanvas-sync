@@ -19,12 +19,6 @@ const PathUtils = {
         return path.join.apply(null, a);
     },
 
-    fullPathToLocalFile: function (part1, part2) {
-        p = path.join(part1, part2);
-
-        return path.normalize(p);
-    },
-
     splitOnSlashForw: function(s) {
         return s.split('/');
     },

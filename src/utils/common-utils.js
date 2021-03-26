@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const UserError = require('./user-error');
 const FatalError = require('./fatal-error');
 const mkdirp = require('mkdirp');
+const path = require('path');
 
 const HTTPS_PREF_REG = /^https:\/\//;
 
@@ -163,7 +164,7 @@ const CUtils = {
     assetToFullPath: function (asset, conf) {
         const remotePath = conf.store.idToPath[asset.id];
 
-        return PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, remotePath);
+        return path.join(conf.PLAYCANVAS_TARGET_DIR, remotePath);
     },
 
     isItemOnRemote: function (h, conf) {
