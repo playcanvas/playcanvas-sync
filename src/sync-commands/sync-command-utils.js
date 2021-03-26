@@ -31,14 +31,12 @@ const SCUtils = {
         CUtils.syncMsg(`Renamed ${oldPath} to ${newPath}`);
     },
 
-    deleteItem: async function(filePath) {
+    deleteItem: async function(remotePath) {
         const conf = await new GetConfig().run();
 
-        const fullPath = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, filePath);
+        await WatchUtils.actionDeleted(remotePath, conf);
 
-        await WatchUtils.actionDeleted(fullPath, conf);
-
-        CUtils.syncMsg(`Deleted ${filePath}`);
+        CUtils.syncMsg(`Deleted ${remotePath}`);
     },
 
     diffSingleFile: async function(filePath) {

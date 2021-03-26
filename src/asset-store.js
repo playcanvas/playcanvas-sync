@@ -34,13 +34,8 @@ class AssetStore {
     }
 
     getAssetAtPath(p) {
-        const asset = this.pathToAsset[p];
-
-        if (asset) {
-            return asset;
-        } else {
+        return this.pathToAsset[p] ||
             CUtils.throwUserError(`Could not find asset at ${p}`);
-        }
     }
 
     handleAddedAsset(h) {

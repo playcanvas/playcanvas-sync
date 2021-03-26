@@ -18,18 +18,14 @@ const WatchUtils = {
     return assetId;
   },
 
-  actionDeleted: async function (fullPath, conf) {
-    const assetId = CUtils.getAssetId(fullPath, conf);
-
-    const remotePath = conf.store.idToPath[assetId];
+  actionDeleted: async function (remotePath, conf) {
+    const assetId = conf.store.getAssetAtPath(remotePath);
 
     conf.store.handleDeletedAsset(assetId);
 
     const url = `/assets/${assetId}?branchId=${conf.PLAYCANVAS_BRANCH_ID}`;
 
     await conf.client.methodDelete(url);
-
-    return remotePath;
   },
 
   reportWatchAction: function (assetId, tag, conf) {

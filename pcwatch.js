@@ -60,9 +60,9 @@ async function handleGoodEvent(e, conf) {
         await eventModified(e, conf);
 
     } else if (e.action === 'ACTION_DELETED') {
-        const remotePath = await WatchUtils.actionDeleted(e.fullPath, conf);
+        await WatchUtils.actionDeleted(e.remotePath, conf);
 
-        CUtils.watchMsg(`Deleted ${remotePath}`);
+        CUtils.watchMsg(`Deleted ${e.remotePath}`);
 
     } else if (e.action === 'ACTION_CREATED') {
         await eventCreated(e, conf);
