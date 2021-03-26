@@ -2,6 +2,12 @@ const path = require('path');
 const fs = require('fs').promises;
 
 const PathUtils = {
+    normTargPath: function (s) {
+        s = s.replace(/[\\/]$/, '');
+
+        return path.normalize(s);
+    },
+
     // no leading slash
     arToSlashForwPath: function(a) {
         return a.join('/');
@@ -27,12 +33,6 @@ const PathUtils = {
         return s.replace(/^[\\/]/, '');
     },
 
-    fullLocalToRemotePath: function (p, targetDir) {
-        p = path.relative(targetDir, p);
-
-        return PathUtils.replaceBackSlash(p);
-    },
-
     relativeLocalToRemotePath: function(p) {
         p = PathUtils.rmFirstSlash(p);
 
@@ -41,14 +41,6 @@ const PathUtils = {
 
     replaceBackSlash: function (s) {
         return s.replace(/\\/g, '/');
-    },
-
-    arePathsEqual: function (s1, s2) {
-        s1 = path.normalize(s1);
-
-        s2 = path.normalize(s2);
-
-        return s1 === s2;
     },
 
     remotePathToData: function(s) {

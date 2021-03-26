@@ -144,19 +144,6 @@ const CUtils = {
         return a.filter(h => h.id !== id);
     },
 
-    getAssetId: function (fullPath, conf) {
-        return !PathUtils.arePathsEqual(fullPath, conf.PLAYCANVAS_TARGET_DIR) &&
-            CUtils.fullPathToId(fullPath, conf);
-    },
-
-    fullPathToId: function (fullPath, conf) {
-        const p = PathUtils.fullLocalToRemotePath(fullPath, conf.PLAYCANVAS_TARGET_DIR);
-
-        const a = conf.store.getAssetAtPath(p);
-
-        return a.id;
-    },
-
     eventHasAsset: function(e, conf) {
         return conf.store.pathToAsset[e.remotePath];
     },
