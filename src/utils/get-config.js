@@ -10,7 +10,7 @@ const PCIGNORE_FILE = 'pcignore.txt';
 
 class GetConfig {
   async run() {
-    this.result = new ConfigVars().run();
+    this.result = await new ConfigVars().run();
 
     this.setClient();
 

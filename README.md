@@ -212,7 +212,7 @@ npm uninstall -g
 
 Config values can be set 
 in a file called `.pcconfig` in your home directory,
-in `pcconfig.json` file in your target directory (and your PlayCanvas branch),
+in a file called `pcconfig.json` in your target directory (and your PlayCanvas branch),
 or provided as environment variables (which would have the highest precedence).
 
 Sample config file:

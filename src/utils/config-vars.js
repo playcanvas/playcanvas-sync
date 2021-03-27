@@ -1,6 +1,7 @@
 const path = require('path');
 const CUtils = require('./common-utils');
 const os = require('os');
+const PathUtils = require('./path-utils');
 
 const HOME_CONFIG_FILE = '.pcconfig';
 const TARGET_CONFIG_FILE = 'pcconfig.json';
@@ -44,8 +45,8 @@ class ConfigVars {
         this.result = {};
     }
 
-    run() {
-        this.setOrigVals();
+    async run() {
+        await this.setOrigVals();
 
         regexFields.forEach(this.makeReg, this);
 
@@ -56,10 +57,12 @@ class ConfigVars {
         return this.result;
     }
 
-    setOrigVals() {
+    async setOrigVals() {
         this.fromEnvOrMap({});
 
         this.fromConfigFile(os.homedir(), HOME_CONFIG_FILE);
+
+        await this.checkPrepTarg();
 
         this.fromConfigFile(this.result.PLAYCANVAS_TARGET_DIR, TARGET_CONFIG_FILE);
 
@@ -76,6 +79,21 @@ class ConfigVars {
         const h = CUtils.jsonFileToMap(p);
 
         this.fromEnvOrMap(h);
+    }
+
+    async checkPrepTarg() {
+        let s = this.result.PLAYCANVAS_TARGET_DIR || '';
+
+        s = PathUtils.rmLastSlash(s);
+
+        const stat = await PathUtils.fsWrap('stat', s);
+
+        if (stat && stat.isDirectory) {
+            this.result.PLAYCANVAS_TARGET_DIR = s;
+
+        } else {
+            CUtils.throwFtError(`Error: could not find target directory: ${s}. Check capitalization.`);
+        }
     }
 
     fromEnvOrMap(h) {
