@@ -125,11 +125,11 @@ const CUtils = {
         }
     },
 
-    throwUserError: function (msg) {
+    throwUsError: function (msg) {
         throw new UserError(msg);
     },
 
-    throwFatalError: function (msg) {
+    throwFatError: function (msg) {
         throw new FatalError('Error: ' + msg);
     },
 
@@ -276,7 +276,7 @@ const CUtils = {
 
     checkHttps: function (url) {
         if (!HTTPS_PREF_REG.test(url)) {
-            CUtils.throwFatalError(`Non-https url specified: ${url}`);
+            CUtils.throwFatError(`Non-https url specified: ${url}`);
         }
     },
 

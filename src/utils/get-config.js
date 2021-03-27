@@ -48,7 +48,7 @@ class GetConfig {
     const id = await this.getUserBranch();
 
     if (id !== this.result.PLAYCANVAS_BRANCH_ID) {
-      CUtils.throwFatalError('Provided branch id does not match your current PlayCanvas branch');
+      CUtils.throwFatError('Provided branch id does not match your current PlayCanvas branch');
     }
   }
 
@@ -61,7 +61,7 @@ class GetConfig {
     } catch (e) {
       console.log(e.message);
 
-      CUtils.throwFatalError('Failed to retrieve your current PlayCanvas branch. Use your personal api token');
+      CUtils.throwFatError('Failed to retrieve your current PlayCanvas branch. Use your personal api token');
     }
   }
 }

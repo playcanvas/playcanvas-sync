@@ -80,7 +80,7 @@ const SyncUtils = {
         const s = CUtils.fileToStr(p);
 
         if (!s) {
-            CUtils.throwUserError(`Could not find local file ${p}`);
+            CUtils.throwUsError(`Could not find local file ${p}`);
         }
 
         return s;
@@ -94,7 +94,7 @@ const SyncUtils = {
                 'Use \'pcsync\' to fix' +
                 SyncUtils.forceMsg(canForce);
 
-            CUtils.throwFatalError(s);
+            CUtils.throwFatError(s);
         }
     },
 
@@ -105,7 +105,7 @@ const SyncUtils = {
             const s = 'Other running instances of \'pcwatch\' detected. Stop them' +
                 SyncUtils.forceMsg(true);
 
-            CUtils.throwFatalError(s);
+            CUtils.throwFatError(s);
         }
     },
 

@@ -92,7 +92,7 @@ class ConfigVars {
 
     checkRequired(field) {
         if (!this.result[field]) {
-            CUtils.throwUserError(`Missing config variable: ${field}`);
+            CUtils.throwUsError(`Missing config variable: ${field}`);
         }
     }
 

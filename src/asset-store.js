@@ -41,7 +41,7 @@ class AssetStore {
 
     getAssetAtPath(remotePath) {
         return this.pathToAsset[remotePath] ||
-            CUtils.throwUserError(`Could not find asset at ${remotePath}`);
+            CUtils.throwUsError(`Could not find asset at ${remotePath}`);
     }
 
     handleAddedAsset(h) {
@@ -111,7 +111,7 @@ class AssetStore {
 
     assertNew(id) {
         if (this.idToAsset[id]) {
-            CUtils.throwUserError(`Asset with id ${id} already exists`);
+            CUtils.throwUsError(`Asset with id ${id} already exists`);
         }
     }
 }
