@@ -19,25 +19,25 @@ const SyncUtils = {
 
     reportList: function (a, tag) {
         if (a.length) {
-            CUtils.syncMsg(`---- ${tag} ----`);
+            console.log(`---- ${tag} ----`);
 
             a = a.map(h => h.remotePath);
 
             a.sort();
 
-            a.forEach(s => CUtils.syncMsg(s));
+            a.forEach(s => console.log(s));
         }
     },
 
     reportExistingFolders: function (diff) {
         diff.equalItems.folders.forEach(h => {
-            CUtils.syncMsg(`Folder ${h.remotePath} already exists`);
+            console.log(`Folder ${h.remotePath} already exists`);
         });
     },
 
     reportEqualFiles: function (diff) {
         diff.equalItems.files.forEach(h => {
-            CUtils.syncMsg(`Local and remote files ${h.remotePath} are equal`);
+            console.log(`Local and remote files ${h.remotePath} are equal`);
         });
     },
 
@@ -46,7 +46,7 @@ const SyncUtils = {
 
         h.anyDiffFound ?
             SyncUtils.promptAndRun(callback) :
-            CUtils.syncMsg('No differences found between local and remote.');
+            console.log('No differences found between local and remote.');
     },
 
     promptAndRun: function(callback) {

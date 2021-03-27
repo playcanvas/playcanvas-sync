@@ -119,7 +119,7 @@ class ConfigVars {
             allConfigFields : [];
 
         a.forEach(field => {
-            CUtils.configMsg(`${field}: ${this.result[field]}`);
+            console.log(`${field}: ${this.result[field]}`);
         });
     }
 }

@@ -33,7 +33,7 @@ const WatchUtils = {
 
     const s = `${tag} ${remotePath}`;
 
-    CUtils.watchMsg(s);
+    console.log(s);
   },
 
   verboseEvent: function (h, shouldKeep, conf) {

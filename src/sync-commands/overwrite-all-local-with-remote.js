@@ -27,7 +27,7 @@ class OverwriteAllLocalWithRemote {
         this.diff.extraItems.remote.folders.forEach(h => {
             CUtils.makeLocalFolder(h, this.conf);
 
-            CUtils.syncMsg(`Created ${h.remotePath}`);
+            console.log(`Created ${h.remotePath}`);
         });
     }
 
@@ -44,7 +44,7 @@ class OverwriteAllLocalWithRemote {
 
         await this.conf.client.loadAssetToFile(asset, this.conf);
 
-        CUtils.syncMsg(`${action} ${h.remotePath}`);
+        console.log(`${action} ${h.remotePath}`);
     }
 }
 

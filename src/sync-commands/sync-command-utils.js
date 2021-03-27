@@ -33,7 +33,7 @@ const SCUtils = {
 
         await new ActionRenamed(h, conf).run();
 
-        CUtils.syncMsg(`Renamed ${oldPath} to ${newPath}`);
+        console.log(`Renamed ${oldPath} to ${newPath}`);
     },
 
     deleteItem: async function(remotePath) {
@@ -41,7 +41,7 @@ const SCUtils = {
 
         await WatchUtils.actionDeleted(remotePath, conf);
 
-        CUtils.syncMsg(`Deleted ${remotePath}`);
+        console.log(`Deleted ${remotePath}`);
     },
 
     diffSingleFile: async function(remotePath) {

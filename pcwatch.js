@@ -26,7 +26,7 @@ async function run() {
 }
 
 async function startWatcher() {
-    CUtils.watchMsg('Started');
+    console.log('Started');
 
     const conf = await new GetConfig().run();
 
@@ -62,7 +62,7 @@ async function handleGoodEvent(e, conf) {
     } else if (e.action === 'ACTION_DELETED') {
         await WatchUtils.actionDeleted(e.remotePath, conf);
 
-        CUtils.watchMsg(`Deleted ${e.remotePath}`);
+        console.log(`Deleted ${e.remotePath}`);
 
     } else if (e.action === 'ACTION_CREATED') {
         await eventCreated(e, conf);

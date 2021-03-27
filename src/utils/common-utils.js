@@ -200,18 +200,6 @@ const CUtils = {
         return res;
     },
 
-    syncMsg: function (s) {
-        console.log(s);
-    },
-
-    watchMsg: function (s) {
-        console.log(s);
-    },
-
-    configMsg: function (s) {
-        console.log(s);
-    },
-
     applyItemLimit: function(data, limit) {
         data.folders = data.folders.filter(h => {
             return limit.folders.includes(h.remotePath);
