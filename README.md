@@ -212,7 +212,8 @@ npm uninstall -g
 
 Config values can be set 
 in a file called `.pcconfig` in your home directory,
-in a file called `pcconfig.json` in your target directory (and your PlayCanvas branch),
+in a file called `pcconfig.json` in your target directory
+(and your remote PlayCanvas branch),
 or provided as environment variables (which would have the highest precedence).
 
 Sample config file:
@@ -227,19 +228,31 @@ Sample config file:
   "PLAYCANVAS_BAD_FOLDER_REG": "\\."
 }
 ```
-All these key-value pairs are necessary.
 
-You can, for instance, keep `PLAYCANVAS_API_KEY`, `PLAYCANVAS_BAD_FILE_REG`
-and `PLAYCANVAS_BAD_FOLDER_REG` in `.pcconfig` in your home directory,
-and `PLAYCANVAS_BRANCH_ID` and `PLAYCANVAS_PROJECT_ID` in `pcconfig.json` in your project.
+You can get your api key (token) from your PlayCanvas account page
+(playcanvas.com/&lt;username&gt;/account).
 
-`PLAYCANVAS_TARGET_DIR` can be set in `.pcconfig` or as an environment variable.
+You can use 
 
-You can copy your project id from the URL of your project home page, e.g.
-for `https://playcanvas.com/project/10/overview/test_proj` the id is 10.
+```
+copy({
+  PLAYCANVAS_BRANCH_ID: config.self.branch.id,
+  PLAYCANVAS_PROJECT_ID: config.project.id
+})
+```
 
-You can copy your branch id from the list of branches in the
-Version Control Panel of the PlayCanvas Editor.
+from the Chrome Developer Tools console (on the PlayCanvas Editor page) 
+to copy your branch and project id to the clipboard.
+
+Alternatively, you can get your branch id from the
+Version Control Panel of the PlayCanvas Editor, and
+your project id from its home page url.
+
+All listed key-value pairs are necessary. You can keep 
+some of them in `.pcconfig` in your home directory,
+and the rest in `pcconfig.json` in your project.
+
+Backslash characters should be written as `\\` (escaped).
 
 # Files and Folders to Exclude
 
@@ -248,7 +261,7 @@ create local auxiliary files and directories,
 that do not need to be automatically pushed to PlayCanvas.
 
 `PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG` contain RegExp strings (note the
-double escapes) that tell `pcwatch` which files and directories to
+escapes) that tell `pcwatch` which files and directories to
 ignore. In our sample `.pcconfig`, a bad file has a name that starts
 with a dot or ends with `~`.
 A bad folder is one that has a dot anywhere in its path relative 
@@ -259,7 +272,7 @@ To determine which auxiliary files and folders your OS and text editor
 create, run `pcwatch` with environment (or `.pcconfig`) variables
 `PLAYCANVAS_DRY_RUN` and `PLAYCANVAS_VERBOSE` set to `1`, and create/edit some files.
 
-`pcwatch` output will show file system events as they happen,
+`pcwatch` output will show all file system events as they happen,
 and which of them will be filtered out by your current 
 `PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG`.
 
