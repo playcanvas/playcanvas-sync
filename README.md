@@ -246,7 +246,8 @@ to copy your branch and project id to the clipboard.
 
 Alternatively, you can get your branch id from the
 Version Control Panel of the PlayCanvas Editor, and
-your project id from its home page url.
+your project id from its home page url, e.g.
+for `playcanvas.com/project/10/overview/test_proj` the id is 10.
 
 All listed key-value pairs are necessary. You can keep 
 some of them in `.pcconfig` in your home directory,
