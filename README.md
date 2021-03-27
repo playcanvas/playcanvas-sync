@@ -2,7 +2,7 @@
 
 The `pcsync` and `pcwatch` utilities allow editing copies of
 JavaScript and other textual files of a PlayCanvas project
-locally, on your own computer, in a text editor of your choice.
+locally on your own computer, in a text editor of your choice.
 
 `pcsync` also allows pushing and pulling [non-text files](#using-pcsync-for-non-text-files), such as
 images and models, between your machine and PlayCanvas, individually or all at once.
