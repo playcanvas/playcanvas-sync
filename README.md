@@ -57,7 +57,7 @@ A local directory [designated](#config-variables) as `PLAYCANVAS_TARGET_DIR`
 corresponds to the root of the PlayCanvas file and folder asset hierarchy.
 
 All file and folder paths passed to `pcsync` as arguments
-should be relative to this root, e.g.
+should be relative to this root and use forward slashes even on Windows, e.g.
 
 ```
 pcsync rename dir1/file1.js file1.js
