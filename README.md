@@ -192,7 +192,7 @@ npm uninstall -g
 
 Config values can be set 
 in a file called `.pcconfig` in your home directory,
-in a file called `pcconfig.json` in your target directory
+in `pcconfig.json` in your target directory
 (and your remote PlayCanvas branch),
 or provided as environment variables (which would have the highest precedence).
 
@@ -250,7 +250,7 @@ to `PLAYCANVAS_TARGET_DIR`. The expressions provided are sufficient in most case
 and you can simply copy them into your `.pcconfig`.
 
 To determine which auxiliary files and folders your OS and text editor
-create, run `pcwatch` with environment (or `.pcconfig`) variables
+create, run `pcwatch` with config/environment variables
 `PLAYCANVAS_DRY_RUN` and `PLAYCANVAS_VERBOSE` set to `1`, and create/edit some files.
 
 `pcwatch` output will show all file system events as they happen,
