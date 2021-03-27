@@ -2,12 +2,6 @@ const path = require('path');
 const fs = require('fs').promises;
 
 const PathUtils = {
-    normTargPath: function (s) {
-        s = s.replace(/[\\/]$/, '');
-
-        return path.normalize(s);
-    },
-
     // no leading slash
     arToSlashForwPath: function(a) {
         return a.join('/');
@@ -27,8 +21,8 @@ const PathUtils = {
         return s.replace(/^[\\/]/, '');
     },
 
-    replaceBackSlash: function (s) {
-        return s.replace(/\\/g, '/');
+    rmLastSlash: function (s) {
+        return s.replace(/[\\/]$/, '');
     },
 
     remotePathToData: function(s) {
@@ -106,9 +100,7 @@ const PathUtils = {
 
     fsWrap: async function (method, fullPath) {
         try {
-            const res = await fs[method](fullPath);
-
-            return res;
+            return await fs[method](fullPath);
 
         } catch (e) {
             return null;
