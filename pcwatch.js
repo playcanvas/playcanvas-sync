@@ -40,6 +40,8 @@ async function startWatcher() {
 }
 
 async function watchIteration(conf, pathToData) {
+    await CUtils.waitMs(WatchUtils.WATCH_LOOP_INTERVAL);
+
     const handler = new LocalWatcher(
         conf,
         pathToData,
@@ -47,11 +49,7 @@ async function watchIteration(conf, pathToData) {
         handleEvent
     );
 
-    pathToData = await new LocalTraversal(conf.PLAYCANVAS_TARGET_DIR, handler).run();
-
-    await CUtils.waitMs(WatchUtils.WATCH_LOOP_INTERVAL);
-
-    return pathToData;
+    return new LocalTraversal(conf.PLAYCANVAS_TARGET_DIR, handler).run();
 }
 
 async function handleEvent(e, conf) {
