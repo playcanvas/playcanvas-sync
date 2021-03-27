@@ -94,7 +94,7 @@ const SyncUtils = {
                 'Use \'pcsync\' to fix' +
                 SyncUtils.forceMsg(canForce);
 
-            CUtils.throwFatError(s);
+            CUtils.throwFtError(s);
         }
     },
 
@@ -105,7 +105,7 @@ const SyncUtils = {
             const s = 'Other running instances of \'pcwatch\' detected. Stop them' +
                 SyncUtils.forceMsg(true);
 
-            CUtils.throwFatError(s);
+            CUtils.throwFtError(s);
         }
     },
 
