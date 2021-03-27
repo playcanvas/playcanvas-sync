@@ -1,5 +1,4 @@
 const ActionCreated = require('../watch-actions/action-created');
-const CUtils = require('../utils/common-utils');
 const WatchUtils = require('../watch-actions/watch-utils');
 const ComputeDiffAll = require('./compute-diff-all');
 const GetConfig = require('../utils/get-config');
@@ -15,6 +14,10 @@ class OverwriteAllRemoteWithLocal {
     await this.handleAllFolders();
 
     await this.handleAllFiles();
+
+    if (!this.doneAnyting) {
+      console.log('Nothing done');
+    }
   }
 
   async init() {
@@ -40,13 +43,19 @@ class OverwriteAllRemoteWithLocal {
   async createItem(h) {
     await new ActionCreated(h, this.conf).run();
 
-    console.log(`Created ${h.remotePath}`);
+    this.actionEnd('Created', h);
   }
 
   async updateItem(h) {
     await WatchUtils.actionModified(h, this.conf);
 
-    console.log(`Updated ${h.remotePath}`);
+    this.actionEnd('Updated', h);
+  }
+
+  actionEnd(action, h) {
+    this.doneAnyting = true;
+
+    console.log(`${action} ${h.remotePath}`);
   }
 }
 
