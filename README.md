@@ -190,7 +190,7 @@ npm uninstall -g
 
 # Config Variables
 
-Config values can be set 
+Config variables can be set 
 in a file called `.pcconfig` in your home directory,
 in `pcconfig.json` in your target directory
 (and your remote PlayCanvas branch),
@@ -231,7 +231,7 @@ for `playcanvas.com/project/10/overview/test_proj` the id is 10.
 
 All listed key-value pairs are necessary. You can keep 
 some of them in `.pcconfig` in your home directory,
-and the rest in `pcconfig.json` in your project.
+and others in `pcconfig.json` in your project.
 
 Backslash characters should be written as `\\` (escaped).
 
