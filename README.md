@@ -94,25 +94,17 @@ if `pcignore.txt` exists. This ensures that the set of files managed locally
 exactly matches the set ignored by PlayCanvas merge, which is appropriate
 for most workflows. 
 
-In some rare cases you may need `pcsync` and `pcwatch` to
-work with more files than listed in `pcignore.txt`. This can be accomplished with
-the `PLAYCANVAS_INCLUDE_REG` config variable, which is a regular expression to
-test each file's full path from the root of the target directory, including
-the file name.
+To make `pcsync` and `pcwatch` work with more files than listed in `pcignore.txt`,
+use the `PLAYCANVAS_INCLUDE_REG` config variable, which is a regular expression to
+test each file's path from the root of the asset hierarchy.
 
 Before a PlayCanvas merge, make sure that the latest checkpoint of the destination
 branch is taken after `pcignore.txt` was added.
 
-If you are using git for your textual files, it is recommended that you merge 
-others' work with yours via git merge rather than PlayCanvas merge.
-
-You complete a git merge of two branches before a PlayCanvas merge of the
+If you are using git for your textual files, 
+you can perform a git merge before a PlayCanvas merge of the
 corresponding branches, push the result to the PlayCanvas destination branch,
 and then perform a PlayCanvas merge. 
-
-The PlayCanvas merge will ignore the files in `pcignore.txt`
-and thus your merge result checkpoint will have the correctly merged
-versions of both your locally- and PlayCanvas-managed assets.
 
 ## `pcignore.txt` Syntax
 
@@ -129,15 +121,13 @@ ignore_regexp <regexp string>
 `ignore_all_textual_files` is the most common choice.
 
 Multiple `ignore_regexp` lines can be provided. Any textual asset whose 
-full path from the root of the PlayCanvas asset hierarchy
+path from the root of the asset hierarchy
 matches an `ignore_regexp` expression will be ignored.
 
 To check your `pcignore.txt` syntax, you can run `pcsync parseIgnore`.
 It will list all existing files that match your current `pcignore.txt`.
 
-Because of some limitations in the node library used to parse lines with gitignore syntax, 
-use a space and not * or ? to match a space in a file or folder name in gitignore lines
-that contain a slash.
+Use a space and not * or ? to match a space in a file or folder name in gitignore lines.
 
 # Using `pcsync` for Non-text Files
 
@@ -158,17 +148,16 @@ pcsync diffAll -e jpeg,png
 pcsync pushAll -r "\\.(png|jpeg)"
 ```
 
-The regular expression tests each file's full path from the root of the target directory.
+The regular expression tests each file's path from the root.
 
 # Installation
 
-We recommend using a recent stable version of `node`. Dependencies may
-not compile if your version of `node` is too old. `nvm` offers a
+We recommend using a recent stable version of `node`. `nvm` offers a
 convenient way to run multiple versions of `node` on your machine.
 
 Download or clone https://github.com/playcanvas/playcanvas-sync
 
-On a Mac, install Command Line Tools. On Catalina, also do:
+On a Mac, install Command Line Tools. On Catalina, you may also need:
 ```
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 ```
@@ -179,7 +168,13 @@ From the `playcanvas-sync` folder run:
 npm install
 ```
 
-After this, to install globally (this is optional), run:
+After this, you can use the tool from this folder, e.g.
+
+```
+node pcwatch.js
+```
+
+or install it globally with:
 
 ```
 npm install -g
