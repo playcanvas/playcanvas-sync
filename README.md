@@ -4,8 +4,8 @@ The `pcsync` and `pcwatch` utilities allow editing copies of
 JavaScript and other textual files of a PlayCanvas project
 locally on your own computer, in a text editor of your choice.
 
-`pcsync` also allows pushing and pulling [non-text files](#using-pcsync-for-non-text-files), such as
-images and models, between your machine and PlayCanvas, individually or all at once.
+`pcsync` also allows pushing and pulling of [non-text files](#using-pcsync-for-non-text-files), such as
+images and models.
 
 In addition, if your project has a file called [`pcignore.txt`](#the-pcignoretxt-file),
 PlayCanvas merge will not affect the files listed in it,
@@ -16,7 +16,7 @@ and the operation of `pcsync` and `pcwatch` will be restricted only to those fil
 and to compare one or all local files to their 
 remote (PlayCanvas) versions.
  
-`pcwatch` detects changes to local files and folders (edits, renames, removal and creation)
+`pcwatch` detects changes to local files and folders (edits, removals and creation)
 as they happen and applies them to PlayCanvas in real time.
 
 If you do not need your local changes pushed to PlayCanvas "as you type",
