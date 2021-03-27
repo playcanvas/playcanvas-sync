@@ -25,11 +25,6 @@ const optionalFields = [
 
 const allConfigFields = requiredFields.concat(optionalFields);
 
-const fieldsToReport = [
-    'PLAYCANVAS_TARGET_DIR',
-    'PLAYCANVAS_BRANCH_ID'
-];
-
 const fieldsWithDefaults = {
     PLAYCANVAS_BASE_URL: 'https://playcanvas.com'
 };
@@ -122,8 +117,7 @@ class ConfigVars {
 
     reportVars() {
         const a = this.result.PLAYCANVAS_VERBOSE ?
-            allConfigFields :
-            fieldsToReport;
+            allConfigFields : [];
 
         a.forEach(field => {
             CUtils.configMsg(`${field}: ${this.result[field]}`);

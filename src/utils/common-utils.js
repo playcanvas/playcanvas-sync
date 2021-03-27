@@ -132,7 +132,7 @@ const CUtils = {
     },
 
     throwFatalError: function (msg) {
-        throw new FatalError('Fatal: ' + msg);
+        throw new FatalError('Error: ' + msg);
     },
 
     addKeyVal: function (h, k, v) {
