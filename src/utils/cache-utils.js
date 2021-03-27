@@ -23,9 +23,7 @@ const CacheUtils = {
     },
 
     loadLocalItems: function (conf) {
-        const needEmtpy = conf.OPERATION_TYPE === 'overwrite_all_local';
-
-        const handler = new LocalContents(conf, needEmtpy);
+        const handler = new LocalContents(conf);
 
         return new LocalTraversal(
             conf.PLAYCANVAS_TARGET_DIR,

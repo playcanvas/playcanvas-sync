@@ -3,10 +3,8 @@ const CUtils = require('./common-utils');
 const TypeUtils = require('./type-utils');
 
 class LocalContents {
-  constructor(conf, keepEmptyFolders) {
+  constructor(conf) {
     this.conf = conf;
-
-    this.keepEmptyFolders = keepEmptyFolders;
 
     this.result = {
       files: [],
@@ -16,9 +14,7 @@ class LocalContents {
   }
 
   onTravEnd() {
-    if (!this.keepEmptyFolders) {
-      PathUtils.rmEmptyFolders(this.result);
-    }
+    PathUtils.rmEmptyFolders(this.result);
 
     return this.result;
   }

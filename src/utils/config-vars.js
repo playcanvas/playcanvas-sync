@@ -16,7 +16,6 @@ const requiredFields = [
 ];
 
 const optionalFields = [
-    'OPERATION_TYPE',
     'PLAYCANVAS_INCLUDE_REG',
     'PLAYCANVAS_FORCE_REG',
     'PLAYCANVAS_DRY_RUN',
