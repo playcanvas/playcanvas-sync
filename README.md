@@ -361,13 +361,3 @@ Now you are ready to start using `pcsync` and `pcwatch`
 to sync your PlayCanvas project and edit with VS Code goodness 🚀
 
 ![](src/readme-imgs/vs-code-demo.gif) 
- 
-# TODO
-
-* JS files created with `pcwatch` or `pcsync` are parsed by the editor when
-a user selects a script to be added as a component to some entity. It may
-take a second or two before the newly parsed script is added to the dropdown,
-some progress indication may be useful. 
-
-* Add an Editor button to generate a .pcconfig file 
-with fields like project id and branch id already filled in
