@@ -1,10 +1,12 @@
 const CUtils = require('./common-utils');
 
 class LocalWatcher {
-  constructor(conf, origPathToData, callback) {
+  constructor(conf, origPathToData, waitTime, callback) {
     this.conf = conf;
 
     this.origPathToData = origPathToData;
+
+    this.waitTime = waitTime;
 
     this.callback = callback;
 
@@ -31,8 +33,8 @@ class LocalWatcher {
     }
   }
 
-  visitFile(h) {
-    this.addToCur(h);
+  async visitFile(h) {
+    await this.visItem(h);
 
     const data = this.origPathToData[h.fullPath];
 
@@ -40,7 +42,7 @@ class LocalWatcher {
   }
 
   async visitDir(h) {
-    this.addToCur(h);
+    await this.visItem(h);
 
     if (!this.origPathToData[h.fullPath]) {
       await this.triggerEvent('ACTION_CREATED', h)
@@ -55,8 +57,10 @@ class LocalWatcher {
     }
   }
 
-  addToCur(h) {
+  async visItem(h) {
     this.curPathToData[h.fullPath] = h;
+
+    await CUtils.waitMs(this.waitTime);
   }
 
   triggerEvent(action, h) {

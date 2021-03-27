@@ -26,25 +26,30 @@ async function run() {
 }
 
 async function startWatcher() {
-    console.log('Started');
-
     const conf = await new GetConfig().run();
+
+    console.log(`Started in ${conf.PLAYCANVAS_TARGET_DIR}`);
 
     const local = await CacheUtils.getCached(conf, 'local_items');
 
     let pathToData = local.locPathToData;
 
-    while(true) {
+    while (true) {
         pathToData = await watchIteration(conf, pathToData);
     }
 }
 
 async function watchIteration(conf, pathToData) {
-    const handler = new LocalWatcher(conf, pathToData, handleEvent);
+    const handler = new LocalWatcher(
+        conf,
+        pathToData,
+        WatchUtils.WATCH_ITEM_INTERVAL,
+        handleEvent
+    );
 
     pathToData = await new LocalTraversal(conf.PLAYCANVAS_TARGET_DIR, handler).run();
 
-    await CUtils.waitMs(1000); // todo
+    await CUtils.waitMs(WatchUtils.WATCH_LOOP_INTERVAL);
 
     return pathToData;
 }

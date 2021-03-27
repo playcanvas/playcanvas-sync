@@ -3,6 +3,9 @@ const CUtils = require('../utils/common-utils');
 const TypeUtils = require('../utils/type-utils');
 
 const WatchUtils = {
+  WATCH_LOOP_INTERVAL: 1000,
+  WATCH_ITEM_INTERVAL: 10,
+
   actionModified: async function (data, conf) {
     const assetId = conf.store.getAssetId(data.remotePath);
 
