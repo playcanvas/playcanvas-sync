@@ -273,8 +273,7 @@ you intend to keep in git, create a PlayCanvas checkpoint that includes your `pc
 * Start editing/creating files locally in your own text editor
 * When necessary, merge in `git` the branch of another group member into your branch 
 * Use `pcsync pushAll` to update your remote branch after git merge
-* Merge the same branches in PlayCanvas. Because of your `pcignore.txt`,
-your remote copies of git merge result files will not be affected
+* Merge the same branches in PlayCanvas
 * Use `pcsync diffAll` to verify that local and remote files are still in sync
 
 ## Case 2: Multiple users working on the same PlayCanvas branch, with `git`
@@ -291,7 +290,6 @@ use `git` merge instead to maintain an accurate `git` history of edits to each f
  
 ## Case 3: Single user per PlayCanvas branch, without `git`
 
-* Create your own PlayCanvas branch of your team's project
 * Run `pcsync pullAll` to download existing textual files 
 from PlayCanvas
 * Launch `pcwatch`
