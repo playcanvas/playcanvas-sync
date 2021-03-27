@@ -4,7 +4,6 @@ const PathUtils = require('../utils/path-utils');
 const SyncUtils = require('./sync-utils');
 const ActionRenamed = require('../watch-actions/action-renamed');
 const GetConfig = require('../utils/get-config');
-const CUtils = require('../utils/common-utils');
 const WatchUtils = require('../watch-actions/watch-utils');
 const DiffStrings = require('../diff/diff-strings');
 const path = require('path');

@@ -13,6 +13,10 @@ class OverwriteAllLocalWithRemote {
         this.handleAllFolders();
 
         await this.handleAllFiles();
+
+        if (!this.doneAnyting) {
+            console.log('Nothing done');
+        }
     }
 
     async init() {
@@ -27,7 +31,7 @@ class OverwriteAllLocalWithRemote {
         this.diff.extraItems.remote.folders.forEach(h => {
             CUtils.makeLocalFolder(h, this.conf);
 
-            console.log(`Created ${h.remotePath}`);
+            this.actionEnd('Created', h);
         });
     }
 
@@ -43,6 +47,12 @@ class OverwriteAllLocalWithRemote {
         const asset = this.conf.store.pathToAsset[h.remotePath];
 
         await this.conf.client.loadAssetToFile(asset, this.conf);
+
+        this.actionEnd(action, h);
+    }
+
+    actionEnd(action, h) {
+        this.doneAnyting = true;
 
         console.log(`${action} ${h.remotePath}`);
     }
