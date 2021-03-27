@@ -117,6 +117,7 @@ const CUtils = {
 
             } else if (e instanceof FatalError) {
                 console.log(e.message);
+
                 process.exit(1);
 
             } else {
@@ -130,7 +131,7 @@ const CUtils = {
     },
 
     throwFtError: function (msg) {
-        throw new FatalError('Error: ' + msg);
+        throw new FatalError(msg);
     },
 
     addKeyVal: function (h, k, v) {
