@@ -69,33 +69,18 @@ will move `file1.js` to the root asset directory.
 
 `pcwatch` does not need any options.
 
-While `pcwatch` is running, it is recommended to periodically run 
+Moving or renaming a file or a folder
+will appear to `pcwatch` as a `remove + create`. In such cases it may be better to
+stop `pcwatch`, perform the opearation locally, apply it to PlayCanvas with
+`pcsync rename`, and start `pcwatch` again.
 
-```
-pcsync diffAll
-```
-
-to verify that the local and remote versions of all your files are indeed in sync,
-especially at the beginning and the end of your coding session.
-
-For OS-specific reasons moving a file from one directory to another
-may appear to `pcwatch` as a `remove + create`. In such cases it may be better to
-stop `pcwatch`, move the file locally, then move the remote file with
-`pcsync rename`. Now `pcwatch` can be started again.
-
-Similarly, it is recommended to stop `pcwatch` when
-renaming or moving existing folders. Remote folders can then
-be updated with `pcsync` or manually. If `pcwatch` is not
-stopped, remote files and folders can get out of sync (which still
-can be fixed with `pcsync` or manually).
-
-# Note on Adding New Files as Script Components
+# Adding New Files as Script Components
 
 Assume file F was  created locally
 and pushed to PlayCanvas with `pcsync` or `pcwatch`, and
 now you are adding F as a script component to an entity in PlayCanvas Editor.
 
-It will take a second or two for F to appear in the dropdown list, because
+Note that it will take a second or two for F to appear in the dropdown list, because
 F is parsed by the editor for the first time when that list is populated 
 (we may add some progress indication for that).
 
