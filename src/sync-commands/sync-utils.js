@@ -88,6 +88,17 @@ const SyncUtils = {
     },
 
     errorIfMultWatch: async function() {
+        const a = await SyncUtils.getWatchProcs();
+
+        if (a.length > 1) { // 1 (this process) is expected
+            const s = 'Other running instances of \'pcwatch\' detected. Stop them' +
+                SyncUtils.forceMsg(true);
+
+            CUtils.throwFtError(s);
+        }
+    },
+
+    getWatchProcs: async function() {
         const conf = await new GetConfig().run();
 
         const a = await FindProcess('name', /pcwatch/);
@@ -96,12 +107,7 @@ const SyncUtils = {
             console.log(a);
         }
 
-        if (a.length > 1) { // 1 (this process) is expected
-            const s = 'Other running instances of \'pcwatch\' detected. Stop them' +
-                SyncUtils.forceMsg(true);
-
-            CUtils.throwFtError(s);
-        }
+        return a.filter(h => h.name !== 'winpty.exe'); // git bash on wind
     },
 
     forceMsg: function (canForce) {
