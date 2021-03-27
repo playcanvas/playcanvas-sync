@@ -41,7 +41,10 @@ class GetConfig {
   }
 
   async setStore() {
-    this.result.store = await new AssetStore(this.result).populate();
+    // use existing remote folders when present
+    const needEmtpy = this.result.OPERATION_TYPE === 'overwrite_all_remote';
+
+    this.result.store = await new AssetStore(this.result, needEmtpy).populate();
   }
 
   async checkBranchMatch() {

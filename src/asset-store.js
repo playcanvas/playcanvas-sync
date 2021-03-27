@@ -3,8 +3,10 @@ const TypeUtils = require('./utils/type-utils');
 const CacheUtils = require('./utils/cache-utils');
 
 class AssetStore {
-    constructor(conf) {
+    constructor(conf, keepEmptyFolders) {
         this.conf = conf;
+
+        this.keepEmptyFolders = keepEmptyFolders;
 
         this.idToAsset = {};
 
@@ -98,8 +100,7 @@ class AssetStore {
 
     checkAddFolder(h) {
         const shouldAdd = h.type === 'folder' &&
-            (this.foldersWithActive[h.id] ||
-                (this.conf.OPERATION_TYPE === 'overwrite_all_remote'));
+            (this.foldersWithActive[h.id] || this.keepEmptyFolders);
 
         if (shouldAdd) {
             this.addToFolder(h);
