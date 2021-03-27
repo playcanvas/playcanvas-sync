@@ -168,10 +168,11 @@ From the `playcanvas-sync` folder run:
 npm install
 ```
 
-After this, you can use the tool from this folder, e.g.
+After this, [set your config variables](#config-variables) and 
+use the tool from this folder, e.g.
 
 ```
-node pcwatch.js
+node pcwatch.js diffAll
 ```
 
 or install it globally with:
