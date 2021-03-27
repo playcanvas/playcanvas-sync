@@ -107,7 +107,7 @@ const CUtils = {
         return conf.PLAYCANVAS_BAD_FOLDER_REG.test(s);
     },
 
-    wrapUserErrors: async function (callback, args) {
+    wrapUsErrors: async function (callback, args) {
         try {
             const res = await callback.apply(null, args);
 
