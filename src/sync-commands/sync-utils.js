@@ -3,6 +3,7 @@ const ComputeDiffAll = require('./compute-diff-all');
 const readline = require('readline');
 const FindProcess = require('find-process');
 const path = require('path');
+const GetConfig = require('../utils/get-config');
 
 const SyncUtils = {
     reportDiffAll: async function() {
@@ -27,18 +28,6 @@ const SyncUtils = {
 
             a.forEach(s => console.log(s));
         }
-    },
-
-    reportExistingFolders: function (diff) {
-        diff.equalItems.folders.forEach(h => {
-            console.log(`Folder ${h.remotePath} already exists`);
-        });
-    },
-
-    reportEqualFiles: function (diff) {
-        diff.equalItems.files.forEach(h => {
-            console.log(`Local and remote files ${h.remotePath} are equal`);
-        });
     },
 
     compareAndPrompt: async function(callback) {
@@ -99,20 +88,20 @@ const SyncUtils = {
     },
 
     errorIfMultWatch: async function() {
-        const n = await SyncUtils.countWatchInstances();
+        const conf = await new GetConfig().run();
 
-        if (n > 1) { // 1 (this process) is expected
+        const a = await FindProcess('name', /pcwatch/);
+
+        if (conf.PLAYCANVAS_VERBOSE) {
+            console.log(a);
+        }
+
+        if (a.length > 1) { // 1 (this process) is expected
             const s = 'Other running instances of \'pcwatch\' detected. Stop them' +
                 SyncUtils.forceMsg(true);
 
             CUtils.throwFtError(s);
         }
-    },
-
-    countWatchInstances: async function() {
-        const a = await FindProcess('name', /pcwatch/);
-
-        return a.length;
     },
 
     forceMsg: function (canForce) {
