@@ -109,9 +109,7 @@ const CUtils = {
 
     wrapUsErrors: async function (callback, args) {
         try {
-            const res = await callback.apply(null, args);
-
-            return res;
+            return await callback.apply(null, args);
 
         } catch (e) {
             if (e instanceof UserError) {
