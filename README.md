@@ -152,8 +152,7 @@ The regular expression tests each file's path from the root.
 
 # Installation
 
-We recommend using a recent stable version of `node`. `nvm` offers a
-convenient way to run multiple versions of `node` on your machine.
+Use a recent stable version of `node`. We recommend using `nvm`.
 
 Download or clone https://github.com/playcanvas/playcanvas-sync
 
@@ -168,7 +167,7 @@ From the `playcanvas-sync` folder run:
 npm install
 ```
 
-After this, [set your config variables](#config-variables) and 
+Now [set your config variables](#config-variables) and you can
 use the tool from this folder, e.g.
 
 ```
