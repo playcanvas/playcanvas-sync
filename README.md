@@ -116,9 +116,14 @@ ignore_all_textual_files
 ignore_all_js_files
 ignore_all_files_with_extension <extension1,extension2,...>
 ignore_regexp <regexp string>
+source_branch_wins
 ```
 
 `ignore_all_textual_files` is the most common choice.
+
+`source_branch_wins` (included once anywhere) changes the PlayCanvas merge behavior:
+instead of keeping an item as it is in the destination branch, the merge result will
+now include the version of the corresponding item (if present) from the source branch.
 
 Multiple `ignore_regexp` lines can be provided. Any textual asset whose 
 path from the root of the asset hierarchy
