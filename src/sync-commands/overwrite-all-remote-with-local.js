@@ -33,12 +33,14 @@ class OverwriteAllRemoteWithLocal {
     }
   }
 
-  handleAllFiles() {
-    const promises1 = this.diff.filesThatDiffer.map(this.updateItem, this);
+  async handleAllFiles() {
+    for (const h of this.diff.filesThatDiffer) {
+      await this.updateItem(h);
+    }
 
-    const promises2 = this.diff.extraItems.local.files.map(this.createItem, this);
-
-    return CUtils.iterWait(promises1, promises2);
+    for (const h of this.diff.extraItems.local.files) {
+      await this.createItem(h);
+    }
   }
 
   async createItem(h) {

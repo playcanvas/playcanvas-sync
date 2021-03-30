@@ -271,14 +271,6 @@ const CUtils = {
 
     waitMs: function (ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
-    },
-
-    iterWait: async function (a1, a2) {
-        const a = a1.concat(a2);
-
-        for (const p of a) {
-            await p;
-        }
     }
 };
 

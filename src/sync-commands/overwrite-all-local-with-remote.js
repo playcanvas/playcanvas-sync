@@ -25,7 +25,7 @@ class OverwriteAllLocalWithRemote {
         this.diff = await new ComputeDiffAll(this.limitToItems).run();
     }
 
-    async handleAllFolders() {
+    handleAllFolders() {
         CUtils.sortByStrField(this.diff.extraItems.remote.folders, 'remotePath');
 
         this.diff.extraItems.remote.folders.forEach(h => {
@@ -35,12 +35,14 @@ class OverwriteAllLocalWithRemote {
         });
     }
 
-    handleAllFiles() {
-        const promises1 = this.diff.filesThatDiffer.map(h => this.fetchFile(h, 'Updated'));
+    async handleAllFiles() {
+        for (const h of this.diff.filesThatDiffer) {
+            await this.fetchFile(h, 'Updated');
+        }
 
-        const promises2 = this.diff.extraItems.remote.files.map(h => this.fetchFile(h, 'Created'));
-
-        return CUtils.iterWait(promises1, promises2);
+        for (const h of this.diff.extraItems.remote.files) {
+            await this.fetchFile(h, 'Created');
+        }
     }
 
     async fetchFile(h, action) {
