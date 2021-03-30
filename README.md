@@ -122,8 +122,9 @@ source_branch_wins
 `ignore_all_textual_files` is the most common choice.
 
 `source_branch_wins` (included once anywhere) changes the PlayCanvas merge behavior:
-instead of keeping an item as it is in the destination branch, the merge result will
-now include the version of the corresponding item (if present) from the source branch.
+instead of keeping items matching `pcignore.txt` as is (in the destination branch), 
+the merge result will now include the versions of the corresponding 
+items (if present) from the source branch.
 
 Multiple `ignore_regexp` lines can be provided. Any textual asset whose 
 path from the root of the asset hierarchy
