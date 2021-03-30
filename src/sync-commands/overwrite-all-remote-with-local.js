@@ -2,6 +2,7 @@ const ActionCreated = require('../watch-actions/action-created');
 const WatchUtils = require('../watch-actions/watch-utils');
 const ComputeDiffAll = require('./compute-diff-all');
 const GetConfig = require('../utils/get-config');
+const CUtils = require('../utils/common-utils');
 
 class OverwriteAllRemoteWithLocal {
   constructor(limitToItems) {
@@ -37,7 +38,7 @@ class OverwriteAllRemoteWithLocal {
 
     const promises2 = this.diff.extraItems.local.files.map(this.createItem, this);
 
-    return Promise.all(promises1.concat(promises2));
+    return CUtils.iterWait(promises1, promises2);
   }
 
   async createItem(h) {

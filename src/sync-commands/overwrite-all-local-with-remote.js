@@ -40,7 +40,7 @@ class OverwriteAllLocalWithRemote {
 
         const promises2 = this.diff.extraItems.remote.files.map(h => this.fetchFile(h, 'Created'));
 
-        return Promise.all(promises1.concat(promises2));
+        return CUtils.iterWait(promises1, promises2);
     }
 
     async fetchFile(h, action) {
