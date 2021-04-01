@@ -62,13 +62,13 @@ program
 function runCompAll (cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
-    CUtils.wrapUsErrors(() => {
+    CUtils.wrapUserErrors(() => {
         return SyncUtils.reportDiffAll();
     });
 }
 
 function runDiff (filePath) {
-    CUtils.wrapUsErrors(() => {
+    CUtils.wrapUserErrors(() => {
         return SCUtils.diffSingleFile(filePath);
     });
 }
@@ -92,7 +92,7 @@ function runOverwriteAllRemote (cmdObj) {
 function runDownloadSingle (filePath) {
     CUtils.setForceEnv(filePath);
 
-    CUtils.wrapUsErrors(() => {
+    CUtils.wrapUserErrors(() => {
         return SCUtils.downloadSingleFile(filePath);
     });
 }
@@ -100,13 +100,13 @@ function runDownloadSingle (filePath) {
 function runUploadSingle (filePath) {
     CUtils.setForceEnv(filePath);
 
-    CUtils.wrapUsErrors(() => {
+    CUtils.wrapUserErrors(() => {
         return SCUtils.uploadSingleFile(filePath);
     });
 }
 
 function runRename (oldPath, newPath) {
-    CUtils.wrapUsErrors(() => {
+    CUtils.wrapUserErrors(() => {
         return SCUtils.renameItem(oldPath, newPath);
     });
 }
@@ -114,13 +114,13 @@ function runRename (oldPath, newPath) {
 function runDelete (filePath) {
     CUtils.setForceEnv(filePath);
 
-    CUtils.wrapUsErrors(() => {
+    CUtils.wrapUserErrors(() => {
         return SCUtils.deleteItem(filePath);
     });
 }
 
 function runParse () {
-    CUtils.wrapUsErrors(() => {
+    CUtils.wrapUserErrors(() => {
         return SCUtils.reportIgnoredAssets();
     });
 }

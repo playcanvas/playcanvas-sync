@@ -17,9 +17,9 @@ program.parse(process.argv);
 
 async function run() {
     if (!program.force) {
-        await CUtils.wrapUsErrors(() => SyncUtils.errorIfDifferent(true));
+        await CUtils.wrapUserErrors(() => SyncUtils.errorIfDifferent(true));
 
-        await CUtils.wrapUsErrors(SyncUtils.errorIfMultWatch);
+        await CUtils.wrapUserErrors(SyncUtils.errorIfMultWatch);
     }
 
     await startWatcher();

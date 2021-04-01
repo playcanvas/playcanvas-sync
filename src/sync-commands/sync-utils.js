@@ -31,7 +31,7 @@ const SyncUtils = {
     },
 
     compareAndPrompt: async function(callback) {
-        const h = await CUtils.wrapUsErrors(SyncUtils.reportDiffAll);
+        const h = await CUtils.wrapUserErrors(SyncUtils.reportDiffAll);
 
         h.anyDiffFound ?
             SyncUtils.promptAndRun(callback) :
@@ -48,7 +48,7 @@ const SyncUtils = {
             rl.close();
 
             if (answer === 'y') {
-                CUtils.wrapUsErrors(callback);
+                CUtils.wrapUserErrors(callback);
             } else {
                 process.exit(0);
             }
