@@ -1,8 +1,9 @@
 const CUtils = require('../utils/common-utils');
 const ComputeDiffAll = require('./compute-diff-all');
-const PathUtils = require('../utils/path-utils');
 const readline = require('readline');
 const FindProcess = require('find-process');
+const path = require('path');
+const GetConfig = require('../utils/get-config');
 
 const SyncUtils = {
     reportDiffAll: async function() {
@@ -10,11 +11,7 @@ const SyncUtils = {
 
         SyncUtils.reportList(h.filesThatDiffer, 'Files that Differ');
 
-        // SyncUtils.reportList(h.extraItems.local.folders, 'Local Folders Missing on Remote');
-
         SyncUtils.reportList(h.extraItems.local.files, 'Local Files Missing on Remote');
-
-        // SyncUtils.reportList(h.extraItems.remote.folders, 'Remote Folders Missing on Local');
 
         SyncUtils.reportList(h.extraItems.remote.files, 'Remote Files Missing on Local');
 
@@ -23,42 +20,13 @@ const SyncUtils = {
 
     reportList: function (a, tag) {
         if (a.length) {
-            CUtils.syncMsg(`---- ${tag} ----`);
+            console.log(`---- ${tag} ----`);
 
             a = a.map(h => h.remotePath);
 
             a.sort();
 
-            a.forEach(s => CUtils.syncMsg(s));
-        }
-    },
-
-    reportExistingFolders: function (diff) {
-        diff.equalItems.folders.forEach(h => {
-            CUtils.syncMsg(`Folder ${h.remotePath} already exists`);
-        });
-    },
-
-    reportEqualFiles: function (diff) {
-        diff.equalItems.files.forEach(h => {
-            CUtils.syncMsg(`Local and remote files ${h.remotePath} are equal`);
-        });
-    },
-
-    makeRenameEvent: function (oldPath, newPath, conf) {
-        const p1 = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, oldPath);
-
-        const p2 = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, newPath);
-
-        const h1 = CUtils.fullPathToEventData(p1);
-
-        const h2 = CUtils.fullPathToEventData(p2);
-
-        return {
-            directory: h1.directory,
-            oldFile: h1.file,
-            newDirectory: h2.directory,
-            newFile: h2.file
+            a.forEach(s => console.log(s));
         }
     },
 
@@ -67,7 +35,7 @@ const SyncUtils = {
 
         h.anyDiffFound ?
             SyncUtils.promptAndRun(callback) :
-            CUtils.syncMsg('No differences found between local and remote.');
+            console.log('No differences found between local and remote.');
     },
 
     promptAndRun: function(callback) {
@@ -87,23 +55,21 @@ const SyncUtils = {
         });
     },
 
-    remoteFileStr: async function (filePath, conf) {
-        const p = PathUtils.relativeLocalToRemotePath(filePath);
-
-        const asset = conf.store.getAssetAtPath(p);
+    remoteFileStr: async function (remotePath, conf) {
+        const asset = conf.store.getAssetAtPath(remotePath);
 
         const s = await conf.client.loadAssetToStr(asset, conf.PLAYCANVAS_BRANCH_ID);
 
         return CUtils.replaceCarriage(s);
     },
 
-    localFileStr: function (filePath, conf) {
-        const p = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, filePath);
+    localFileStr: function (remotePath, conf) {
+        const p = path.join(conf.PLAYCANVAS_TARGET_DIR, remotePath);
 
         const s = CUtils.fileToStr(p);
 
         if (!s) {
-            CUtils.throwUserError(`Could not find local file ${p}`);
+            CUtils.throwUsError(`Could not find local file ${p}`);
         }
 
         return s;
@@ -117,25 +83,31 @@ const SyncUtils = {
                 'Use \'pcsync\' to fix' +
                 SyncUtils.forceMsg(canForce);
 
-            CUtils.throwFatalError(s);
+            CUtils.throwFtError(s);
         }
     },
 
     errorIfMultWatch: async function() {
-        const n = await SyncUtils.countWatchInstances();
+        const a = await SyncUtils.getWatchProcs();
 
-        if (n > 1) { // 1 (this process) is expected
+        if (a.length > 1) { // 1 (this process) is expected
             const s = 'Other running instances of \'pcwatch\' detected. Stop them' +
                 SyncUtils.forceMsg(true);
 
-            CUtils.throwFatalError(s);
+            CUtils.throwFtError(s);
         }
     },
 
-    countWatchInstances: async function() {
+    getWatchProcs: async function() {
+        const conf = await new GetConfig().run();
+
         const a = await FindProcess('name', /pcwatch/);
 
-        return a.length;
+        if (conf.PLAYCANVAS_VERBOSE) {
+            console.log(a);
+        }
+
+        return a.filter(h => h.name !== 'winpty.exe'); // git bash on wind
     },
 
     forceMsg: function (canForce) {

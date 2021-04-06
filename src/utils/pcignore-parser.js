@@ -6,7 +6,8 @@ const specialTokenParts = [
     'ignore_all_textual_files',
     'ignore_all_js_files',
     'ignore_all_files_with_extension',
-    'ignore_regexp'
+    'ignore_regexp',
+    'source_branch_wins'
 ].join('|');
 
 const specialTokenReg = new RegExp(`\\s*(${specialTokenParts})\\s*(\\S+)?`);

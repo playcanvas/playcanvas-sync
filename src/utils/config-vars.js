@@ -1,6 +1,7 @@
 const path = require('path');
 const CUtils = require('./common-utils');
 const os = require('os');
+const PathUtils = require('./path-utils');
 
 const HOME_CONFIG_FILE = '.pcconfig';
 const TARGET_CONFIG_FILE = 'pcconfig.json';
@@ -24,11 +25,6 @@ const optionalFields = [
 
 const allConfigFields = requiredFields.concat(optionalFields);
 
-const fieldsToReport = [
-    'PLAYCANVAS_TARGET_DIR',
-    'PLAYCANVAS_BRANCH_ID'
-];
-
 const fieldsWithDefaults = {
     PLAYCANVAS_BASE_URL: 'https://playcanvas.com'
 };
@@ -49,8 +45,8 @@ class ConfigVars {
         this.result = {};
     }
 
-    run() {
-        this.setOrigVals();
+    async run() {
+        await this.setOrigVals();
 
         regexFields.forEach(this.makeReg, this);
 
@@ -61,10 +57,12 @@ class ConfigVars {
         return this.result;
     }
 
-    setOrigVals() {
+    async setOrigVals() {
         this.fromEnvOrMap({});
 
         this.fromConfigFile(os.homedir(), HOME_CONFIG_FILE);
+
+        await this.checkPrepTarg();
 
         this.fromConfigFile(this.result.PLAYCANVAS_TARGET_DIR, TARGET_CONFIG_FILE);
 
@@ -83,6 +81,21 @@ class ConfigVars {
         this.fromEnvOrMap(h);
     }
 
+    async checkPrepTarg() {
+        let s = this.result.PLAYCANVAS_TARGET_DIR || '';
+
+        s = PathUtils.rmLastSlash(s);
+
+        const stat = await PathUtils.fsWrap('stat', s);
+
+        if (stat && stat.isDirectory) {
+            this.result.PLAYCANVAS_TARGET_DIR = s;
+
+        } else {
+            CUtils.throwFtError(`Error: could not find target directory: ${s}. Check capitalization.`);
+        }
+    }
+
     fromEnvOrMap(h) {
         allConfigFields.forEach(field => {
             this.result[field] = process.env[field] || h[field] || this.result[field];
@@ -97,7 +110,7 @@ class ConfigVars {
 
     checkRequired(field) {
         if (!this.result[field]) {
-            CUtils.throwUserError(`Missing config variable: ${field}`);
+            CUtils.throwUsError(`Missing config variable: ${field}`);
         }
     }
 
@@ -121,11 +134,10 @@ class ConfigVars {
 
     reportVars() {
         const a = this.result.PLAYCANVAS_VERBOSE ?
-            allConfigFields :
-            fieldsToReport;
+            allConfigFields : [];
 
         a.forEach(field => {
-            CUtils.configMsg(`${field}: ${this.result[field]}`);
+            console.log(`${field}: ${this.result[field]}`);
         });
     }
 }

@@ -1,7 +1,8 @@
 const ActionCreated = require('../watch-actions/action-created');
-const CUtils = require('../utils/common-utils');
 const WatchUtils = require('../watch-actions/watch-utils');
 const ComputeDiffAll = require('./compute-diff-all');
+const GetConfig = require('../utils/get-config');
+const CUtils = require('../utils/common-utils');
 
 class OverwriteAllRemoteWithLocal {
   constructor(limitToItems) {
@@ -14,14 +15,16 @@ class OverwriteAllRemoteWithLocal {
     await this.handleAllFolders();
 
     await this.handleAllFiles();
+
+    if (!this.doneAnyting) {
+      console.log('Nothing done');
+    }
   }
 
   async init() {
-    CUtils.setOperationType('overwrite_remote');
+    this.conf = await new GetConfig().run();
 
     this.diff = await new ComputeDiffAll(this.limitToItems).run();
-
-    this.conf = this.diff.conf;
   }
 
   async handleAllFolders() {
@@ -30,28 +33,32 @@ class OverwriteAllRemoteWithLocal {
     }
   }
 
-  handleAllFiles() {
-    const promises1 = this.diff.filesThatDiffer.map(this.updateItem, this);
+  async handleAllFiles() {
+    for (const h of this.diff.filesThatDiffer) {
+      await this.updateItem(h);
+    }
 
-    const promises2 = this.diff.extraItems.local.files.map(this.createItem, this);
-
-    return Promise.all(promises1.concat(promises2));
+    for (const h of this.diff.extraItems.local.files) {
+      await this.createItem(h);
+    }
   }
 
   async createItem(h) {
-    const event = CUtils.fullPathToEventData(h.fullPath);
+    await new ActionCreated(h, this.conf).run();
 
-    await new ActionCreated(event, this.conf).run();
-
-    CUtils.syncMsg(`Created ${h.remotePath}`);
+    this.actionEnd('Created', h);
   }
 
   async updateItem(h) {
-    const event = CUtils.fullPathToEventData(h.fullPath);
+    await WatchUtils.actionModified(h, this.conf);
 
-    await WatchUtils.actionModified(event, this.conf);
+    this.actionEnd('Updated', h);
+  }
 
-    CUtils.syncMsg(`Updated ${h.remotePath}`);
+  actionEnd(action, h) {
+    this.doneAnyting = true;
+
+    console.log(`${action} ${h.remotePath}`);
   }
 }
 

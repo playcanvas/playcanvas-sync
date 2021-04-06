@@ -1,20 +1,19 @@
 #!/usr/bin/env node
 
-const nsfw = require('nsfw');
 const GetConfig = require('./src/utils/get-config');
 const program = require('commander');
 
 const CUtils = require('./src/utils/common-utils');
 const WatchUtils = require('./src/watch-actions/watch-utils');
 const ActionCreated = require('./src/watch-actions/action-created');
-const ActionRenamed = require('./src/watch-actions/action-renamed');
 const SyncUtils = require('./src/sync-commands/sync-utils');
+const LocalWatcher = require('./src/utils/local-watcher');
+const CacheUtils = require('./src/utils/cache-utils');
+const LocalTraversal = require('./src/utils/local-traversal');
 
 program.option('-f, --force', 'skip local/remote equality check');
 
 program.parse(process.argv);
-
-const WATCH_OPTS = { debounceMS: 1000 };
 
 async function run() {
     if (!program.force) {
@@ -29,70 +28,55 @@ async function run() {
 async function startWatcher() {
     const conf = await new GetConfig().run();
 
-    const watcher = await nsfw(
-        conf.PLAYCANVAS_TARGET_DIR,
-        function (events) {
-            CUtils.wrapUserErrors(handleEvents, [events, conf]);
-        },
-        WATCH_OPTS
+    console.log(`Started in ${conf.PLAYCANVAS_TARGET_DIR}`);
+
+    const local = await CacheUtils.getCached(conf, 'local_items');
+
+    let pathToData = local.locPathToData;
+
+    while (true) {
+        pathToData = await watchIteration(conf, pathToData);
+    }
+}
+
+async function watchIteration(conf, pathToData) {
+    await CUtils.waitMs(WatchUtils.WATCH_LOOP_INTERVAL);
+
+    const handler = new LocalWatcher(
+        conf,
+        pathToData,
+        WatchUtils.WATCH_ITEM_INTERVAL,
+        handleEvent
     );
 
-    await watcher.start();
-
-    CUtils.watchMsg('Started');
+    return new LocalTraversal(conf.PLAYCANVAS_TARGET_DIR, handler).run();
 }
 
-async function handleEvents(events, conf) {
-    const a = WatchUtils.filterEvents(events, conf);
-
-    if (conf.PLAYCANVAS_DRY_RUN) {
-        return;
-    }
-
-    for (const e of a) {
-        await handleFileEvent(e, conf);
-    }
+async function handleEvent(e, conf) {
+    return WatchUtils.shouldKeepEvent(e, conf) &&
+        !conf.PLAYCANVAS_DRY_RUN &&
+        handleGoodEvent(e, conf);
 }
 
-async function handleFileEvent(e, conf) {
-    if (e.action === nsfw.actions.MODIFIED) {
+async function handleGoodEvent(e, conf) {
+    if (e.action === 'ACTION_MODIFIED') {
         await eventModified(e, conf);
 
-    } else if (e.action === nsfw.actions.RENAMED) {
-        await eventRenamed(e, conf);
+    } else if (e.action === 'ACTION_DELETED') {
+        await WatchUtils.actionDeleted(e.remotePath, conf);
 
-    } else if (e.action === nsfw.actions.DELETED) {
-        const remotePath = await WatchUtils.actionDeleted(e, conf);
+        console.log(`Deleted ${e.remotePath}`);
 
-        CUtils.watchMsg(`Deleted ${remotePath}`);
-
-    } else if (e.action === nsfw.actions.CREATED) {
+    } else if (e.action === 'ACTION_CREATED') {
         await eventCreated(e, conf);
     }
 }
 
-// sometimes file move appears as modified
 async function eventModified(e, conf) {
     if (CUtils.eventHasAsset(e, conf)) {
         const id = await WatchUtils.actionModified(e, conf);
 
         WatchUtils.reportWatchAction(id, 'Updated', conf);
-
-    } else {
-        await eventCreated(e, conf);
-    }
-}
-
-async function eventRenamed(e, conf) {
-    if (CUtils.eventHasAsset(e, conf)) {
-        const id = await new ActionRenamed(e, conf).run();
-
-        WatchUtils.reportWatchAction(id, 'New name', conf);
-
-    } else {
-        CUtils.renameToCreateEvent(e);
-
-        await eventCreated(e, conf);
     }
 }
 

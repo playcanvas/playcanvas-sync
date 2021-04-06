@@ -1,6 +1,6 @@
 const GetConfig = require('../utils/get-config');
-const DirContents = require('../utils/dir-contents');
 const CUtils = require('../utils/common-utils');
+const CacheUtils = require('../utils/cache-utils');
 
 class ComputeDiffAll {
   constructor(limitToItems) {
@@ -47,14 +47,12 @@ class ComputeDiffAll {
   async init() {
     this.conf = await new GetConfig().run();
 
-    this.res.conf = this.conf;
-
     this.remote = {
       folders: this.conf.store.folderAssets,
       files: this.conf.store.activeAssets
     };
 
-    this.local = new DirContents(this.conf).run();
+    this.local = await CacheUtils.getCached(this.conf, 'local_items');
 
     this.applyLimit();
   }
@@ -118,9 +116,7 @@ class ComputeDiffAll {
   setAnyDiffFound() {
     const allResArrays = [
       this.res.filesThatDiffer,
-      // this.res.extraItems.local.folders,
       this.res.extraItems.local.files,
-      // this.res.extraItems.remote.folders,
       this.res.extraItems.remote.files
     ];
 

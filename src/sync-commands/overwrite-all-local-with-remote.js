@@ -1,4 +1,5 @@
 const CUtils = require('../utils/common-utils');
+const GetConfig = require('../utils/get-config');
 const ComputeDiffAll = require('./compute-diff-all');
 
 class OverwriteAllLocalWithRemote {
@@ -12,32 +13,36 @@ class OverwriteAllLocalWithRemote {
         this.handleAllFolders();
 
         await this.handleAllFiles();
+
+        if (!this.doneAnyting) {
+            console.log('Nothing done');
+        }
     }
 
     async init() {
-        CUtils.setOperationType('overwrite_local');
+        this.conf = await new GetConfig().run();
 
         this.diff = await new ComputeDiffAll(this.limitToItems).run();
-
-        this.conf = this.diff.conf;
     }
 
-    async handleAllFolders() {
+    handleAllFolders() {
         CUtils.sortByStrField(this.diff.extraItems.remote.folders, 'remotePath');
 
         this.diff.extraItems.remote.folders.forEach(h => {
             CUtils.makeLocalFolder(h, this.conf);
 
-            CUtils.syncMsg(`Created ${h.remotePath}`);
+            this.actionEnd('Created', h);
         });
     }
 
-    handleAllFiles() {
-        const promises1 = this.diff.filesThatDiffer.map(h => this.fetchFile(h, 'Updated'));
+    async handleAllFiles() {
+        for (const h of this.diff.filesThatDiffer) {
+            await this.fetchFile(h, 'Updated');
+        }
 
-        const promises2 = this.diff.extraItems.remote.files.map(h => this.fetchFile(h, 'Created'));
-
-        return Promise.all(promises1.concat(promises2));
+        for (const h of this.diff.extraItems.remote.files) {
+            await this.fetchFile(h, 'Created');
+        }
     }
 
     async fetchFile(h, action) {
@@ -45,7 +50,13 @@ class OverwriteAllLocalWithRemote {
 
         await this.conf.client.loadAssetToFile(asset, this.conf);
 
-        CUtils.syncMsg(`${action} ${h.remotePath}`);
+        this.actionEnd(action, h);
+    }
+
+    actionEnd(action, h) {
+        this.doneAnyting = true;
+
+        console.log(`${action} ${h.remotePath}`);
     }
 }
 

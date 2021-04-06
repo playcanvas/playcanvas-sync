@@ -1,26 +1,19 @@
 const fs = require('fs');
 const CUtils = require('../utils/common-utils');
-const PathUtils = require('../utils/path-utils');
-const nsfw = require('nsfw');
-const IsGoodEvent = require('./is-good-event');
-
-const ACTION_TO_NAME = {};
-ACTION_TO_NAME[nsfw.actions.CREATED] = 'CREATED';
-ACTION_TO_NAME[nsfw.actions.MODIFIED] = 'MODIFIED';
-ACTION_TO_NAME[nsfw.actions.RENAMED] = 'RENAMED';
-ACTION_TO_NAME[nsfw.actions.DELETED] = 'DELETED';
+const TypeUtils = require('../utils/type-utils');
 
 const WatchUtils = {
-  actionModified: async function (e, conf) {
-    const fullPath = PathUtils.eventToFullPath(e);
+  WATCH_LOOP_INTERVAL: 1000,
+  WATCH_ITEM_INTERVAL: 10,
 
-    const assetId = CUtils.getAssetId(fullPath, conf);
+  actionModified: async function (data, conf) {
+    const assetId = conf.store.getAssetId(data.remotePath);
 
     const url = `/assets/${assetId}`;
 
     const h = {
       branchId: conf.PLAYCANVAS_BRANCH_ID,
-      file: fs.createReadStream(fullPath)
+      file: fs.createReadStream(data.fullPath)
     };
 
     await conf.client.putForm(url, h);
@@ -28,20 +21,14 @@ const WatchUtils = {
     return assetId;
   },
 
-  actionDeleted: async function (e, conf) {
-    const fullPath = PathUtils.eventToFullPath(e);
-
-    const assetId = CUtils.getAssetId(fullPath, conf);
-
-    const remotePath = conf.store.idToPath[assetId];
+  actionDeleted: async function (remotePath, conf) {
+    const assetId = conf.store.getAssetId(remotePath);
 
     conf.store.handleDeletedAsset(assetId);
 
     const url = `/assets/${assetId}?branchId=${conf.PLAYCANVAS_BRANCH_ID}`;
 
     await conf.client.methodDelete(url);
-
-    return remotePath;
   },
 
   reportWatchAction: function (assetId, tag, conf) {
@@ -49,35 +36,34 @@ const WatchUtils = {
 
     const s = `${tag} ${remotePath}`;
 
-    CUtils.watchMsg(s);
+    console.log(s);
   },
 
-  verboseEvents: function (a, tag, conf) {
+  verboseEvent: function (h, shouldKeep, conf) {
     if (conf.PLAYCANVAS_VERBOSE) {
-      CUtils.watchMsg(tag);
+      console.log('------------------');
 
-      a = a.map(WatchUtils.cloneWithActionStr);
+      console.log('EVENT:');
 
-      console.log(a);
+      console.log(h);
+
+      const s = shouldKeep ? 'YES' : 'NO';
+
+      console.log(`SHOULD APPLY TO REMOTE: ${s}`);
+
+      console.log('------------------');
     }
   },
 
-  cloneWithActionStr: function (h) {
-    h = CUtils.shallowClone(h);
+  shouldKeepEvent: function (h, conf) {
+    let res = (h.isFile && !TypeUtils.isBadFile(h.itemName, h.remotePath, conf)) ||
+      (h.isDirectory && !CUtils.isBadDir(h.remotePath, conf));
 
-    h.action = ACTION_TO_NAME[h.action];
+    res = res && !CUtils.isBadDir(h.parentRemote, conf);
 
-    return h;
-  },
+    WatchUtils.verboseEvent(h, res, conf);
 
-  filterEvents: function (a, conf) {
-    WatchUtils.verboseEvents(a, 'ALL EVENTS:', conf);
-
-    a = a.filter(h => new IsGoodEvent(h, conf).run());
-
-    WatchUtils.verboseEvents(a, 'EVENTS AFTER BAD REMOVED:', conf);
-
-    return a;
+    return res;
   }
 };
 

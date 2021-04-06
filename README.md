@@ -2,10 +2,10 @@
 
 The `pcsync` and `pcwatch` utilities allow editing copies of
 JavaScript and other textual files of a PlayCanvas project
-locally, on your own computer, in a text editor of your choice.
+locally on your own computer, in a text editor of your choice.
 
-`pcsync` also allows pushing and pulling [non-text files](#using-pcsync-for-non-text-files), such as
-images and models, between your machine and PlayCanvas, individually or all at once.
+`pcsync` also allows pushing and pulling of [non-text files](#using-pcsync-for-non-text-files), such as
+images and models.
 
 In addition, if your project has a file called [`pcignore.txt`](#the-pcignoretxt-file),
 PlayCanvas merge will not affect the files listed in it,
@@ -16,7 +16,7 @@ and the operation of `pcsync` and `pcwatch` will be restricted only to those fil
 and to compare one or all local files to their 
 remote (PlayCanvas) versions.
  
-`pcwatch` detects changes to local files and folders (edits, renames, removal and creation)
+`pcwatch` detects changes to local files and folders (edits, removals and creation)
 as they happen and applies them to PlayCanvas in real time.
 
 If you do not need your local changes pushed to PlayCanvas "as you type",
@@ -57,7 +57,7 @@ A local directory [designated](#config-variables) as `PLAYCANVAS_TARGET_DIR`
 corresponds to the root of the PlayCanvas file and folder asset hierarchy.
 
 All file and folder paths passed to `pcsync` as arguments
-should be relative to this root, e.g.
+should be relative to this root and use forward slashes even on Windows, e.g.
 
 ```
 pcsync rename dir1/file1.js file1.js
@@ -69,33 +69,18 @@ will move `file1.js` to the root asset directory.
 
 `pcwatch` does not need any options.
 
-While `pcwatch` is running, it is recommended to periodically run 
+Moving or renaming a file or a folder
+will appear to `pcwatch` as a `remove + create`. In such cases it may be better to
+stop `pcwatch`, perform the opearation locally, apply it to PlayCanvas with
+`pcsync rename`, and start `pcwatch` again.
 
-```
-pcsync diffAll
-```
-
-to verify that the local and remote versions of all your files are indeed in sync,
-especially at the beginning and the end of your coding session.
-
-For OS-specific reasons moving a file from one directory to another
-may appear to `pcwatch` as a `remove + create`. In such cases it may be better to
-stop `pcwatch`, move the file locally, then move the remote file with
-`pcsync rename`. Now `pcwatch` can be started again.
-
-Similarly, it is recommended to stop `pcwatch` when
-renaming or moving existing folders. Remote folders can then
-be updated with `pcsync` or manually. If `pcwatch` is not
-stopped, remote files and folders can get out of sync (which still
-can be fixed with `pcsync` or manually).
-
-# Note on Adding New Files as Script Components
+# Adding New Files as Script Components
 
 Assume file F was  created locally
 and pushed to PlayCanvas with `pcsync` or `pcwatch`, and
 now you are adding F as a script component to an entity in PlayCanvas Editor.
 
-It will take a second or two for F to appear in the dropdown list, because
+Note that it will take a second or two for F to appear in the dropdown list, because
 F is parsed by the editor for the first time when that list is populated 
 (we may add some progress indication for that).
 
@@ -109,25 +94,17 @@ if `pcignore.txt` exists. This ensures that the set of files managed locally
 exactly matches the set ignored by PlayCanvas merge, which is appropriate
 for most workflows. 
 
-In some rare cases you may need `pcsync` and `pcwatch` to
-work with more files than listed in `pcignore.txt`. This can be accomplished with
-the `PLAYCANVAS_INCLUDE_REG` config variable, which is a regular expression to
-test each file's full path from the root of the target directory, including
-the file name.
+To make `pcsync` and `pcwatch` work with more files than listed in `pcignore.txt`,
+use the `PLAYCANVAS_INCLUDE_REG` config variable, which is a regular expression to
+test each file's path from the root of the asset hierarchy.
 
 Before a PlayCanvas merge, make sure that the latest checkpoint of the destination
 branch is taken after `pcignore.txt` was added.
 
-If you are using git for your textual files, it is recommended that you merge 
-others' work with yours via git merge rather than PlayCanvas merge.
-
-You complete a git merge of two branches before a PlayCanvas merge of the
+If you are using git for your textual files, 
+you can perform a git merge before a PlayCanvas merge of the
 corresponding branches, push the result to the PlayCanvas destination branch,
 and then perform a PlayCanvas merge. 
-
-The PlayCanvas merge will ignore the files in `pcignore.txt`
-and thus your merge result checkpoint will have the correctly merged
-versions of both your locally- and PlayCanvas-managed assets.
 
 ## `pcignore.txt` Syntax
 
@@ -139,20 +116,24 @@ ignore_all_textual_files
 ignore_all_js_files
 ignore_all_files_with_extension <extension1,extension2,...>
 ignore_regexp <regexp string>
+source_branch_wins
 ```
 
 `ignore_all_textual_files` is the most common choice.
 
+`source_branch_wins` (included once anywhere) changes the PlayCanvas merge behavior:
+instead of keeping items matching `pcignore.txt` as is (in the destination branch), 
+the merge result will now include the versions of the corresponding 
+items (if present) from the source branch.
+
 Multiple `ignore_regexp` lines can be provided. Any textual asset whose 
-full path from the root of the PlayCanvas asset hierarchy
+path from the root of the asset hierarchy
 matches an `ignore_regexp` expression will be ignored.
 
 To check your `pcignore.txt` syntax, you can run `pcsync parseIgnore`.
 It will list all existing files that match your current `pcignore.txt`.
 
-Because of some limitations in the node library used to parse lines with gitignore syntax, 
-use a space and not * or ? to match a space in a file or folder name in gitignore lines
-that contain a slash.
+Use a space and not * or ? to match a space in a file or folder name in gitignore lines.
 
 # Using `pcsync` for Non-text Files
 
@@ -173,17 +154,15 @@ pcsync diffAll -e jpeg,png
 pcsync pushAll -r "\\.(png|jpeg)"
 ```
 
-The regular expression tests each file's full path from the root of the target directory.
+The regular expression tests each file's path from the root.
 
 # Installation
 
-We recommend using a recent stable version of `node`. Dependencies may
-not compile if your version of `node` is too old. `nvm` offers a
-convenient way to run multiple versions of `node` on your machine.
+Use a recent stable version of `node`. We recommend using `nvm`.
 
 Download or clone https://github.com/playcanvas/playcanvas-sync
 
-On a Mac, install Command Line Tools. On Catalina, also do:
+On a Mac, install Command Line Tools. On Catalina, you may also need:
 ```
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 ```
@@ -194,7 +173,14 @@ From the `playcanvas-sync` folder run:
 npm install
 ```
 
-After this, to install globally (this is optional), run:
+Now [set your config variables](#config-variables) and you can
+use the tool from this folder, e.g.
+
+```
+node pcwatch.js diffAll
+```
+
+or install it globally with:
 
 ```
 npm install -g
@@ -210,9 +196,10 @@ npm uninstall -g
 
 # Config Variables
 
-Config values can be set 
+Config variables can be set 
 in a file called `.pcconfig` in your home directory,
-in `pcconfig.json` file in your target directory (and your PlayCanvas branch),
+in `pcconfig.json` in your target directory
+(and your remote PlayCanvas branch),
 or provided as environment variables (which would have the highest precedence).
 
 Sample config file:
@@ -227,19 +214,32 @@ Sample config file:
   "PLAYCANVAS_BAD_FOLDER_REG": "\\."
 }
 ```
-All these key-value pairs are necessary.
 
-You can, for instance, keep `PLAYCANVAS_API_KEY`, `PLAYCANVAS_BAD_FILE_REG`
-and `PLAYCANVAS_BAD_FOLDER_REG` in `.pcconfig` in your home directory,
-and `PLAYCANVAS_BRANCH_ID` and `PLAYCANVAS_PROJECT_ID` in `pcconfig.json` in your project.
+You can get your api key (token) from your PlayCanvas account page
+(playcanvas.com/&lt;username&gt;/account).
 
-`PLAYCANVAS_TARGET_DIR` can be set in `.pcconfig` or as an environment variable.
+You can use 
 
-You can copy your project id from the URL of your project home page, e.g.
-for `https://playcanvas.com/project/10/overview/test_proj` the id is 10.
+```
+copy({
+  PLAYCANVAS_BRANCH_ID: config.self.branch.id,
+  PLAYCANVAS_PROJECT_ID: config.project.id
+})
+```
 
-You can copy your branch id from the list of branches in the
-Version Control Panel of the PlayCanvas Editor.
+from the Chrome Developer Tools console (on the PlayCanvas Editor page) 
+to copy your branch and project id to the clipboard.
+
+Alternatively, you can get your branch id from the
+Version Control Panel of the PlayCanvas Editor, and
+your project id from its home page url, e.g.
+for `playcanvas.com/project/10/overview/test_proj` the id is 10.
+
+All listed key-value pairs are necessary. You can keep 
+some of them in `.pcconfig` in your home directory,
+and others in `pcconfig.json` in your project.
+
+Backslash characters should be written as `\\` (escaped).
 
 # Files and Folders to Exclude
 
@@ -248,7 +248,7 @@ create local auxiliary files and directories,
 that do not need to be automatically pushed to PlayCanvas.
 
 `PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG` contain RegExp strings (note the
-double escapes) that tell `pcwatch` which files and directories to
+escapes) that tell `pcwatch` which files and directories to
 ignore. In our sample `.pcconfig`, a bad file has a name that starts
 with a dot or ends with `~`.
 A bad folder is one that has a dot anywhere in its path relative 
@@ -256,10 +256,10 @@ to `PLAYCANVAS_TARGET_DIR`. The expressions provided are sufficient in most case
 and you can simply copy them into your `.pcconfig`.
 
 To determine which auxiliary files and folders your OS and text editor
-create, run `pcwatch` with environment (or `.pcconfig`) variables
+create, run `pcwatch` with config/environment variables
 `PLAYCANVAS_DRY_RUN` and `PLAYCANVAS_VERBOSE` set to `1`, and create/edit some files.
 
-`pcwatch` output will show file system events as they happen,
+`pcwatch` output will show all file system events as they happen,
 and which of them will be filtered out by your current 
 `PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG`.
 
@@ -279,8 +279,7 @@ you intend to keep in git, create a PlayCanvas checkpoint that includes your `pc
 * Start editing/creating files locally in your own text editor
 * When necessary, merge in `git` the branch of another group member into your branch 
 * Use `pcsync pushAll` to update your remote branch after git merge
-* Merge the same branches in PlayCanvas. Because of your `pcignore.txt`,
-your remote copies of git merge result files will not be affected
+* Merge the same branches in PlayCanvas
 * Use `pcsync diffAll` to verify that local and remote files are still in sync
 
 ## Case 2: Multiple users working on the same PlayCanvas branch, with `git`
@@ -297,7 +296,6 @@ use `git` merge instead to maintain an accurate `git` history of edits to each f
  
 ## Case 3: Single user per PlayCanvas branch, without `git`
 
-* Create your own PlayCanvas branch of your team's project
 * Run `pcsync pullAll` to download existing textual files 
 from PlayCanvas
 * Launch `pcwatch`
@@ -369,13 +367,3 @@ Now you are ready to start using `pcsync` and `pcwatch`
 to sync your PlayCanvas project and edit with VS Code goodness 🚀
 
 ![](src/readme-imgs/vs-code-demo.gif) 
- 
-# TODO
-
-* JS files created with `pcwatch` or `pcsync` are parsed by the editor when
-a user selects a script to be added as a component to some entity. It may
-take a second or two before the newly parsed script is added to the dropdown,
-some progress indication may be useful. 
-
-* Add an Editor button to generate a .pcconfig file 
-with fields like project id and branch id already filled in

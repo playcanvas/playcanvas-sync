@@ -4,62 +4,62 @@ const PathUtils = require('../utils/path-utils');
 const SyncUtils = require('./sync-utils');
 const ActionRenamed = require('../watch-actions/action-renamed');
 const GetConfig = require('../utils/get-config');
-const CUtils = require('../utils/common-utils');
 const WatchUtils = require('../watch-actions/watch-utils');
 const DiffStrings = require('../diff/diff-strings');
+const path = require('path');
 
 const SCUtils = {
-  downloadSingleFile: function(remotePath) {
-    const limitToItems = PathUtils.remotePathToData(remotePath);
+    downloadSingleFile: function(remotePath) {
+        const limitToItems = PathUtils.remotePathToData(remotePath);
 
-    return new OverwriteAllLocalWithRemote(limitToItems).run();
-  },
+        return new OverwriteAllLocalWithRemote(limitToItems).run();
+    },
 
-  uploadSingleFile: function(remotePath) {
-    const limitToItems = PathUtils.remotePathToData(remotePath);
+    uploadSingleFile: function(remotePath) {
+        const limitToItems = PathUtils.remotePathToData(remotePath);
 
-    return new OverwriteAllRemoteWithLocal(limitToItems).run();
-  },
+        return new OverwriteAllRemoteWithLocal(limitToItems).run();
+    },
 
-  renameItem: async function(oldPath, newPath) {
-    const conf = await new GetConfig().run();
+    renameItem: async function(oldPath, newPath) {
+        const conf = await new GetConfig().run();
 
-    const e = SyncUtils.makeRenameEvent(oldPath, newPath, conf);
+        const h = {
+            remoteOldPath: oldPath,
+            remoteNewDir: path.dirname(newPath),
+            newFileName: path.basename(newPath)
+        }
 
-    await new ActionRenamed(e, conf).run();
+        await new ActionRenamed(h, conf).run();
 
-    CUtils.syncMsg(`Renamed ${oldPath} to ${newPath}`);
-  },
+        console.log(`Renamed ${oldPath} to ${newPath}`);
+    },
 
-  deleteItem: async function(filePath) {
-    const conf = await new GetConfig().run();
+    deleteItem: async function(remotePath) {
+        const conf = await new GetConfig().run();
 
-    const p = PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, filePath);
+        await WatchUtils.actionDeleted(remotePath, conf);
 
-    const e = CUtils.fullPathToEventData(p);
+        console.log(`Deleted ${remotePath}`);
+    },
 
-    await WatchUtils.actionDeleted(e, conf);
+    diffSingleFile: async function(remotePath) {
+        const conf = await new GetConfig().run();
 
-    CUtils.syncMsg(`Deleted ${filePath}`);
-  },
+        const remoteStr = await SyncUtils.remoteFileStr(remotePath, conf);
 
-  diffSingleFile: async function(filePath) {
-    const conf = await new GetConfig().run();
+        const localStr = SyncUtils.localFileStr(remotePath, conf);
 
-    const remoteStr = await SyncUtils.remoteFileStr(filePath, conf);
+        new DiffStrings(remoteStr, localStr).run();
+    },
 
-    const localStr = SyncUtils.localFileStr(filePath, conf);
+    reportIgnoredAssets: async function () {
+        await SyncUtils.errorIfDifferent(false);
 
-    new DiffStrings(remoteStr, localStr).run();
-  },
+        const conf = await new GetConfig().run();
 
-  reportIgnoredAssets: async function () {
-    await SyncUtils.errorIfDifferent(false);
-
-    const conf = await new GetConfig().run();
-
-    SyncUtils.reportList(conf.store.activeAssets, 'Assets matched by pcignore.txt');
-  }
+        SyncUtils.reportList(conf.store.activeAssets, 'Assets matched by pcignore.txt');
+    }
 };
 
 module.exports = SCUtils;

@@ -1,11 +1,10 @@
-const path = require('path');
 const CUtils = require('../utils/common-utils');
 
 const NO_PARENT_TOKEN = 'null';
 
 class ActionRenamed {
-    constructor(event, conf) {
-        this.event = event;
+    constructor(data, conf) {
+        this.data = data;
 
         this.conf = conf;
     }
@@ -15,19 +14,13 @@ class ActionRenamed {
 
         await this.callApi();
 
-        this.updateStore();
-
         return this.assetId;
     }
 
     init() {
-        this.newName = this.event.newFile;
+        this.assetId = this.conf.store.getAssetId(this.data.remoteOldPath);
 
-        const fullOldPath = path.join(this.event.directory, this.event.oldFile);
-
-        this.assetId = CUtils.getAssetId(fullOldPath, this.conf);
-
-        this.parentId = CUtils.getAssetId(this.event.newDirectory, this.conf);
+        this.parentId = this.conf.store.getAssetId(this.data.remoteNewDir);
     }
 
     callApi() {
@@ -35,19 +28,11 @@ class ActionRenamed {
 
         const h = {
             branchId: this.conf.PLAYCANVAS_BRANCH_ID,
-            name: this.newName,
+            name: this.data.newFileName,
             parent: this.parentId || NO_PARENT_TOKEN
         };
 
         return this.conf.client.putForm(url, h);
-    }
-
-    updateStore() {
-        this.conf.store.handleRenamedAsset(this.assetId, this.newName, this.parentId);
-
-        if (this.event.isDirEvent) {
-            this.conf.store.updateAllPaths();
-        }
     }
 }
 

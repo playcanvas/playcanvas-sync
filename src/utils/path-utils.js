@@ -1,109 +1,111 @@
 const path = require('path');
+const fs = require('fs').promises;
 
 const PathUtils = {
-  // no leading slash
-  arToSlashForwPath: function(a) {
-    return a.join('/');
-  },
+    // no leading slash
+    arToSlashForwPath: function(a) {
+        return a.join('/');
+    },
 
-  fullPathToLocalFile: function (part1, part2) {
-    p = path.join(part1, part2);
+    pathArToFullLocal: function (r, pathAr) {
+        const a = [ r ].concat(pathAr);
 
-    return path.normalize(p);
-  },
+        return path.join.apply(null, a);
+    },
 
-  splitOnSlashForw: function(s) {
-    return s.split('/');
-  },
+    splitOnSlashForw: function(s) {
+        return s.split('/');
+    },
 
-  splitOnOSDelimiter: function (s) {
-    return s.split(path.delimiter);
-  },
+    rmFirstSlash: function (s) {
+        return s.replace(/^[\\/]/, '');
+    },
 
-  rmFirstSlash: function (s) {
-    return s.replace(/^[\\/]/, '');
-  },
+    rmLastSlash: function (s) {
+        return s.replace(/[\\/]$/, '');
+    },
 
-  fullLocalToRemotePath: function (p, targetDir) {
-    p = path.relative(targetDir, p);
+    remotePathToData: function(s) {
+        s = PathUtils.rmFirstSlash(s);
 
-    return PathUtils.replaceBackSlash(p);
-  },
+        const a = PathUtils.splitOnSlashForw(s);
 
-  relativeLocalToRemotePath: function(p) {
-    p = PathUtils.rmFirstSlash(p);
+        const folderParts = a.slice(0, a.length - 1);
 
-    return PathUtils.replaceBackSlash(p);
-  },
+        return {
+            folders: PathUtils.partsToFolderRemotePaths(folderParts),
+            remotePath: s
+        }
+    },
 
-  replaceBackSlash: function (s) {
-    return s.replace(/\\/g, '/');
-  },
+    partsToFolderRemotePaths: function (parts) {
+        const res = [];
 
-  arePathsEqual: function (s1, s2) {
-    s1 = path.normalize(s1);
+        parts.forEach((s, ind) => {
+            const a = parts.slice(0, ind + 1);
 
-    s2 = path.normalize(s2);
+            const p = PathUtils.arToSlashForwPath(a);
 
-    return s1 === s2;
-  },
+            res.push(p);
+        });
 
-  remotePathToData: function(s) {
-    s = PathUtils.rmFirstSlash(s);
+        return res;
+    },
 
-    const a = PathUtils.splitOnSlashForw(s);
+    rmEmptyFolders: function (data) {
+        const paths = PathUtils.allFilePaths(data.files);
 
-    const folderParts = a.slice(0, a.length - 1);
+        data.folders = data.folders.filter(h => paths[h.remotePath]);
+    },
 
-    return {
-      folders: PathUtils.partsToFolderRemotePaths(folderParts),
-      remotePath: s
+    allFilePaths: function (files) {
+        const res = {};
+
+        files.forEach(h => PathUtils.addPathParts(h.remotePath, res));
+
+        return res;
+    },
+
+    addPathParts: function (remotePath, dst) {
+        const parts = PathUtils.splitOnSlashForw(remotePath);
+
+        for (let i = 0; i < parts.length; i++) {
+            const a = parts.slice(0, i);
+
+            const s = PathUtils.arToSlashForwPath(a);
+
+            dst[s] = 1;
+        }
+    },
+
+    makeLocItemData: async function (name, parentAr, rootDir) {
+        const pathAr = parentAr.concat([name]);
+
+        const fullPath = PathUtils.pathArToFullLocal(rootDir, pathAr);
+
+        const stat = await PathUtils.fsWrap('stat', fullPath);
+
+        return stat ? {
+            itemName: name,
+            fullPath: fullPath,
+            remotePath: PathUtils.arToSlashForwPath(pathAr),
+            isFile: stat.isFile(),
+            isDirectory: stat.isDirectory(),
+            modTime: stat.mtime.getTime(),
+            pathArray: pathAr,
+            parentFull: PathUtils.pathArToFullLocal(rootDir, parentAr),
+            parentRemote: PathUtils.arToSlashForwPath(parentAr)
+        } : {};
+    },
+
+    fsWrap: async function (method, fullPath) {
+        try {
+            return await fs[method](fullPath);
+
+        } catch (e) {
+            return null;
+        }
     }
-  },
-
-  partsToFolderRemotePaths: function (parts) {
-    const res = [];
-
-    parts.forEach((s, ind) => {
-      const a = parts.slice(0, ind + 1);
-
-      const p = PathUtils.arToSlashForwPath(a);
-
-      res.push(p);
-    });
-
-    return res;
-  },
-
-  eventToFullPath: function (e) {
-    return path.join(e.directory, e.file);
-  },
-
-  rmEmptyFolders: function (data) {
-    const paths = PathUtils.allFilePaths(data.files);
-
-    data.folders = data.folders.filter(h => paths[h.remotePath]);
-  },
-
-  allFilePaths: function (files) {
-    const res = {};
-
-    files.forEach(h => PathUtils.addPathParts(h.remotePath, res));
-
-    return res;
-  },
-
-  addPathParts: function (remotePath, dst) {
-    const parts = PathUtils.splitOnSlashForw(remotePath);
-
-    for (let i = 0; i < parts.length; i++) {
-      const a = parts.slice(0, i);
-
-      const s = PathUtils.arToSlashForwPath(a);
-
-      dst[s] = 1;
-    }
-  }
 };
 
 module.exports = PathUtils;

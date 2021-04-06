@@ -1,16 +1,16 @@
-const path = require('path');
 const fs = require('fs');
 const CUtils = require('../utils/common-utils');
 
 class ActionCreated {
-  constructor(event, conf) {
-    this.event = event;
+  constructor(data, conf) {
+    this.data = data;
 
     this.conf = conf;
   }
 
   async run() {
-    this.init();
+    this.parentId = this.data.parentRemote &&
+        this.conf.store.getAssetId(this.data.parentRemote);
 
     const response = await this.createRemote();
 
@@ -21,23 +21,11 @@ class ActionCreated {
     return asset.id;
   }
 
-  init() {
-    this.fullPath = path.join(this.event.directory, this.event.file);
-
-    const fullParent = path.dirname(this.fullPath);
-
-    this.parentId = CUtils.getAssetId(fullParent, this.conf);
-
-    this.assetName = path.basename(this.fullPath);
-  }
-
   createRemote() {
-    const stat = fs.statSync(this.fullPath);
-
-    if (stat.isFile()) {
+    if (this.data.isFile) {
       return this.createFile();
 
-    } else if (stat.isDirectory()) {
+    } else if (this.data.isDirectory) {
       return this.createDirectory();
     }
   }
@@ -45,7 +33,7 @@ class ActionCreated {
   createFile() {
     const h = { preload: 'true' };
 
-    return this.callApi(h, this.fullPath);
+    return this.callApi(h, this.data.fullPath);
   }
 
   createDirectory() {
@@ -56,7 +44,7 @@ class ActionCreated {
 
   callApi(opts, srcPath) {
     const h = {
-      name: this.assetName,
+      name: this.data.itemName,
       projectId: this.conf.PLAYCANVAS_PROJECT_ID,
       branchId: this.conf.PLAYCANVAS_BRANCH_ID
     };

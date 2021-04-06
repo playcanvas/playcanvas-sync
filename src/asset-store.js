@@ -1,6 +1,6 @@
 const CUtils = require('./utils/common-utils');
 const TypeUtils = require('./utils/type-utils');
-const LoadAssets = require('./load-assets');
+const CacheUtils = require('./utils/cache-utils');
 
 class AssetStore {
     constructor(conf) {
@@ -20,7 +20,7 @@ class AssetStore {
     }
 
     async populate() {
-        this.allAssets = await new LoadAssets(this.conf).run();
+        this.allAssets = await CacheUtils.getCached(this.conf, 'remote_assets');
 
         this.allAssets.forEach(this.addToIds, this);
 
@@ -33,14 +33,15 @@ class AssetStore {
         return this;
     }
 
-    getAssetAtPath(p) {
-        const asset = this.pathToAsset[p];
+    getAssetId(remotePath) {
+        const a = this.getAssetAtPath(remotePath);
 
-        if (asset) {
-            return asset;
-        } else {
-            CUtils.throwUserError(`Could not find asset at ${p}`);
-        }
+        return a.id
+    }
+
+    getAssetAtPath(remotePath) {
+        return this.pathToAsset[remotePath] ||
+            CUtils.throwUsError(`Could not find asset at ${remotePath}`);
     }
 
     handleAddedAsset(h) {
@@ -73,30 +74,6 @@ class AssetStore {
         delete this.pathToAsset[p];
     }
 
-    handleRenamedAsset(id, name, parent) {
-        const a = this.idToAsset[id];
-
-        a.name = name;
-
-        a.parent = parent;
-
-        const oldPath = this.idToPath[id];
-
-        delete this.pathToAsset[oldPath];
-
-        const newPath = CUtils.assetPathStr(a, this.idToAsset);
-
-        this.idToAsset[id].remotePath = newPath;
-
-        this.idToPath[id] = newPath;
-
-        this.pathToAsset[newPath] = a;
-    }
-
-    updateAllPaths() {
-        this.allAssets.forEach(h => this.handleRenamedAsset(h.id, h.name, h.parent));
-    }
-
     addToIds(h) {
         this.idToAsset[h.id] = h;
     }
@@ -121,8 +98,7 @@ class AssetStore {
 
     checkAddFolder(h) {
         const shouldAdd = h.type === 'folder' &&
-            (this.foldersWithActive[h.id] ||
-                CUtils.isOperationType('overwrite_remote'));
+            this.foldersWithActive[h.id];
 
         if (shouldAdd) {
             this.addToFolder(h);
@@ -135,7 +111,7 @@ class AssetStore {
 
     assertNew(id) {
         if (this.idToAsset[id]) {
-            CUtils.throwUserError(`Asset with id ${id} already exists`);
+            CUtils.throwUsError(`Asset with id ${id} already exists`);
         }
     }
 }

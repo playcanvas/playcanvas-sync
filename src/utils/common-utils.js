@@ -5,7 +5,6 @@ const UserError = require('./user-error');
 const FatalError = require('./fatal-error');
 const mkdirp = require('mkdirp');
 const path = require('path');
-const TypeUtils = require('./type-utils');
 
 const HTTPS_PREF_REG = /^https:\/\//;
 
@@ -88,10 +87,6 @@ const CUtils = {
         return s.replace(/\r\n?/g, '\n');
     },
 
-    strToMd5Hash: function (s) {
-        return crypto.createHash('md5').update(s, 'latin1').digest('hex');
-    },
-
     fileToMd5Hash: function(file) {
         const hash = crypto.createHash('md5');
 
@@ -109,16 +104,12 @@ const CUtils = {
     },
 
     isBadDir: function (s, conf) {
-        s = PathUtils.fullLocalToRemotePath(s, conf.PLAYCANVAS_TARGET_DIR);
-
         return conf.PLAYCANVAS_BAD_FOLDER_REG.test(s);
     },
 
     wrapUserErrors: async function (callback, args) {
         try {
-            const res = await callback.apply(null, args);
-
-            return res;
+            return await callback.apply(null, args);
 
         } catch (e) {
             if (e instanceof UserError) {
@@ -126,6 +117,7 @@ const CUtils = {
 
             } else if (e instanceof FatalError) {
                 console.log(e.message);
+
                 process.exit(1);
 
             } else {
@@ -134,12 +126,12 @@ const CUtils = {
         }
     },
 
-    throwUserError: function (msg) {
-        throw new UserError('Error: ' + msg);
+    throwUsError: function (msg) {
+        throw new UserError(msg);
     },
 
-    throwFatalError: function (msg) {
-        throw new FatalError('Fatal Error: ' + msg);
+    throwFtError: function (msg) {
+        throw new FatalError(msg);
     },
 
     addKeyVal: function (h, k, v) {
@@ -152,25 +144,8 @@ const CUtils = {
         return a.filter(h => h.id !== id);
     },
 
-    getAssetId: function (fullPath, conf) {
-        return !PathUtils.arePathsEqual(fullPath, conf.PLAYCANVAS_TARGET_DIR) &&
-            CUtils.fullPathToId(fullPath, conf);
-    },
-
-    fullPathToId: function (fullPath, conf) {
-        const p = PathUtils.fullLocalToRemotePath(fullPath, conf.PLAYCANVAS_TARGET_DIR);
-
-        const a = conf.store.getAssetAtPath(p);
-
-        return a.id;
-    },
-
     eventHasAsset: function(e, conf) {
-        const fullPath = path.join(e.directory, e.oldFile || e.file);
-
-        const p = PathUtils.fullLocalToRemotePath(fullPath, conf.PLAYCANVAS_TARGET_DIR);
-
-        return conf.store.pathToAsset[p];
+        return conf.store.pathToAsset[e.remotePath];
     },
 
     makeDirP: function(s) {
@@ -188,7 +163,7 @@ const CUtils = {
     assetToFullPath: function (asset, conf) {
         const remotePath = conf.store.idToPath[asset.id];
 
-        return PathUtils.fullPathToLocalFile(conf.PLAYCANVAS_TARGET_DIR, remotePath);
+        return path.join(conf.PLAYCANVAS_TARGET_DIR, remotePath);
     },
 
     isItemOnRemote: function (h, conf) {
@@ -225,22 +200,6 @@ const CUtils = {
         return res;
     },
 
-    syncMsg: function (s) {
-        console.log(s);
-    },
-
-    watchMsg: function (s) {
-        console.log(s);
-    },
-
-    configMsg: function (s) {
-        console.log(s);
-    },
-
-    capFirst: function (s) {
-        return s.charAt(0).toUpperCase() + s.slice(1);
-    },
-
     applyItemLimit: function(data, limit) {
         data.folders = data.folders.filter(h => {
             return limit.folders.includes(h.remotePath);
@@ -255,27 +214,6 @@ const CUtils = {
         ar.sort((a, b) => a[field].localeCompare(b[field]));
     },
 
-    fullPathToEventData: function (s) {
-        return {
-            directory: path.dirname(s),
-            file: path.basename(s)
-        }
-    },
-
-    prettyJson: function (h) {
-        return JSON.stringify(h, null, 2);
-    },
-
-    shallowClone: function (h) {
-        return Object.assign({}, h);
-    },
-
-    matchFromRegex: function(s, r) {
-        const match = r.exec(s);
-
-        return match ? match[1] : match;
-    },
-
     jsonFileToMap: function (p) {
         return fs.existsSync(p) ?
             CUtils.readJson(p) :
@@ -286,12 +224,6 @@ const CUtils = {
         const s = fs.readFileSync(p);
 
         return JSON.parse(s);
-    },
-
-    renameToCreateEvent: function (e) {
-        e.directory = e.newDirectory;
-
-        e.file = e.newFile;
     },
 
     checkSetEnv: function (k, v) {
@@ -314,14 +246,6 @@ const CUtils = {
         return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     },
 
-    setOperationType: function (v) {
-        global.OPERATION_TYPE = v;
-    },
-
-    isOperationType: function (v) {
-        return global.OPERATION_TYPE === v;
-    },
-
     handleForceRegOpts: function (cmdObj) {
         const v = cmdObj.regexp ||
             (cmdObj.ext && CUtils.extToReg(cmdObj.ext));
@@ -341,8 +265,12 @@ const CUtils = {
 
     checkHttps: function (url) {
         if (!HTTPS_PREF_REG.test(url)) {
-            CUtils.throwFatalError(`Non-https url specified: ${url}`);
+            CUtils.throwFtError(`Non-https url specified: ${url}`);
         }
+    },
+
+    waitMs: function (ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 };
 
