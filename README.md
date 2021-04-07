@@ -267,6 +267,12 @@ If in your case no bad files and folders exist, use a string like
 `"matchNothing"` as the value of `PLAYCANVAS_BAD_FILE_REG` 
 and/or `PLAYCANVAS_BAD_FOLDER_REG`.
 
+# Troubleshooting
+
+Problems are often caused by setting config variables incorrectly.
+Execute your command with the config/environment variable `PLAYCANVAS_VERBOSE` set to `1`
+to print the current values of all config variables and other useful data.
+
 # Sample Workflows
 
 ## Case 1: Single user per PlayCanvas branch, with `git`
