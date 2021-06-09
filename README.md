@@ -53,6 +53,13 @@ switch to the browser code editor.
   parseIgnore                 list assets matched by pcignore.txt
 ```
 
+To automatically answer "yes" to any prompts that might print
+on the command line from `pushAll` or `pullAll` commands, simply supply `-y` or `--yes` arguments:
+
+```
+pcsync pushAll -y
+```
+
 A local directory [designated](#config-variables) as `PLAYCANVAS_TARGET_DIR`
 corresponds to the root of the PlayCanvas file and folder asset hierarchy.
 
