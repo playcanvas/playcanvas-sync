@@ -53,9 +53,6 @@ switch to the browser code editor.
   parseIgnore                 list assets matched by pcignore.txt
 ```
 
-`pushAll` and `pullAll` accept an optional `-y` or `--yes` flag to
-automatically answer "yes" to confirmation prompts.
-
 A local directory [designated](#config-variables) as `PLAYCANVAS_TARGET_DIR`
 corresponds to the root of the PlayCanvas file and folder asset hierarchy.
 
@@ -67,6 +64,9 @@ pcsync rename dir1/file1.js file1.js
 ```
 
 will move `file1.js` to the root asset directory.
+
+`pushAll` and `pullAll` accept an optional `-y` or `--yes` flag to
+automatically answer "yes" to confirmation prompts.
 
 # The `pcwatch` Utility
 
