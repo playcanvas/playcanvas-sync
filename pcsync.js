@@ -78,21 +78,21 @@ function runDiff (filePath) {
 function runOverwriteAllLocal (cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
-    if(cmdObj.yes) return new OverwriteAllLocalWithRemote().run();
-
-    SyncUtils.compareAndPrompt(() => {
+    const cb = function () {
         return new OverwriteAllLocalWithRemote().run();
-    });
+    };
+
+    return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
 }
 
 function runOverwriteAllRemote (cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
-    if(cmdObj.yes) return new OverwriteAllRemoteWithLocal().run();
-
-    SyncUtils.compareAndPrompt(() => {
+    const cb = function () {
         return new OverwriteAllRemoteWithLocal().run();
-    });
+    };
+
+    return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
 }
 
 function runDownloadSingle (filePath) {

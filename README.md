@@ -53,12 +53,8 @@ switch to the browser code editor.
   parseIgnore                 list assets matched by pcignore.txt
 ```
 
-To automatically answer "yes" to any prompts that might print
-on the command line from `pushAll` or `pullAll` commands, simply supply `-y` or `--yes` arguments:
-
-```
-pcsync pushAll -y
-```
+`pushAll` and `pullAll` accept an optional `-y` or `--yes` flag to
+automatically answer "yes" to confirmation prompts.
 
 A local directory [designated](#config-variables) as `PLAYCANVAS_TARGET_DIR`
 corresponds to the root of the PlayCanvas file and folder asset hierarchy.
@@ -242,9 +238,9 @@ Version Control Panel of the PlayCanvas Editor, and
 your project id from its home page url, e.g.
 for `playcanvas.com/project/10/overview/test_proj` the id is 10.
 
-All listed key-value pairs are necessary. You can keep 
-some of them in `.pcconfig` in your home directory,
-and others in `pcconfig.json` in your project.
+All listed key-value pairs are necessary. You can split them between
+`.pcconfig` (in your home directory), `pcconfig.json` (in your project target directory),
+and environment variables. `PLAYCANVAS_TARGET_DIR` cannot be set in `pcconfig.json`.
 
 Backslash characters should be written as `\\` (escaped).
 
