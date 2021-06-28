@@ -242,6 +242,9 @@ All listed key-value pairs are necessary. You can keep
 some of them in `.pcconfig` in your home directory,
 and others in `pcconfig.json` in your project.
 
+To find `pcconfig.json`, `pcsync` needs to know your target directory,
+so `PLAYCANVAS_TARGET_DIR` can only be set in `.pcconfig` or an environment variable.
+
 Backslash characters should be written as `\\` (escaped).
 
 # Files and Folders to Exclude
