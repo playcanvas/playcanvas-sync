@@ -238,12 +238,9 @@ Version Control Panel of the PlayCanvas Editor, and
 your project id from its home page url, e.g.
 for `playcanvas.com/project/10/overview/test_proj` the id is 10.
 
-All listed key-value pairs are necessary. You can keep 
-some of them in `.pcconfig` in your home directory,
-and others in `pcconfig.json` in your project.
-
-To find `pcconfig.json`, `pcsync` needs to know your target directory,
-so `PLAYCANVAS_TARGET_DIR` can only be set in `.pcconfig` or an environment variable.
+All listed key-value pairs are necessary. You can split them between
+`.pcconfig` (in your home directory), `pcconfig.json` (in your project target directory),
+and environment variables. `PLAYCANVAS_TARGET_DIR` cannot be set in `pcconfig.json`.
 
 Backslash characters should be written as `\\` (escaped).
 
