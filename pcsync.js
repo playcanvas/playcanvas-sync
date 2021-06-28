@@ -25,6 +25,7 @@ program
     .description('download all remote files, overwriting their local counterparts')
     .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
     .option('-e, --ext <extensions>', 'handle files with provided extensions')
+    .option('-y, --yes', 'Automatically answer "yes" to any prompts that might print on the command line.')
     .action(runOverwriteAllLocal);
 
 program
@@ -32,6 +33,7 @@ program
     .description('upload all local files, overwriting their remote counterparts')
     .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
     .option('-e, --ext <extensions>', 'handle files with provided extensions')
+    .option('-y, --yes', 'Automatically answer "yes" to any prompts that might print on the command line.')
     .action(runOverwriteAllRemote);
 
 program
@@ -76,6 +78,8 @@ function runDiff (filePath) {
 function runOverwriteAllLocal (cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
+    if(cmdObj.yes) return new OverwriteAllLocalWithRemote().run();
+
     SyncUtils.compareAndPrompt(() => {
         return new OverwriteAllLocalWithRemote().run();
     });
@@ -83,6 +87,8 @@ function runOverwriteAllLocal (cmdObj) {
 
 function runOverwriteAllRemote (cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
+
+    if(cmdObj.yes) return new OverwriteAllRemoteWithLocal().run();
 
     SyncUtils.compareAndPrompt(() => {
         return new OverwriteAllRemoteWithLocal().run();
