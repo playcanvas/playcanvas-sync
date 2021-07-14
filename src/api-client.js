@@ -108,7 +108,6 @@ class ApiClient {
     const url = `/project/${projectId}/branch`;
 
     const resp = await this.methodGet(url, EDITOR_PREF, true);
-    console.log('GET RESPONSE:', resp);
 
     return JSON.parse(resp);
   }
