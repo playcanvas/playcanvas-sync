@@ -26,7 +26,8 @@ const optionalFields = [
 const allConfigFields = requiredFields.concat(optionalFields);
 
 const fieldsWithDefaults = {
-    PLAYCANVAS_BASE_URL: 'https://playcanvas.com'
+    PLAYCANVAS_BASE_URL: 'https://playcanvas.com',
+    PLAYCANVAS_TARGET_DIR: './'
 };
 
 const integerFields = [
@@ -62,11 +63,11 @@ class ConfigVars {
 
         this.fromConfigFile(os.homedir(), HOME_CONFIG_FILE);
 
-        await this.checkPrepTarg();
-
         this.fromConfigFile(this.result.PLAYCANVAS_TARGET_DIR, TARGET_CONFIG_FILE);
 
         this.fromDefaults();
+
+        await this.checkPrepTarg();
 
         requiredFields.forEach(this.checkRequired, this);
     }
