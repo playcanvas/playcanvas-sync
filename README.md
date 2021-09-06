@@ -238,8 +238,6 @@ Version Control Panel of the PlayCanvas Editor, and
 your project id from its home page url, e.g.
 for `playcanvas.com/project/10/overview/test_proj` the id is 10.
 
-Backslash characters should be written as `\\` (escaped).
-
 All listed key-value pairs are necessary. You can split them between
 `.pcconfig` (in your home directory), `pcconfig.json` (in your project target directory),
 and environment variables.
@@ -247,6 +245,8 @@ and environment variables.
 `PLAYCANVAS_TARGET_DIR` can only be set in `.pcconfig` or an environment variable. You
 can also set `PLAYCANVAS_USE_CWD_AS_TARGET` to `1` in `.pcconfig` to use
 your current working directory as your target.
+
+Backslash characters should be written as `\\` (escaped).
 
 # Files and Folders to Exclude
 
