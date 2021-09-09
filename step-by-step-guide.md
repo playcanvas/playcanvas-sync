@@ -1,3 +1,9 @@
+# Step-by-Step Setup Guide
+
+This is a brief step-by-step installation and setup guide to
+supplement our [README](README.md), which
+provides details and alternatives for the steps below.
+
 Install a recent stable version of `node`. 
 We recommend using `nvm`.
 
