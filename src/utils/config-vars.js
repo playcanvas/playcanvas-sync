@@ -17,6 +17,7 @@ const requiredFields = [
 ];
 
 const optionalFields = [
+    'PLAYCANVAS_USE_CWD_AS_TARGET',
     'PLAYCANVAS_INCLUDE_REG',
     'PLAYCANVAS_FORCE_REG',
     'PLAYCANVAS_DRY_RUN',
@@ -82,9 +83,15 @@ class ConfigVars {
     }
 
     async checkPrepTarg() {
-        let s = this.result.PLAYCANVAS_TARGET_DIR || '';
+        let s = this.result.PLAYCANVAS_TARGET_DIR ||
+            (this.result.PLAYCANVAS_USE_CWD_AS_TARGET && process.cwd()) ||
+            '';
 
         s = PathUtils.rmLastSlash(s);
+
+        if (s === require.main.path) {
+            CUtils.throwFtError('Error: do not use the playcanvas-sync directory as target');
+        }
 
         const stat = await PathUtils.fsWrap('stat', s);
 
