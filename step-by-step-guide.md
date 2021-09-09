@@ -62,6 +62,14 @@ A sample full `.pcconfig` should look like this:
 The variables `PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG` tell
 the tool which files and folders to exclude. Their values in our
 sample `.pcconfig` above are sufficient for most users, so you can simply
-copy them. More details [here](README.md#files-and-folders-to-exclude)
+copy them. More details [here](README.md#files-and-folders-to-exclude).
 
+`pcsync` and `pcwatch` are now ready to use. Depending on
+whether you intend to use `git` to store your local
+textual files, you can select and follow one of our
+[sample workflows](README.md#sample-workflows).
 
+If you plan to merge your textual
+files with `git`, consider using
+[`pcignore.txt`](README.md#the-pcignoretxt-file)
+to exclude them from PlayCanvas merge.
