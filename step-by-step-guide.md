@@ -29,8 +29,8 @@ npm uninstall -g
 Get your PlayCanvas api key (token) from your PlayCanvas account page
 (playcanvas.com/&lt;username&gt;/account).
 
-Open Chrome Developer Tools console on the PlayCanvas Editor page
-and run 
+From the Chrome Developer Tools console
+(on the PlayCanvas Editor page) run
 ```
 copy({
   PLAYCANVAS_BRANCH_ID: config.self.branch.id,
@@ -62,4 +62,6 @@ A sample full `.pcconfig` should look like this:
 The variables `PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG` tell
 the tool which files and folders to exclude. Their values in our
 sample `.pcconfig` above are sufficient for most users, so you can simply
-copy them. More details in [README](README.md#files-and-folders-to-exclude)
+copy them. More details [here](README.md#files-and-folders-to-exclude)
+
+

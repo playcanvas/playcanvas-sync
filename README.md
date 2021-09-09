@@ -282,7 +282,22 @@ to print the current values of all config variables and other useful data.
 
 # Sample Workflows
 
-## Case 1: Single user per PlayCanvas branch, with `git`
+## Case 1: Single user per PlayCanvas branch, without `git`
+
+* Run `pcsync pullAll` to download existing textual files
+  from PlayCanvas
+* Launch `pcwatch`
+* Start editing/creating files locally in your own text editor
+
+To merge changes from another PlayCanvas branch into your branch without `git`:
+
+* Stop `pcwatch`
+* Run `pcsync diffAll`, and, if necessary, `pcsync push/pushAll` to
+  make sure the PlayCanvas version is up-to-date.
+* Perform merge in PlayCanvas
+* Use `pcsync pullAll` to download the merge result
+
+## Case 2: Single user per PlayCanvas branch, with `git`
 
 * Create your own PlayCanvas branch of your team's project
 * Create a git branch for your work, and make it your local target directory
@@ -295,7 +310,7 @@ you intend to keep in git, create a PlayCanvas checkpoint that includes your `pc
 * Merge the same branches in PlayCanvas
 * Use `pcsync diffAll` to verify that local and remote files are still in sync
 
-## Case 2: Multiple users working on the same PlayCanvas branch, with `git`
+## Case 3: Multiple users working on the same PlayCanvas branch, with `git`
  
 Most items from Case 1 apply, also:
  
@@ -306,21 +321,6 @@ team member's changes into your `git` branch, resolve conflicts in `git`, if any
 * Avoid `pcsync pull/pullAll`. To get others' files/changes into your branch, 
 use `git` merge instead to maintain an accurate `git` history of edits to each file 
 (who added what).
- 
-## Case 3: Single user per PlayCanvas branch, without `git`
-
-* Run `pcsync pullAll` to download existing textual files 
-from PlayCanvas
-* Launch `pcwatch`
-* Start editing/creating files locally in your own text editor
-
-To merge changes from another PlayCanvas branch into your branch without `git`:
-
-* Stop `pcwatch`
-* Run `pcsync diffAll`, and, if necessary, `pcsync push/pushAll` to
-make sure the PlayCanvas version is up-to-date.
-* Perform merge in PlayCanvas
-* Use `pcsync pullAll` to download the merge result
 
 # Using TypeScript
 
