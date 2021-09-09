@@ -212,7 +212,7 @@ Sample config file:
   "PLAYCANVAS_BRANCH_ID": "abc",
   "PLAYCANVAS_PROJECT_ID": 10,
   "PLAYCANVAS_TARGET_DIR": "/Users/zpaul/proj1",
-  "PLAYCANVAS_API_KEY": "abc",
+  "PLAYCANVAS_API_KEY": "xyz",
   "PLAYCANVAS_BAD_FILE_REG": "^\\.|~$",
   "PLAYCANVAS_BAD_FOLDER_REG": "\\."
 }
