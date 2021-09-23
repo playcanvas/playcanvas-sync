@@ -4,16 +4,16 @@ This is a brief step-by-step installation and setup guide to
 supplement our [README](README.md), which
 provides details and alternatives for the steps below.
 
-Install a recent stable version of `node`. 
+Install a recent stable version of `node`.
 We recommend using `nvm`.
 
 Download or clone https://github.com/playcanvas/playcanvas-sync
 
-Install dependencies by running 
+Install dependencies by running from the `playcanvas-sync` folder.
+
 ```
 npm install
 ```
-from the `playcanvas-sync` folder.
 
 After this, you can either run the tool from the `playcanvas-sync` folder,
 or install it globally with
@@ -26,8 +26,9 @@ To uninstall globally, run
 ```
 npm uninstall -g
 ```
-Get your PlayCanvas api key (token) from your PlayCanvas account page
-(playcanvas.com/&lt;username&gt;/account).
+Get your PlayCanvas API key (token) from your PlayCanvas account page
+(playcanvas.com/&lt;username&gt;/account). Instructions can be found in our
+[User Manual page here](https://developer.playcanvas.com/en/user-manual/api/#authorization).
 
 From the Chrome Developer Tools console
 (on the PlayCanvas Editor page) run
@@ -37,16 +38,23 @@ copy({
   PLAYCANVAS_PROJECT_ID: config.project.id
 })
 ```
-This will copy your branch and project id to the clipboard. Paste them
-into a file called `.pcconfig` in your home directory.
+This will copy your branch and project id to the clipboard.
 
-Alternatively, you can get your branch id from the
-Version Control Panel of the PlayCanvas Editor, and
-your project id from its home page url, e.g.
-for `playcanvas.com/project/10/overview/test_proj` the id is 10.
+![](docs/images/branch-id-project-id-clipboard.gif)
+
+Paste them into a file called `.pcconfig` in your home directory.
+
+* Windows Home Directory: `C:\Users\<username>`
+* Mac Home Directory: `/Users/<username>`
+
+Alternatively, you can also find these ids from the editor and
+project pages via the
+[steps outlined in the User Manual](https://developer.playcanvas.com/en/user-manual/api/#parameters).
 
 Create a directory for the local versions of your PlayCanvas files, e.g.
-`proj1`. Add its full path to `.pcconfig`, along with your api key.
+`proj1`. Add its full path to `.pcconfig` in the home directory, along
+with your API key.
+
 A sample full `.pcconfig` should look like this:
 
 ```
@@ -60,9 +68,12 @@ A sample full `.pcconfig` should look like this:
 }
 ```
 The variables `PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG` tell
-the tool which files and folders to exclude. Their values in our
-sample `.pcconfig` above are sufficient for most users, so you can simply
-copy them. More details [here](README.md#files-and-folders-to-exclude).
+the tool which files and folders to exclude when pushing changes to the
+PlayCanvas project.
+
+Their values in our sample `.pcconfig` above are sufficient for most projects, so
+you can simply copy them. More details
+[here](README.md#files-and-folders-to-exclude).
 
 `pcsync` and `pcwatch` are now ready to use. Depending on
 whether you intend to use `git` to store your local
