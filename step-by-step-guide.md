@@ -9,7 +9,7 @@ We recommend using `nvm`.
 
 Download or clone https://github.com/playcanvas/playcanvas-sync
 
-Install dependencies by running from the `playcanvas-sync` folder.
+Install dependencies by running from the `playcanvas-sync` folder
 
 ```
 npm install
