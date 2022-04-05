@@ -1,6 +1,6 @@
 const CUtils = require('./utils/common-utils');
 
-const ASSET_QRY_LIMIT = 1000;
+const ASSET_QRY_LIMIT = 100000;
 
 class LoadAssets {
   constructor(conf) {
