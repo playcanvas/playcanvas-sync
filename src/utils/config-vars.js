@@ -18,7 +18,7 @@ const requiredFields = [
 
 const optionalFields = [
     'PLAYCANVAS_USE_CWD_AS_TARGET',
-    'PLAYCANVAS_CWD_SUBDIR',
+    'PLAYCANVAS_TARGET_SUBDIR',
     'PLAYCANVAS_INCLUDE_REG',
     'PLAYCANVAS_FORCE_REG',
     'PLAYCANVAS_DRY_RUN',
@@ -120,8 +120,7 @@ class ConfigVars {
     }
 
     async addSubdirToTarget() {
-        let s = this.result.PLAYCANVAS_USE_CWD_AS_TARGET &&
-            this.result.PLAYCANVAS_CWD_SUBDIR;
+        let s = this.result.PLAYCANVAS_TARGET_SUBDIR;
 
         if (s) {
             s = PathUtils.rmLastSlash(s);

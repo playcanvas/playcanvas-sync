@@ -244,18 +244,16 @@ and environment variables.
 
 `PLAYCANVAS_TARGET_DIR` can only be set in `.pcconfig` or an environment variable. You
 can also set `PLAYCANVAS_USE_CWD_AS_TARGET` to `1` in `.pcconfig` to use
-your current working directory (CWD) as your target.
+your current working directory as your target.
 
 For some workflows, it may be necessary to
-keep the `pcconfig.json` file
-in CWD, but treat one of CWD's subdirectories as
-the root of the local file hierarchy. In such cases both 
-`PLAYCANVAS_USE_CWD_AS_TARGET`
-and `PLAYCANVAS_CWD_SUBDIR` need to be provided,
-the latter can be in `pcconfig.json`, e.g.
+keep the `pcconfig.json` file at the top level
+in the target directory, but treat one of its subdirectories as
+the root of the local file hierarchy. In such cases 
+`PLAYCANVAS_TARGET_SUBDIR` needs to be provided, e.g.
 
 ```
-"PLAYCANVAS_CWD_SUBDIR": "src"
+"PLAYCANVAS_TARGET_SUBDIR": "src"
 ```
 
 Backslash characters should be written as `\\` (escaped).
