@@ -120,8 +120,11 @@ class ConfigVars {
     }
 
     async addSubdirToTarget() {
-        if (this.result.PLAYCANVAS_CWD_SUBDIR) {
-            const s = PathUtils.rmLastSlash(this.result.PLAYCANVAS_CWD_SUBDIR);
+        let s = this.result.PLAYCANVAS_USE_CWD_AS_TARGET &&
+            this.result.PLAYCANVAS_CWD_SUBDIR;
+
+        if (s) {
+            s = PathUtils.rmLastSlash(s);
 
             this.result.PLAYCANVAS_TARGET_DIR = path.join(
                 this.result.PLAYCANVAS_TARGET_DIR,
