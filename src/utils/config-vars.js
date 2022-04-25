@@ -68,7 +68,7 @@ class ConfigVars {
 
         this.fromConfigFile(this.result.PLAYCANVAS_TARGET_DIR, TARGET_CONFIG_FILE);
 
-        this.addSubdirToTarget();
+        await this.addSubdirToTarget();
 
         this.fromDefaults();
 
@@ -96,14 +96,9 @@ class ConfigVars {
             CUtils.throwFtError('Error: do not use the playcanvas-sync directory as target');
         }
 
-        const stat = await PathUtils.fsWrap('stat', s);
+        await CUtils.checkTargetExists(s);
 
-        if (stat && stat.isDirectory) {
-            this.result.PLAYCANVAS_TARGET_DIR = s;
-
-        } else {
-            CUtils.throwFtError(`Error: could not find target directory: ${s}. Check capitalization.`);
-        }
+        this.result.PLAYCANVAS_TARGET_DIR = s;
     }
 
     fromEnvOrMap(h) {
@@ -124,7 +119,7 @@ class ConfigVars {
         }
     }
 
-    addSubdirToTarget() {
+    async addSubdirToTarget() {
         if (this.result.PLAYCANVAS_CWD_SUBDIR) {
             const s = PathUtils.rmLastSlash(this.result.PLAYCANVAS_CWD_SUBDIR);
 
@@ -132,6 +127,8 @@ class ConfigVars {
                 this.result.PLAYCANVAS_TARGET_DIR,
                 s
             );
+
+            await CUtils.checkTargetExists(this.result.PLAYCANVAS_TARGET_DIR);
         }
     }
 
