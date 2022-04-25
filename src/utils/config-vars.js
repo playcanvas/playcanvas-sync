@@ -18,6 +18,7 @@ const requiredFields = [
 
 const optionalFields = [
     'PLAYCANVAS_USE_CWD_AS_TARGET',
+    'PLAYCANVAS_CWD_SUBDIR',
     'PLAYCANVAS_INCLUDE_REG',
     'PLAYCANVAS_FORCE_REG',
     'PLAYCANVAS_DRY_RUN',
@@ -66,6 +67,8 @@ class ConfigVars {
         await this.checkPrepTarg();
 
         this.fromConfigFile(this.result.PLAYCANVAS_TARGET_DIR, TARGET_CONFIG_FILE);
+
+        this.addSubdirToTarget();
 
         this.fromDefaults();
 
@@ -118,6 +121,17 @@ class ConfigVars {
     checkRequired(field) {
         if (!this.result[field]) {
             CUtils.throwUsError(`Missing config variable: ${field}`);
+        }
+    }
+
+    addSubdirToTarget() {
+        if (this.result.PLAYCANVAS_CWD_SUBDIR) {
+            const s = PathUtils.rmLastSlash(this.result.PLAYCANVAS_CWD_SUBDIR);
+
+            this.result.PLAYCANVAS_TARGET_DIR = path.join(
+                this.result.PLAYCANVAS_TARGET_DIR,
+                s
+            );
         }
     }
 
