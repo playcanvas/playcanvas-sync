@@ -18,6 +18,7 @@ const requiredFields = [
 
 const optionalFields = [
     'PLAYCANVAS_USE_CWD_AS_TARGET',
+    'PLAYCANVAS_TARGET_SUBDIR',
     'PLAYCANVAS_INCLUDE_REG',
     'PLAYCANVAS_FORCE_REG',
     'PLAYCANVAS_DRY_RUN',
@@ -67,6 +68,8 @@ class ConfigVars {
 
         this.fromConfigFile(this.result.PLAYCANVAS_TARGET_DIR, TARGET_CONFIG_FILE);
 
+        await this.addSubdirToTarget();
+
         this.fromDefaults();
 
         requiredFields.forEach(this.checkRequired, this);
@@ -93,14 +96,9 @@ class ConfigVars {
             CUtils.throwFtError('Error: do not use the playcanvas-sync directory as target');
         }
 
-        const stat = await PathUtils.fsWrap('stat', s);
+        await CUtils.checkTargetExists(s);
 
-        if (stat && stat.isDirectory) {
-            this.result.PLAYCANVAS_TARGET_DIR = s;
-
-        } else {
-            CUtils.throwFtError(`Error: could not find target directory: ${s}. Check capitalization.`);
-        }
+        this.result.PLAYCANVAS_TARGET_DIR = s;
     }
 
     fromEnvOrMap(h) {
@@ -118,6 +116,21 @@ class ConfigVars {
     checkRequired(field) {
         if (!this.result[field]) {
             CUtils.throwUsError(`Missing config variable: ${field}`);
+        }
+    }
+
+    async addSubdirToTarget() {
+        let s = this.result.PLAYCANVAS_TARGET_SUBDIR;
+
+        if (s) {
+            s = PathUtils.rmLastSlash(s);
+
+            this.result.PLAYCANVAS_TARGET_DIR = path.join(
+                this.result.PLAYCANVAS_TARGET_DIR,
+                s
+            );
+
+            await CUtils.checkTargetExists(this.result.PLAYCANVAS_TARGET_DIR);
         }
     }
 

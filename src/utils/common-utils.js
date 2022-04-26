@@ -271,6 +271,19 @@ const CUtils = {
 
     waitMs: function (ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    },
+
+    checkTargetExists: async function(fullPath) {
+        const stat = await PathUtils.fsWrap('stat', fullPath);
+
+        const good = stat && stat.isDirectory;
+
+        if (!good) {
+            const s = `Error: could not find target directory: ${fullPath}. ` +
+                'Check capitalization.';
+
+            CUtils.throwFtError(s);
+        }
     }
 };
 

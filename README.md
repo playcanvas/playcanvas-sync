@@ -246,6 +246,16 @@ and environment variables.
 can also set `PLAYCANVAS_USE_CWD_AS_TARGET` to `1` in `.pcconfig` to use
 your current working directory as your target.
 
+For some workflows, it may be necessary to
+keep the `pcconfig.json` file at the top level
+in the target directory, but treat one of its subdirectories as
+the root of the local file hierarchy. In such cases 
+`PLAYCANVAS_TARGET_SUBDIR` needs to be provided, e.g.
+
+```
+"PLAYCANVAS_TARGET_SUBDIR": "src"
+```
+
 Backslash characters should be written as `\\` (escaped).
 
 # Files and Folders to Exclude
