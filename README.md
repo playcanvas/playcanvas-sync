@@ -4,7 +4,7 @@ The `pcsync` and `pcwatch` utilities allow editing copies of
 JavaScript and other textual files of a PlayCanvas project
 locally on your own computer, in a text editor of your choice.
 
-`pcsync` also allows pushing and pulling of [non-text files](#using-pcsync-for-non-text-files), such as
+`pcsync` also allows pushing and pulling of [binary files](#using-pcsync-for-binary-files), such as
 images and models.
 
 In addition, if your project has a file called [`pcignore.txt`](#the-pcignoretxt-file),
@@ -138,12 +138,14 @@ It will list all existing files that match your current `pcignore.txt`.
 
 Use a space and not * or ? to match a space in a file or folder name in gitignore lines.
 
-# Using `pcsync` for Non-text Files
+# Using `pcsync` for Binary Files
 
-`push`, `pull` (single file) and `rm` work with non-text file arguments without any special options.
+Binary files include assets such as textures (JPG and PNG) and models (GLB).
+
+`push`, `pull` (single file) and `rm` work with binary file arguments without any special options.
 
 `pushAll`, `pullAll` and `diffAll` have two options that make them work with matching
-files only, including non-text (without one of these options `pcsync` only works with textual files):
+files only, including binary (without one of these options `pcsync` only works with textual files):
 
 ```
   -e, --ext <extensions>  handle files with provided extensions
