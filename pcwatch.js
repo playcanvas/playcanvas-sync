@@ -16,7 +16,7 @@ program.option('-f, --force', 'skip local/remote equality check');
 program.parse(process.argv);
 
 async function run() {
-    if (!program.force) {
+    if (!program.opts().force) {
         await CUtils.wrapUserErrors(() => SyncUtils.errorIfDifferent(true));
 
         await CUtils.wrapUserErrors(SyncUtils.errorIfMultWatch);
