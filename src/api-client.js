@@ -111,6 +111,32 @@ class ApiClient {
 
     return JSON.parse(resp);
   }
+  
+  async getEditorBranches(projectId) {
+    const url = `/projects/${projectId}/branches`;
+
+    const branches = [];
+    let hasMore = true;
+    let branchId = undefined;
+
+    while (hasMore) {
+      const resp = await this.methodGet(
+        url + (branchId ? "skip=" + branchId : ""),
+        BRANCHES_PREF,
+        true
+      );
+
+      const respData = JSON.parse(resp);
+
+      hasMore = respData.pagination.hasMore;
+
+      branches.push(...respData.result);
+
+      branchId = respData.result[respData.result.length - 1].id;
+    }
+
+    return branches;
+  }
 }
 
 module.exports = ApiClient;
