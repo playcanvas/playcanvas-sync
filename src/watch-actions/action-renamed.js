@@ -20,7 +20,8 @@ class ActionRenamed {
     init() {
         this.assetId = this.conf.store.getAssetId(this.data.remoteOldPath);
 
-        this.parentId = this.conf.store.getAssetId(this.data.remoteNewDir);
+        this.parentId = this.data.remoteNewDir !== '.' &&
+            this.conf.store.getAssetId(this.data.remoteNewDir);
     }
 
     callApi() {
