@@ -26,7 +26,7 @@ const SCUtils = {
 
         const h = {
             remoteOldPath: oldPath,
-            remoteNewDir: path.dirname(newPath),
+            remoteNewDir: PathUtils.remoteDirFromParam(newPath),
             newFileName: path.basename(newPath)
         }
 
