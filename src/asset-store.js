@@ -34,9 +34,9 @@ class AssetStore {
     }
 
     getAssetId(remotePath) {
-        const a = this.getAssetAtPath(remotePath);
-
-        return a.id
+        return remotePath !== "." ?
+            this.getAssetAtPath(remotePath).id :
+            null
     }
 
     getAssetAtPath(remotePath) {
