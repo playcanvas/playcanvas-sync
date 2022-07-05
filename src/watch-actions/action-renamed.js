@@ -18,7 +18,8 @@ class ActionRenamed {
     init() {
         this.assetId = this.conf.store.getAssetId(this.data.remoteOldPath);
 
-        this.parentId = this.data.remoteNewDir !== '.' &&
+        this.parentId = this.data.remoteNewDir === '.' ?
+            NO_PARENT_TOKEN :
             this.conf.store.getAssetId(this.data.remoteNewDir);
     }
 
@@ -28,7 +29,7 @@ class ActionRenamed {
         const h = {
             branchId: this.conf.PLAYCANVAS_BRANCH_ID,
             name: this.data.newFileName,
-            parent: this.parentId || NO_PARENT_TOKEN
+            parent: this.parentId
         };
 
         return this.conf.client.putForm(url, h);
