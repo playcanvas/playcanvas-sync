@@ -105,6 +105,12 @@ const PathUtils = {
         } catch (e) {
             return null;
         }
+    },
+
+    remoteDirFromParam: function (s) {
+        s = path.dirname(s);
+
+        return s === '.' ? '' : s;
     }
 };
 

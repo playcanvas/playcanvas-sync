@@ -1,5 +1,3 @@
-const CUtils = require('../utils/common-utils');
-
 const NO_PARENT_TOKEN = 'null';
 
 class ActionRenamed {
@@ -20,7 +18,9 @@ class ActionRenamed {
     init() {
         this.assetId = this.conf.store.getAssetId(this.data.remoteOldPath);
 
-        this.parentId = this.conf.store.getAssetId(this.data.remoteNewDir);
+        this.parentId = this.data.remoteNewDir ?
+            this.conf.store.getAssetId(this.data.remoteNewDir) :
+            NO_PARENT_TOKEN;
     }
 
     callApi() {
@@ -29,7 +29,7 @@ class ActionRenamed {
         const h = {
             branchId: this.conf.PLAYCANVAS_BRANCH_ID,
             name: this.data.newFileName,
-            parent: this.parentId || NO_PARENT_TOKEN
+            parent: this.parentId
         };
 
         return this.conf.client.putForm(url, h);
