@@ -342,7 +342,7 @@ You can build TypeScript Bindings from the PlayCanvas engine repo (branch `stabl
 as mentioned in the [instructions here](https://github.com/playcanvas/engine):
 
 ```
-npm run tsd
+npm run build:types
 ```
 
 This will generate the file `build/output/playcanvas.d.ts` in your engine folder.
