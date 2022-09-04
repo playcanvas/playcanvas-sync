@@ -92,6 +92,7 @@ const PathUtils = {
             isFile: stat.isFile(),
             isDirectory: stat.isDirectory(),
             modTime: stat.mtime.getTime(),
+            hash: null,
             pathArray: pathAr,
             parentFull: PathUtils.pathArToFullLocal(rootDir, parentAr),
             parentRemote: PathUtils.arToSlashForwPath(parentAr)
