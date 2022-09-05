@@ -19,10 +19,8 @@ class LocalContents {
     return this.result;
   }
 
-  async visitFile(h) {
+  visitFile(h) {
     if (!TypeUtils.isBadFile(h.itemName, h.remotePath, this.conf)) {
-      h.hash = await CUtils.fileToMd5Hash(h.fullPath);
-
       this.addToRes('files', h);
     }
   }
