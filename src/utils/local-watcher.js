@@ -38,7 +38,7 @@ class LocalWatcher {
 
     const data = this.origPathToData[h.fullPath];
 
-    return data ? this.handleKnownFile(h, data) : this.triggerEvent('ACTION_CREATED', h);
+    return data ? await this.handleKnownFile(h, data) : await this.handleCreatedFile(h);
   }
 
   async visitDir(h) {
@@ -51,10 +51,30 @@ class LocalWatcher {
     return true;
   }
 
-  handleKnownFile(h, data) {
-    if (h.modTime !== data.modTime) {
-      return this.triggerEvent('ACTION_MODIFIED', h);
+  async handleKnownFile(h, data) {
+    // NOTE: if the hash is not defined, then define it for the next iterations
+    if (!data.hash) {
+      h.hash = await CUtils.fileToMd5Hash(h.fullPath)
+
+      return
     }
+
+    // NOTE: recalculate hash only if the modification time is changed.
+    if (h.modTime !== data.modTime) {
+      h.hash = await CUtils.fileToMd5Hash(h.fullPath)
+
+      if (h.hash !== data.hash) {
+        return this.triggerEvent('ACTION_MODIFIED', h);
+      }
+    } else {
+      h.hash = data.hash
+    }
+  }
+
+  async handleCreatedFile(h) {
+    h.hash = await CUtils.fileToMd5Hash(h.fullPath);
+
+    return this.triggerEvent('ACTION_CREATED', h);
   }
 
   async visItem(h) {
