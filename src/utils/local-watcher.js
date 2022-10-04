@@ -52,14 +52,14 @@ class LocalWatcher {
     }
 
     async handleKnownFile(h, data) {
-    // NOTE: if the hash is not defined, then define it for the next iterations
+        // NOTE: if the hash is not defined, then define it for the next iterations
         if (!data.hash) {
             h.hash = await CUtils.fileToMd5Hash(h.fullPath);
 
             return;
         }
 
-    // NOTE: recalculate hash only if the modification time is changed.
+        // NOTE: recalculate hash only if the modification time is changed.
         if (h.modTime !== data.modTime) {
             h.hash = await CUtils.fileToMd5Hash(h.fullPath);
 
