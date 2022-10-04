@@ -9,7 +9,7 @@ const path = require('path');
 const HTTPS_PREF_REG = /^https:\/\//;
 
 const CUtils = {
-    pushArToAr: function(a1, a2) {
+    pushArToAr: function (a1, a2) {
         Array.prototype.push.apply(a1, a2);
     },
 
@@ -40,7 +40,7 @@ const CUtils = {
 
         a = a.slice(0, a.length - 1);
 
-        a.forEach(h => {
+        a.forEach((h) => {
             dst[h.id] = 1;
         });
     },
@@ -72,22 +72,22 @@ const CUtils = {
         });
     },
 
-    fileToStr: function(file) {
+    fileToStr: function (file) {
         if (fs.existsSync(file)) {
             const s = fs.readFileSync(file, 'utf8');
 
             return CUtils.replaceCarriage(s);
 
-        } else {
-            return null;
         }
+        return null;
+
     },
 
     replaceCarriage: function (s) { // for windows
         return s.replace(/\r\n?/g, '\n');
     },
 
-    fileToMd5Hash: function(file) {
+    fileToMd5Hash: function (file) {
         const hash = crypto.createHash('md5');
 
         hash.setDefaultEncoding('latin1');
@@ -144,11 +144,11 @@ const CUtils = {
         return a.filter(h => h.id !== id);
     },
 
-    eventHasAsset: function(e, conf) {
+    eventHasAsset: function (e, conf) {
         return conf.store.pathToAsset[e.remotePath];
     },
 
-    makeDirP: function(s) {
+    makeDirP: function (s) {
         if (!fs.existsSync(s)) {
             mkdirp.sync(s);
         }
@@ -178,18 +178,18 @@ const CUtils = {
 
             return md5 === remote.file.hash;
 
-        } else {
-            return false;
         }
+        return false;
+
     },
 
-    partitionFolders: function(a, conf) {
+    partitionFolders: function (a, conf) {
         const res = {
             isOnRemote: [],
             isNotOnRemote: []
         };
 
-        a.forEach(h => {
+        a.forEach((h) => {
             const field = CUtils.isItemOnRemote(h, conf) ?
                 'isOnRemote' :
                 'isNotOnRemote';
@@ -200,12 +200,12 @@ const CUtils = {
         return res;
     },
 
-    applyItemLimit: function(data, limit) {
-        data.folders = data.folders.filter(h => {
+    applyItemLimit: function (data, limit) {
+        data.folders = data.folders.filter((h) => {
             return limit.folders.includes(h.remotePath);
         });
 
-        data.files = data.files.filter(h => {
+        data.files = data.files.filter((h) => {
             return limit.remotePath === h.remotePath;
         });
     },
@@ -232,7 +232,7 @@ const CUtils = {
         }
     },
 
-    setForceEnv: function(remotePath) {
+    setForceEnv: function (remotePath) {
         let s = PathUtils.rmFirstSlash(remotePath);
 
         s = CUtils.escapeRegExp(s);
@@ -242,7 +242,7 @@ const CUtils = {
         CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', s);
     },
 
-    escapeRegExp: function(s) { // from MDN
+    escapeRegExp: function (s) { // from MDN
         return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     },
 
@@ -273,7 +273,7 @@ const CUtils = {
         return new Promise(resolve => setTimeout(resolve, ms));
     },
 
-    checkTargetExists: async function(fullPath) {
+    checkTargetExists: async function (fullPath) {
         const stat = await PathUtils.fsWrap('stat', fullPath);
 
         const good = stat && stat.isDirectory;

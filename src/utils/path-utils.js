@@ -3,17 +3,17 @@ const fs = require('fs').promises;
 
 const PathUtils = {
     // no leading slash
-    arToSlashForwPath: function(a) {
+    arToSlashForwPath: function (a) {
         return a.join('/');
     },
 
     pathArToFullLocal: function (r, pathAr) {
-        const a = [ r ].concat(pathAr);
+        const a = [r].concat(pathAr);
 
         return path.join.apply(null, a);
     },
 
-    splitOnSlashForw: function(s) {
+    splitOnSlashForw: function (s) {
         return s.split('/');
     },
 
@@ -25,7 +25,7 @@ const PathUtils = {
         return s.replace(/[\\/]$/, '');
     },
 
-    remotePathToData: function(s) {
+    remotePathToData: function (s) {
         s = PathUtils.rmFirstSlash(s);
 
         const a = PathUtils.splitOnSlashForw(s);
@@ -35,7 +35,7 @@ const PathUtils = {
         return {
             folders: PathUtils.partsToFolderRemotePaths(folderParts),
             remotePath: s
-        }
+        };
     },
 
     partsToFolderRemotePaths: function (parts) {

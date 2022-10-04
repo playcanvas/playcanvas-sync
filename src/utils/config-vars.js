@@ -102,15 +102,15 @@ class ConfigVars {
     }
 
     fromEnvOrMap(h) {
-        allConfigFields.forEach(field => {
+        allConfigFields.forEach((field) => {
             this.result[field] = process.env[field] || h[field] || this.result[field];
         });
     }
 
     fromDefaults() {
-        allConfigFields.forEach(field => {
+        allConfigFields.forEach((field) => {
             this.result[field] = this.result[field] || fieldsWithDefaults[field];
-        })
+        });
     }
 
     checkRequired(field) {
@@ -156,7 +156,7 @@ class ConfigVars {
         const a = this.result.PLAYCANVAS_VERBOSE ?
             allConfigFields : [];
 
-        a.forEach(field => {
+        a.forEach((field) => {
             console.log(`${field}: ${this.result[field]}`);
         });
     }

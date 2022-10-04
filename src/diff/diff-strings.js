@@ -3,38 +3,38 @@ const DiffChunks = require('./diff-chunks');
 const ReportChunk = require('./report-chunk');
 
 class DiffStrings {
-  constructor(s1, s2) {
-    this.s1 = s1;
+    constructor(s1, s2) {
+        this.s1 = s1;
 
-    this.s2 = s2;
-  }
+        this.s2 = s2;
+    }
 
-  run() {
-    this.setDiffs();
+    run() {
+        this.setDiffs();
 
-    this.formatDiffs();
+        this.formatDiffs();
 
-    this.report();
-  }
+        this.report();
+    }
 
-  setDiffs() {
-    this.diffs = DiffUtils.computeDiffs(this.s1, this.s2);
-  }
+    setDiffs() {
+        this.diffs = DiffUtils.computeDiffs(this.s1, this.s2);
+    }
 
-  formatDiffs() {
-    this.lineObjs = DiffUtils.diffsToLineObjs(this.diffs);
+    formatDiffs() {
+        this.lineObjs = DiffUtils.diffsToLineObjs(this.diffs);
 
-    DiffUtils.addLineNums(this.lineObjs);
+        DiffUtils.addLineNums(this.lineObjs);
 
-    this.chunks = new DiffChunks(this.lineObjs).run();
-  }
+        this.chunks = new DiffChunks(this.lineObjs).run();
+    }
 
-  report() {
-    console.log('--- remote');
-    console.log('+++ local');
+    report() {
+        console.log('--- remote');
+        console.log('+++ local');
 
-    this.chunks.forEach(h => new ReportChunk(h).run());
-  }
+        this.chunks.forEach(h => new ReportChunk(h).run());
+    }
 }
 
 module.exports = DiffStrings;
