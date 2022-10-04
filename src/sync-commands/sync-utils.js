@@ -6,7 +6,7 @@ const path = require('path');
 const GetConfig = require('../utils/get-config');
 
 const SyncUtils = {
-    reportDiffAll: async function() {
+    reportDiffAll: async function () {
         const h = await new ComputeDiffAll().run();
 
         SyncUtils.reportList(h.filesThatDiffer, 'Files that Differ');
@@ -30,7 +30,7 @@ const SyncUtils = {
         }
     },
 
-    compareAndPrompt: async function(callback) {
+    compareAndPrompt: async function (callback) {
         const h = await CUtils.wrapUserErrors(SyncUtils.reportDiffAll);
 
         h.anyDiffFound ?
@@ -38,7 +38,7 @@ const SyncUtils = {
             console.log('No differences found between local and remote.');
     },
 
-    promptAndRun: function(callback) {
+    promptAndRun: function (callback) {
         const rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
@@ -75,7 +75,7 @@ const SyncUtils = {
         return s;
     },
 
-    errorIfDifferent: async function(canForce) {
+    errorIfDifferent: async function (canForce) {
         const h = await SyncUtils.reportDiffAll();
 
         if (h.anyDiffFound) {
@@ -87,7 +87,7 @@ const SyncUtils = {
         }
     },
 
-    errorIfMultWatch: async function() {
+    errorIfMultWatch: async function () {
         const a = await SyncUtils.getWatchProcs();
 
         if (a.length > 1) { // 1 (this process) is expected
@@ -98,7 +98,7 @@ const SyncUtils = {
         }
     },
 
-    getWatchProcs: async function() {
+    getWatchProcs: async function () {
         const conf = await new GetConfig().run();
 
         const a = await FindProcess('name', /pcwatch/);

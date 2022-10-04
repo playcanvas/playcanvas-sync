@@ -61,7 +61,7 @@ program
     .description('list assets matched by pcignore.txt')
     .action(runParse);
 
-function runCompAll (cmdObj) {
+function runCompAll(cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
     CUtils.wrapUserErrors(() => {
@@ -69,13 +69,13 @@ function runCompAll (cmdObj) {
     });
 }
 
-function runDiff (filePath) {
+function runDiff(filePath) {
     CUtils.wrapUserErrors(() => {
         return SCUtils.diffSingleFile(filePath);
     });
 }
 
-function runOverwriteAllLocal (cmdObj) {
+function runOverwriteAllLocal(cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
     const cb = function () {
@@ -85,7 +85,7 @@ function runOverwriteAllLocal (cmdObj) {
     return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
 }
 
-function runOverwriteAllRemote (cmdObj) {
+function runOverwriteAllRemote(cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
     const cb = function () {
@@ -95,7 +95,7 @@ function runOverwriteAllRemote (cmdObj) {
     return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
 }
 
-function runDownloadSingle (filePath) {
+function runDownloadSingle(filePath) {
     CUtils.setForceEnv(filePath);
 
     CUtils.wrapUserErrors(() => {
@@ -103,7 +103,7 @@ function runDownloadSingle (filePath) {
     });
 }
 
-function runUploadSingle (filePath) {
+function runUploadSingle(filePath) {
     CUtils.setForceEnv(filePath);
 
     CUtils.wrapUserErrors(() => {
@@ -111,13 +111,13 @@ function runUploadSingle (filePath) {
     });
 }
 
-function runRename (oldPath, newPath) {
+function runRename(oldPath, newPath) {
     CUtils.wrapUserErrors(() => {
         return SCUtils.renameItem(oldPath, newPath);
     });
 }
 
-function runDelete (filePath) {
+function runDelete(filePath) {
     CUtils.setForceEnv(filePath);
 
     CUtils.wrapUserErrors(() => {
@@ -125,7 +125,7 @@ function runDelete (filePath) {
     });
 }
 
-function runParse () {
+function runParse() {
     CUtils.wrapUserErrors(() => {
         return SCUtils.reportIgnoredAssets();
     });

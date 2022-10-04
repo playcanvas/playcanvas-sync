@@ -3,125 +3,125 @@ const CUtils = require('../utils/common-utils');
 const CacheUtils = require('../utils/cache-utils');
 
 class ComputeDiffAll {
-  constructor(limitToItems) {
-    this.limitToItems = limitToItems;
+    constructor(limitToItems) {
+        this.limitToItems = limitToItems;
 
-    this.commonPaths = {
-      folders: {},
-      files: {}
-    };
+        this.commonPaths = {
+            folders: {},
+            files: {}
+        };
 
-    this.res = {
-      filesThatDiffer: [],
+        this.res = {
+            filesThatDiffer: [],
 
-      equalItems: {
-        files: [],
-        folders: []
-      },
+            equalItems: {
+                files: [],
+                folders: []
+            },
 
-      extraItems: {
-        remote: {
-          files: [],
-          folders: []
-        },
-        local: {
-          files: [],
-          folders: []
-        }
-      }
-    };
-  }
-
-  async run() {
-    await this.init();
-
-    this.handleAllFolders();
-
-    await this.handleAllFiles();
-
-    this.setAnyDiffFound();
-
-    return this.res;
-  }
-
-  async init() {
-    this.conf = await new GetConfig().run();
-
-    this.remote = {
-      folders: this.conf.store.folderAssets,
-      files: this.conf.store.activeAssets
-    };
-
-    this.local = await CacheUtils.getCached(this.conf, 'local_items');
-
-    this.applyLimit();
-  }
-
-  applyLimit() {
-    if (this.limitToItems) {
-      CUtils.applyItemLimit(this.remote, this.limitToItems);
-
-      CUtils.applyItemLimit(this.local, this.limitToItems);
+            extraItems: {
+                remote: {
+                    files: [],
+                    folders: []
+                },
+                local: {
+                    files: [],
+                    folders: []
+                }
+            }
+        };
     }
-  }
 
-  handleAllFolders() {
-    const h = CUtils.partitionFolders(this.local.folders, this.conf);
+    async run() {
+        await this.init();
 
-    this.res.equalItems.folders = h.isOnRemote;
+        this.handleAllFolders();
 
-    this.res.extraItems.local.folders = h.isNotOnRemote;
+        await this.handleAllFiles();
 
-    this.addToCommonPaths(h.isOnRemote, 'folders');
+        this.setAnyDiffFound();
 
-    this.selectRemoteOnly('folders');
-  }
+        return this.res;
+    }
 
-  async handleAllFiles() {
-    const promises = this.local.files.map(this.handleLocalFile, this);
+    async init() {
+        this.conf = await new GetConfig().run();
 
-    await Promise.all(promises);
+        this.remote = {
+            folders: this.conf.store.folderAssets,
+            files: this.conf.store.activeAssets
+        };
 
-    this.selectRemoteOnly('files');
-  }
+        this.local = await CacheUtils.getCached(this.conf, 'local_items');
 
-  handleLocalFile(h) {
-    return CUtils.isItemOnRemote(h, this.conf) ?
-      this.handleFileOnBoth(h) :
-      this.res.extraItems.local.files.push(h);
-  }
+        this.applyLimit();
+    }
 
-  async handleFileOnBoth(h) {
-    this.addToCommonPaths([h], 'files');
+    applyLimit() {
+        if (this.limitToItems) {
+            CUtils.applyItemLimit(this.remote, this.limitToItems);
 
-    const filesEqual = await CUtils.sameHashAsRemote(h, this.conf);
+            CUtils.applyItemLimit(this.local, this.limitToItems);
+        }
+    }
 
-    const dst = filesEqual ? this.res.equalItems.files : this.res.filesThatDiffer;
+    handleAllFolders() {
+        const h = CUtils.partitionFolders(this.local.folders, this.conf);
 
-    dst.push(h);
-  }
+        this.res.equalItems.folders = h.isOnRemote;
 
-  selectRemoteOnly(field) {
-    this.res.extraItems.remote[field] = this.remote[field].filter(h => {
-      return !this.commonPaths[field][h.remotePath];
-    });
-  }
+        this.res.extraItems.local.folders = h.isNotOnRemote;
 
-  addToCommonPaths(a, field) {
-    a.forEach(h => {
-      this.commonPaths[field][h.remotePath] = 1;
-    });
-  }
+        this.addToCommonPaths(h.isOnRemote, 'folders');
 
-  setAnyDiffFound() {
-    const allResArrays = [
-      this.res.filesThatDiffer,
-      this.res.extraItems.local.files,
-      this.res.extraItems.remote.files
-    ];
+        this.selectRemoteOnly('folders');
+    }
 
-    this.res.anyDiffFound = allResArrays.some(a => a.length);
-  }
+    async handleAllFiles() {
+        const promises = this.local.files.map(this.handleLocalFile, this);
+
+        await Promise.all(promises);
+
+        this.selectRemoteOnly('files');
+    }
+
+    handleLocalFile(h) {
+        return CUtils.isItemOnRemote(h, this.conf) ?
+            this.handleFileOnBoth(h) :
+            this.res.extraItems.local.files.push(h);
+    }
+
+    async handleFileOnBoth(h) {
+        this.addToCommonPaths([h], 'files');
+
+        const filesEqual = await CUtils.sameHashAsRemote(h, this.conf);
+
+        const dst = filesEqual ? this.res.equalItems.files : this.res.filesThatDiffer;
+
+        dst.push(h);
+    }
+
+    selectRemoteOnly(field) {
+        this.res.extraItems.remote[field] = this.remote[field].filter((h) => {
+            return !this.commonPaths[field][h.remotePath];
+        });
+    }
+
+    addToCommonPaths(a, field) {
+        a.forEach((h) => {
+            this.commonPaths[field][h.remotePath] = 1;
+        });
+    }
+
+    setAnyDiffFound() {
+        const allResArrays = [
+            this.res.filesThatDiffer,
+            this.res.extraItems.local.files,
+            this.res.extraItems.remote.files
+        ];
+
+        this.res.anyDiffFound = allResArrays.some(a => a.length);
+    }
 }
 
 module.exports = ComputeDiffAll;

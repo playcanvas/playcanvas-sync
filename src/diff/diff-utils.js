@@ -33,7 +33,7 @@ const DiffUtils = {
         h.type = diffValToType[h[0]];
     },
 
-    handleLines: function(h, res) {
+    handleLines: function (h, res) {
         const a = DiffUtils.diffToLineStrs(h[1]);
 
         const lineObjs = a.map(s => DiffUtils.makeLineObj(s, h.type));
@@ -92,7 +92,7 @@ const DiffUtils = {
         let count1 = 0;
         let count2 = 0;
 
-        a.forEach(h => {
+        a.forEach((h) => {
             if (h.type === 'both_files') {
                 count1++;
                 count2++;
@@ -152,7 +152,7 @@ const DiffUtils = {
         return {
             start: firstLine[nField],
             len: lastLine[nField] - firstLine[nField] + 1
-        }
+        };
     },
 
     limitForFile: function (a, type) {

@@ -36,7 +36,7 @@ class AssetStore {
     getAssetId(remotePath) {
         const a = this.getAssetAtPath(remotePath);
 
-        return a.id
+        return a.id;
     }
 
     getAssetAtPath(remotePath) {

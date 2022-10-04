@@ -5,7 +5,7 @@ const LocalTraversal = require('./local-traversal');
 const CacheUtils = {
     cachedData: {},
 
-    getCached: async function(conf, type) {
+    getCached: async function (conf, type) {
         if (!CacheUtils.cachedData[type]) {
             CacheUtils.cachedData[type] = await CacheUtils.loadData(conf, type);
         }
@@ -13,7 +13,7 @@ const CacheUtils = {
         return CacheUtils.cachedData[type];
     },
 
-    loadData: function(conf, type) {
+    loadData: function (conf, type) {
         if (type === 'remote_assets') {
             return new LoadAssets(conf).run();
 
