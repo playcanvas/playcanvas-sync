@@ -1,158 +1,158 @@
 const request = require('request-promise-native');
-const CUtils = require('./utils/common-utils')
+const CUtils = require('./utils/common-utils');
 
 const ASSETS_PREF = '/api';
 const EDITOR_PREF = '/editor';
 
 class ApiClient {
-  constructor(baseUrl, apiKey) {
-    this.baseUrl = baseUrl;
+    constructor(baseUrl, apiKey) {
+        this.baseUrl = baseUrl;
 
-    this.apiKey = apiKey;
+        this.apiKey = apiKey;
 
-    this.headers = {
-      Authorization: `Bearer ${apiKey}`
-    };
+        this.headers = {
+            Authorization: `Bearer ${apiKey}`
+        };
 
-    CUtils.checkHttps(baseUrl);
-  }
-
-  postForm (url, data) {
-    url = this.assetsUrl(url);
-
-    return request.post({
-      url: url,
-      formData: data,
-      headers: this.headers
-    });
-  }
-
-  putForm (url, data) {
-    url = this.assetsUrl(url);
-
-    return request.put(url, {
-      formData: data,
-      headers: this.headers
-    });
-  }
-
-  methodDelete(url) {
-    url = this.assetsUrl(url);
-
-    return request.delete(url, {
-      headers: this.headers
-    });
-  }
-
-  methodGet (url, pref, addToken) {
-    url = this.fullUrl(url, pref);
-
-    if (addToken) {
-      url = `${url}?access_token=${this.apiKey}`;
+        CUtils.checkHttps(baseUrl);
     }
 
-    return request({
-      url: url,
-      headers: this.headers
-    });
-  }
+    postForm(url, data) {
+        url = this.assetsUrl(url);
 
-  methodPost(url, pref, addToken, poyload) {
-    url = this.fullUrl(url, pref);
-
-    if (addToken) {
-      url = `${url}?access_token=${this.apiKey}`;
+        return request.post({
+            url: url,
+            formData: data,
+            headers: this.headers
+        });
     }
 
-    return request({
-      method: 'POST',
-      url: url,
-      headers: this.headers,
-      body: poyload,
-      json: true
-    });
-  }
+    putForm(url, data) {
+        url = this.assetsUrl(url);
 
-  assetsUrl(s) {
-    return this.fullUrl(s, ASSETS_PREF);
-  }
+        return request.put(url, {
+            formData: data,
+            headers: this.headers
+        });
+    }
 
-  fullUrl(s, pref) {
-    s = [ this.baseUrl, pref, s ].join('');
+    methodDelete(url) {
+        url = this.assetsUrl(url);
 
-    return encodeURI(s);
-  }
+        return request.delete(url, {
+            headers: this.headers
+        });
+    }
 
-  loadAssetToFile (h, conf) {
-    const file = CUtils.assetToFullPath(h, conf);
+    methodGet(url, pref, addToken) {
+        url = this.fullUrl(url, pref);
 
-    const stream = this.makeDownloadStream(h, conf.PLAYCANVAS_BRANCH_ID);
+        if (addToken) {
+            url = `${url}?access_token=${this.apiKey}`;
+        }
 
-    return CUtils.streamToFile(stream, file);
-  }
+        return request({
+            url: url,
+            headers: this.headers
+        });
+    }
 
-  loadAssetToStr (asset, branchId) {
-    const stream = this.makeDownloadStream(asset, branchId);
+    methodPost(url, pref, addToken, poyload) {
+        url = this.fullUrl(url, pref);
 
-    return CUtils.streamToString(stream);
-  }
+        if (addToken) {
+            url = `${url}?access_token=${this.apiKey}`;
+        }
 
-  makeDownloadStream (asset, branchId) {
-    const name = asset.file.filename;
+        return request({
+            method: 'POST',
+            url: url,
+            headers: this.headers,
+            body: poyload,
+            json: true
+        });
+    }
 
-    const s = `/assets/${asset.id}/file/${name}?branchId=${branchId}`;
+    assetsUrl(s) {
+        return this.fullUrl(s, ASSETS_PREF);
+    }
 
-    const url = this.assetsUrl(s);
+    fullUrl(s, pref) {
+        s = [this.baseUrl, pref, s].join('');
 
-    return request({
-      url: url,
-      headers: this.headers
-    });
-  }
+        return encodeURI(s);
+    }
 
-  async fetchAssets (projectId, branchId, skip, limit) {
-    const url = `/projects/${projectId}/assets?` +
+    loadAssetToFile(h, conf) {
+        const file = CUtils.assetToFullPath(h, conf);
+
+        const stream = this.makeDownloadStream(h, conf.PLAYCANVAS_BRANCH_ID);
+
+        return CUtils.streamToFile(stream, file);
+    }
+
+    loadAssetToStr(asset, branchId) {
+        const stream = this.makeDownloadStream(asset, branchId);
+
+        return CUtils.streamToString(stream);
+    }
+
+    makeDownloadStream(asset, branchId) {
+        const name = asset.file.filename;
+
+        const s = `/assets/${asset.id}/file/${name}?branchId=${branchId}`;
+
+        const url = this.assetsUrl(s);
+
+        return request({
+            url: url,
+            headers: this.headers
+        });
+    }
+
+    async fetchAssets(projectId, branchId, skip, limit) {
+        const url = `/projects/${projectId}/assets?` +
       `branchId=${branchId}&` +
       `skip=${skip}&limit=${limit}`;
 
-    const resp = await this.methodGet(url, ASSETS_PREF, false);
+        const resp = await this.methodGet(url, ASSETS_PREF, false);
 
-    return JSON.parse(resp);
-  }
-
-  async getCurEditorBranch (projectId) {
-    const url = `/project/${projectId}/branch`;
-
-    const resp = await this.methodGet(url, EDITOR_PREF, true);
-
-    return JSON.parse(resp);
-  }
-
-  async getEditorBranches(projectId) {
-    const url = `/projects/${projectId}/branches`;
-
-    const branches = [];
-    let hasMore = true;
-    let branchId = undefined;
-
-    while (hasMore) {
-      const resp = await this.methodGet(
-        url + (branchId ? "skip=" + branchId : ""),
-        BRANCHES_PREF,
-        true
-      );
-
-      const respData = JSON.parse(resp);
-
-      hasMore = respData.pagination.hasMore;
-
-      branches.push(...respData.result);
-
-      branchId = respData.result[respData.result.length - 1].id;
+        return JSON.parse(resp);
     }
 
-    return branches;
-  }
+    async getCurEditorBranch(projectId) {
+        const url = `/project/${projectId}/branch`;
+
+        const resp = await this.methodGet(url, EDITOR_PREF, true);
+
+        return JSON.parse(resp);
+    }
+
+    async getEditorBranches(projectId) {
+        const url = `/projects/${projectId}/branches`;
+
+        const branches = [];
+        let hasMore = true;
+        let branchId;
+
+        while (hasMore) {
+            const resp = await this.methodGet(
+                url + (branchId ? "skip=" + branchId : ""),
+                BRANCHES_PREF,
+                true
+            );
+
+            const respData = JSON.parse(resp);
+
+            hasMore = respData.pagination.hasMore;
+
+            branches.push(...respData.result);
+
+            branchId = respData.result[respData.result.length - 1].id;
+        }
+
+        return branches;
+    }
 }
 
 module.exports = ApiClient;

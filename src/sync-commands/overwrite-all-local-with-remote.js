@@ -28,7 +28,7 @@ class OverwriteAllLocalWithRemote {
     handleAllFolders() {
         CUtils.sortByStrField(this.diff.extraItems.remote.folders, 'remotePath');
 
-        this.diff.extraItems.remote.folders.forEach(h => {
+        this.diff.extraItems.remote.folders.forEach((h) => {
             CUtils.makeLocalFolder(h, this.conf);
 
             this.actionEnd('Created', h);

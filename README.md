@@ -74,7 +74,7 @@ automatically answer "yes" to confirmation prompts.
 
 Moving or renaming a file or a folder
 will appear to `pcwatch` as a `remove + create`. In such cases it may be better to
-stop `pcwatch`, perform the opearation locally, apply it to PlayCanvas with
+stop `pcwatch`, perform the operation locally, apply it to PlayCanvas with
 `pcsync rename`, and start `pcwatch` again.
 
 # Adding New Files as Script Components

@@ -9,33 +9,33 @@ const DiffStrings = require('../diff/diff-strings');
 const path = require('path');
 
 const SCUtils = {
-    downloadSingleFile: function(remotePath) {
+    downloadSingleFile: function (remotePath) {
         const limitToItems = PathUtils.remotePathToData(remotePath);
 
         return new OverwriteAllLocalWithRemote(limitToItems).run();
     },
 
-    uploadSingleFile: function(remotePath) {
+    uploadSingleFile: function (remotePath) {
         const limitToItems = PathUtils.remotePathToData(remotePath);
 
         return new OverwriteAllRemoteWithLocal(limitToItems).run();
     },
 
-    renameItem: async function(oldPath, newPath) {
+    renameItem: async function (oldPath, newPath) {
         const conf = await new GetConfig().run();
 
         const h = {
             remoteOldPath: oldPath,
             remoteNewDir: PathUtils.remoteDirFromParam(newPath),
             newFileName: path.basename(newPath)
-        }
+        };
 
         await new ActionRenamed(h, conf).run();
 
         console.log(`Renamed ${oldPath} to ${newPath}`);
     },
 
-    deleteItem: async function(remotePath) {
+    deleteItem: async function (remotePath) {
         const conf = await new GetConfig().run();
 
         await WatchUtils.actionDeleted(remotePath, conf);
@@ -43,7 +43,7 @@ const SCUtils = {
         console.log(`Deleted ${remotePath}`);
     },
 
-    diffSingleFile: async function(remotePath) {
+    diffSingleFile: async function (remotePath) {
         const conf = await new GetConfig().run();
 
         const remoteStr = await SyncUtils.remoteFileStr(remotePath, conf);
