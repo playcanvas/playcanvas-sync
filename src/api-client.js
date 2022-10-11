@@ -57,6 +57,22 @@ class ApiClient {
         });
     }
 
+    methodPost(url, pref, addToken, poyload) {
+        url = this.fullUrl(url, pref);
+
+        if (addToken) {
+            url = `${url}?access_token=${this.apiKey}`;
+        }
+
+        return request({
+            method: 'POST',
+            url: url,
+            headers: this.headers,
+            body: poyload,
+            json: true
+        });
+    }
+
     assetsUrl(s) {
         return this.fullUrl(s, ASSETS_PREF);
     }
