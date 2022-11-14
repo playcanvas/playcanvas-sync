@@ -216,7 +216,8 @@ Sample config file:
   "PLAYCANVAS_TARGET_DIR": "/Users/zpaul/proj1",
   "PLAYCANVAS_API_KEY": "xyz",
   "PLAYCANVAS_BAD_FILE_REG": "^\\.|~$",
-  "PLAYCANVAS_BAD_FOLDER_REG": "\\."
+  "PLAYCANVAS_BAD_FOLDER_REG": "\\.",
+  "PLAYCANVAS_CONVERT_TO_POW2": 0
 }
 ```
 

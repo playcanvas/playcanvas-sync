@@ -22,7 +22,8 @@ const optionalFields = [
     'PLAYCANVAS_INCLUDE_REG',
     'PLAYCANVAS_FORCE_REG',
     'PLAYCANVAS_DRY_RUN',
-    'PLAYCANVAS_VERBOSE'
+    'PLAYCANVAS_VERBOSE',
+    'PLAYCANVAS_CONVERT_TO_POW2'
 ];
 
 const allConfigFields = requiredFields.concat(optionalFields);
@@ -103,13 +104,13 @@ class ConfigVars {
 
     fromEnvOrMap(h) {
         allConfigFields.forEach((field) => {
-            this.result[field] = process.env[field] || h[field] || this.result[field];
+            this.result[field] = process.env[field] ?? h[field] ?? this.result[field];
         });
     }
 
     fromDefaults() {
         allConfigFields.forEach((field) => {
-            this.result[field] = this.result[field] || fieldsWithDefaults[field];
+            this.result[field] = this.result[field] ?? fieldsWithDefaults[field];
         });
     }
 

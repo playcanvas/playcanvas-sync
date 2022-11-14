@@ -57,7 +57,7 @@ class ApiClient {
         });
     }
 
-    methodPost(url, pref, addToken, poyload) {
+    methodPost(url, pref, addToken, payload) {
         url = this.fullUrl(url, pref);
 
         if (addToken) {
@@ -68,7 +68,7 @@ class ApiClient {
             method: 'POST',
             url: url,
             headers: this.headers,
-            body: poyload,
+            body: payload,
             json: true
         });
     }
