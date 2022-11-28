@@ -33,6 +33,10 @@ class ActionCreated {
     createFile() {
         const h = { preload: 'true' };
 
+        if (this.conf.PLAYCANVAS_CONVERT_TO_POW2 !== undefined) {
+            h.pow2 = this.conf.PLAYCANVAS_CONVERT_TO_POW2 ? 'true' : 'false';
+        }
+
         return this.callApi(h, this.data.fullPath);
     }
 

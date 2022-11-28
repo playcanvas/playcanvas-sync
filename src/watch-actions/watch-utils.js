@@ -15,6 +15,10 @@ const WatchUtils = {
             branchId: conf.PLAYCANVAS_BRANCH_ID,
             file: fs.createReadStream(data.fullPath)
         };
+ 
+        if (conf.PLAYCANVAS_CONVERT_TO_POW2 !== undefined) {
+            h.pow2 = conf.PLAYCANVAS_CONVERT_TO_POW2 ? 'true' : 'false';
+        }
 
         await conf.client.putForm(url, h);
 
