@@ -284,7 +284,19 @@ const CUtils = {
 
             CUtils.throwFtError(s);
         }
-    }
+    },
+
+    getAsyncPool: (function () {
+        const asyncPools = new Map();
+
+        return function(concurrency = 4, rateLimit = 100) {
+            const key = `${concurrency}-${rateLimit}`;
+            if (!asyncPools.has(key)) {
+                asyncPools.set(key, new AsyncPool(concurrency, rateLimit));
+            }
+            return asyncPools.get(key);
+        }
+    })(),
 };
 
 module.exports = CUtils;

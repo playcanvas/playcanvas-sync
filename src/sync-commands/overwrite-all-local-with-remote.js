@@ -5,6 +5,12 @@ const ComputeDiffAll = require('./compute-diff-all');
 class OverwriteAllLocalWithRemote {
     constructor(limitToItems) {
         this.limitToItems = limitToItems;
+
+        // According to https://developer.playcanvas.com/ru/user-manual/api/#rate-limiting
+        // the rate limit is 120 requests per minute, so we set it to 100 (it is safe)
+        const concurrency = 4;
+        const rateLimit = 100;
+        this.asyncPool = new CUtils.getAsyncPool(concurrency, rateLimit);
     }
 
     async run() {
@@ -37,11 +43,11 @@ class OverwriteAllLocalWithRemote {
 
     async handleAllFiles() {
         for (const h of this.diff.filesThatDiffer) {
-            await this.fetchFile(h, 'Updated');
+            this.asyncPool.add(() => this.fetchFile(h, "Updated"));
         }
 
         for (const h of this.diff.extraItems.remote.files) {
-            await this.fetchFile(h, 'Created');
+            this.asyncPool.add(() => this.fetchFile(h, "Created"));
         }
     }
 

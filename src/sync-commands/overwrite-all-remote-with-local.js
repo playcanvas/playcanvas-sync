@@ -7,6 +7,12 @@ const CUtils = require('../utils/common-utils');
 class OverwriteAllRemoteWithLocal {
     constructor(limitToItems) {
         this.limitToItems = limitToItems;
+
+        // According to https://developer.playcanvas.com/ru/user-manual/api/#rate-limiting
+        // the rate limit is 120 requests per minute, so we set it to 100 (it is safe)
+        const concurrency = 4;
+        const rateLimit = 100;
+        this.asyncPool = new CUtils.getAsyncPool(concurrency, rateLimit);
     }
 
     async run() {
@@ -35,11 +41,11 @@ class OverwriteAllRemoteWithLocal {
 
     async handleAllFiles() {
         for (const h of this.diff.filesThatDiffer) {
-            await this.updateItem(h);
+            this.asyncPool.add(() => this.updateItem(h));
         }
 
         for (const h of this.diff.extraItems.local.files) {
-            await this.createItem(h);
+            this.asyncPool.add(() => this.createItem(h));
         }
     }
 
