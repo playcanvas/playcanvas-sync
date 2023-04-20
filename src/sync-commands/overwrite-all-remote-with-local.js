@@ -8,7 +8,7 @@ class OverwriteAllRemoteWithLocal {
     constructor(limitToItems) {
         this.limitToItems = limitToItems;
 
-        // According to https://developer.playcanvas.com/ru/user-manual/api/#rate-limiting
+        // According to https://developer.playcanvas.com/en/user-manual/api/#rate-limiting
         // the rate limit is 120 requests per minute, so we set it to 100 (it is safe)
         const concurrency = 4;
         const rateLimit = 100;
