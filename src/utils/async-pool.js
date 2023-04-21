@@ -93,8 +93,7 @@ class MinHeap {
  * and the number of tasks executed per minute.
  * You can use the class to limit the number of requests to a server.
  * Also, a task in priority queue can be canceled.
- * @param {number} concurrency - The maximum number of concurrent tasks.
- * @param {number} rateLimit - The maximum number of tasks executed per minute.
+ * 
  * @example
  * const pool = new AsyncPool(2, 1);
  * const taskId = await pool.add(async () => {
@@ -112,6 +111,10 @@ class MinHeap {
  * pool.cancel(taskId);
  */
 class AsyncPool {
+    /**
+     * @param {number} concurrency - The maximum number of concurrent tasks.
+     * @param {number} rateLimit - The maximum number of tasks executed per minute.
+     */
     constructor(concurrency = Infinity, rateLimit = Infinity) {
         this.concurrency = concurrency;
         this.rateLimit = rateLimit;
