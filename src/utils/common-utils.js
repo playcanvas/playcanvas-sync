@@ -5,6 +5,7 @@ const UserError = require('./user-error');
 const FatalError = require('./fatal-error');
 const mkdirp = require('mkdirp');
 const path = require('path');
+const { AsyncPool } = require("./async-pool");
 
 const HTTPS_PREF_REG = /^https:\/\//;
 
