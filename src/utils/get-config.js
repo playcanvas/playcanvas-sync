@@ -14,6 +14,8 @@ class GetConfig {
 
         this.setClient();
 
+        await this.result.client.fetchLimits();
+
         await this.checkBranchMatch();
 
         this.setParser();
