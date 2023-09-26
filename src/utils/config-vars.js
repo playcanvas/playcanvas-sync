@@ -29,7 +29,7 @@ const optionalFields = [
 const allConfigFields = requiredFields.concat(optionalFields);
 
 const fieldsWithDefaults = {
-    PLAYCANVAS_BASE_URL: 'https://playcanvas.com'
+    PLAYCANVAS_BASE_URL: 'https://dev.playcanvas.com'
 };
 
 const integerFields = [

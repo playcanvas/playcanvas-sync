@@ -2,8 +2,6 @@ const request = require('request-promise-native');
 const CUtils = require('./utils/common-utils');
 const Bottleneck = require('bottleneck');
 
-const API_RATE_LIMIT_DOWNLOAD = 5000;
-
 const MAX_CONCURRENT = 10;
 const MINUTE_INTERVAL = 60 * 1000;
 
@@ -33,8 +31,8 @@ class ApiClient {
         if (!this.limiterDownload) {
             this.limiterDownload = new Bottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
-                reservoir: API_RATE_LIMIT_DOWNLOAD * 2, // Initial number of tokens in the reservoir
-                reservoirRefreshAmount: API_RATE_LIMIT_DOWNLOAD, // Number of tokens added to the reservoir every minute
+                reservoir: this.limits.download * 2, // Initial number of tokens in the reservoir
+                reservoirRefreshAmount: this.limits.download, // Number of tokens added to the reservoir every minute
                 reservoirRefreshInterval: MINUTE_INTERVAL // Interval to add tokens to the reservoir (1 minute)
             });
         }
@@ -46,7 +44,7 @@ class ApiClient {
         if (!this.limiterUpload) {
             this.limiterUpload = new Bottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
-                reservoir: this.limits.assets * 2, // Initial number of tokens in the reservoir
+                reservoir: this.limits.assets, // Initial number of tokens in the reservoir
                 reservoirRefreshAmount: this.limits.assets, // Number of tokens added to the reservoir every minute
                 reservoirRefreshInterval: MINUTE_INTERVAL // Interval to add tokens to the reservoir (1 minute)
             });
@@ -59,7 +57,7 @@ class ApiClient {
         if (!this.limiterApi) {
             this.limiterApi = new Bottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
-                reservoir: this.limits.normal * 2, // Initial number of tokens in the reservoir
+                reservoir: this.limits.normal, // Initial number of tokens in the reservoir
                 reservoirRefreshAmount: this.limits.normal, // Number of tokens added to the reservoir every minute
                 reservoirRefreshInterval: MINUTE_INTERVAL // Interval to add tokens to the reservoir (1 minute)
             });
@@ -180,7 +178,7 @@ class ApiClient {
         const url = `/ratelimits`;
         const resp = await this.methodGet(url, ASSETS_PREF, false);
 
-        this.limits = JSON.parse(resp);
+        this.limits = (JSON.parse(resp)).limits;
         return this.limits;
     }
 
