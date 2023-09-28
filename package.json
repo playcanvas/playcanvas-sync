@@ -22,6 +22,7 @@
     "extends": "@playcanvas/eslint-config"
   },
   "dependencies": {
+    "bottleneck": "^2.19.5",
     "commander": "^9.0.0",
     "diff": "^5.0.0",
     "find-process": "^1.4.7",

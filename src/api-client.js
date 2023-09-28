@@ -1,5 +1,9 @@
 const request = require('request-promise-native');
 const CUtils = require('./utils/common-utils');
+const Bottleneck = require('bottleneck');
+
+const MAX_CONCURRENT = 10;
+const MINUTE_INTERVAL = 60 * 1000;
 
 const ASSETS_PREF = '/api';
 const EDITOR_PREF = '/editor';
@@ -14,33 +18,90 @@ class ApiClient {
             Authorization: `Bearer ${apiKey}`
         };
 
+        // Create Bottleneck limiters
+        this.limiterDownload = null;
+        this.limiterUpload = null;
+        this.limiterApi = null;
+        this.limits = null;
+
         CUtils.checkHttps(baseUrl);
+    }
+
+    getDownloadLimiter() {
+        if (!this.limiterDownload) {
+            this.limiterDownload = new Bottleneck({
+                maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
+                reservoir: this.limits.download * 2, // Initial number of tokens in the reservoir
+                reservoirRefreshAmount: this.limits.download, // Number of tokens added to the reservoir every minute
+                reservoirRefreshInterval: MINUTE_INTERVAL // Interval to add tokens to the reservoir (1 minute)
+            });
+        }
+
+        return this.limiterDownload;
+    }
+
+    getUploadLimiter() {
+        if (!this.limiterUpload) {
+            this.limiterUpload = new Bottleneck({
+                maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
+                reservoir: this.limits.assets, // Initial number of tokens in the reservoir
+                reservoirRefreshAmount: this.limits.assets, // Number of tokens added to the reservoir every minute
+                reservoirRefreshInterval: MINUTE_INTERVAL // Interval to add tokens to the reservoir (1 minute)
+            });
+        }
+
+        return this.limiterUpload;
+    }
+
+    getApiLimiter() {
+        if (!this.limiterApi) {
+            this.limiterApi = new Bottleneck({
+                maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
+                reservoir: this.limits.normal, // Initial number of tokens in the reservoir
+                reservoirRefreshAmount: this.limits.normal, // Number of tokens added to the reservoir every minute
+                reservoirRefreshInterval: MINUTE_INTERVAL // Interval to add tokens to the reservoir (1 minute)
+            });
+        }
+
+        return this.limiterApi;
     }
 
     postForm(url, data) {
         url = this.assetsUrl(url);
 
-        return request.post({
-            url: url,
-            formData: data,
-            headers: this.headers
+        const limiter = this.getUploadLimiter();
+
+        return limiter.schedule(() => {
+            return request.post({
+                url: url,
+                formData: data,
+                headers: this.headers
+            });
         });
     }
 
     putForm(url, data) {
         url = this.assetsUrl(url);
 
-        return request.put(url, {
-            formData: data,
-            headers: this.headers
+        const limiter = this.getUploadLimiter();
+
+        return limiter.schedule(() => {
+            return request.put(url, {
+                formData: data,
+                headers: this.headers
+            });
         });
     }
 
     methodDelete(url) {
         url = this.assetsUrl(url);
 
-        return request.delete(url, {
-            headers: this.headers
+        const limiter = this.getApiLimiter();
+
+        return limiter.schedule(() => {
+            return request.delete(url, {
+                headers: this.headers
+            });
         });
     }
 
@@ -86,9 +147,12 @@ class ApiClient {
     loadAssetToFile(h, conf) {
         const file = CUtils.assetToFullPath(h, conf);
 
-        const stream = this.makeDownloadStream(h, conf.PLAYCANVAS_BRANCH_ID);
+        const limiter = this.getDownloadLimiter();
 
-        return CUtils.streamToFile(stream, file);
+        return limiter.schedule({ }, () => {
+            const stream = this.makeDownloadStream(h, conf.PLAYCANVAS_BRANCH_ID);
+            return CUtils.streamToFile(stream, file);
+        });
     }
 
     loadAssetToStr(asset, branchId) {
@@ -108,6 +172,14 @@ class ApiClient {
             url: url,
             headers: this.headers
         });
+    }
+
+    async fetchLimits(projectId, branchId, skip, limit) {
+        const url = `/ratelimits`;
+        const resp = await this.methodGet(url, ASSETS_PREF, false);
+
+        this.limits = (JSON.parse(resp)).limits;
+        return this.limits;
     }
 
     async fetchAssets(projectId, branchId, skip, limit) {
