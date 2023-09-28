@@ -18,7 +18,7 @@ class ApiClient {
             Authorization: `Bearer ${apiKey}`
         };
 
-        // Create a Bottleneck limiters
+        // Create Bottleneck limiters
         this.limiterDownload = null;
         this.limiterUpload = null;
         this.limiterApi = null;
