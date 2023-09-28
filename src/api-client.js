@@ -27,7 +27,7 @@ class ApiClient {
         CUtils.checkHttps(baseUrl);
     }
 
-    createDownloadLimiter() {
+    getDownloadLimiter() {
         if (!this.limiterDownload) {
             this.limiterDownload = new Bottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
@@ -40,7 +40,7 @@ class ApiClient {
         return this.limiterDownload;
     }
 
-    createUploadLimiter() {
+    getUploadLimiter() {
         if (!this.limiterUpload) {
             this.limiterUpload = new Bottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
@@ -53,7 +53,7 @@ class ApiClient {
         return this.limiterUpload;
     }
 
-    createApiLimiter() {
+    getApiLimiter() {
         if (!this.limiterApi) {
             this.limiterApi = new Bottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
@@ -69,7 +69,7 @@ class ApiClient {
     postForm(url, data) {
         url = this.assetsUrl(url);
 
-        const limiter = this.createUploadLimiter();
+        const limiter = this.getUploadLimiter();
 
         return limiter.schedule(() => {
             return request.post({
@@ -83,7 +83,7 @@ class ApiClient {
     putForm(url, data) {
         url = this.assetsUrl(url);
 
-        const limiter = this.createUploadLimiter();
+        const limiter = this.getUploadLimiter();
 
         return limiter.schedule(() => {
             return request.put(url, {
@@ -96,7 +96,7 @@ class ApiClient {
     methodDelete(url) {
         url = this.assetsUrl(url);
 
-        const limiter = this.createApiLimiter();
+        const limiter = this.getApiLimiter();
 
         return limiter.schedule(() => {
             return request.delete(url, {
@@ -147,7 +147,7 @@ class ApiClient {
     loadAssetToFile(h, conf) {
         const file = CUtils.assetToFullPath(h, conf);
 
-        const limiter = this.createDownloadLimiter();
+        const limiter = this.getDownloadLimiter();
 
         return limiter.schedule({ }, () => {
             const stream = this.makeDownloadStream(h, conf.PLAYCANVAS_BRANCH_ID);
