@@ -41,7 +41,7 @@
     "eslint": "^8.24.0"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint --ext .js,.mjs src bin"
+    "lint": "eslint --ext .js,.mjs src bin"
   },
   "bin": {
     "pcsync": "./bin/pcsync.js",
