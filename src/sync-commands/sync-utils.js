@@ -7,7 +7,7 @@ const GetConfig = require('../utils/get-config.js');
 
 const SyncUtils = {
     reportDiffAll: async function () {
-        const h = await newComputeDiffAll().run();
+        const h = await new ComputeDiffAll().run();
 
         SyncUtils.reportList(h.filesThatDiffer, 'Files that Differ');
 
@@ -99,7 +99,7 @@ const SyncUtils = {
     },
 
     getWatchProcs: async function () {
-        const conf = await newGetConfig().run();
+        const conf = await new GetConfig().run();
 
         const a = await FindProcess('name', /pcwatch/);
 

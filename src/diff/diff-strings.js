@@ -26,14 +26,14 @@ class DiffStrings {
 
         DiffUtils.addLineNums(this.lineObjs);
 
-        this.chunks = newDiffChunks(this.lineObjs).run();
+        this.chunks = new DiffChunks(this.lineObjs).run();
     }
 
     report() {
         console.log('--- remote');
         console.log('+++ local');
 
-        this.chunks.forEach(h => newReportChunk(h).run());
+        this.chunks.forEach(h => new ReportChunk(h).run());
     }
 }
 

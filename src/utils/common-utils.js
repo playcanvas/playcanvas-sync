@@ -48,7 +48,7 @@ const CUtils = {
     streamToString: function (stream) {
         const a = [];
 
-        return newPromise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             stream.on('data', s => a.push(s));
 
             stream.on('end', () => {
@@ -66,7 +66,7 @@ const CUtils = {
 
         readStream.pipe(writeStream);
 
-        return newPromise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             writeStream.on('finish', resolve);
             writeStream.on('error', reject);
         });
@@ -94,7 +94,7 @@ const CUtils = {
 
         const input = fs.createReadStream(file);
 
-        return newPromise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             input.on('data', s => hash.update(s));
 
             input.on('end', () => resolve(hash.digest('hex')));
@@ -127,11 +127,11 @@ const CUtils = {
     },
 
     throwUsError: function (msg) {
-        throw newUserError(msg);
+        throw new UserError(msg);
     },
 
     throwFtError: function (msg) {
-        throw newFatalError(msg);
+        throw new FatalError(msg);
     },
 
     addKeyVal: function (h, k, v) {
@@ -270,7 +270,7 @@ const CUtils = {
     },
 
     waitMs: function (ms) {
-        return newPromise(resolve => setTimeout(resolve, ms));
+        return new Promise(resolve => setTimeout(resolve, ms));
     },
 
     checkTargetExists: async function (fullPath) {

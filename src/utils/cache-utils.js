@@ -15,7 +15,7 @@ const CacheUtils = {
 
     loadData: function (conf, type) {
         if (type === 'remote_assets') {
-            return newLoadAssets(conf).run();
+            return new LoadAssets(conf).run();
 
         } else if (type === 'local_items') {
             return CacheUtils.loadLocalItems(conf);
@@ -23,9 +23,9 @@ const CacheUtils = {
     },
 
     loadLocalItems: function (conf) {
-        const handler = newLocalContents(conf);
+        const handler = new LocalContents(conf);
 
-        return newLocalTraversal(
+        return new LocalTraversal(
             conf.PLAYCANVAS_TARGET_DIR,
             handler
         ).run();

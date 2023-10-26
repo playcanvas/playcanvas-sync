@@ -138,7 +138,7 @@ class ConfigVars {
     makeReg(field) {
         const v = this.result[field];
 
-        this.result[field] = v && newRegExp(v);
+        this.result[field] = v && new RegExp(v);
     }
 
     makeInt(field) {

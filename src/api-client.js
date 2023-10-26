@@ -29,7 +29,7 @@ class ApiClient {
 
     getDownloadLimiter() {
         if (!this.limiterDownload) {
-            this.limiterDownload = newBottleneck({
+            this.limiterDownload = new Bottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
                 reservoir: this.limits.download * 2, // Initial number of tokens in the reservoir
                 reservoirRefreshAmount: this.limits.download, // Number of tokens added to the reservoir every minute
@@ -42,7 +42,7 @@ class ApiClient {
 
     getUploadLimiter() {
         if (!this.limiterUpload) {
-            this.limiterUpload = newBottleneck({
+            this.limiterUpload = new Bottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
                 reservoir: this.limits.assets, // Initial number of tokens in the reservoir
                 reservoirRefreshAmount: this.limits.assets, // Number of tokens added to the reservoir every minute
@@ -55,7 +55,7 @@ class ApiClient {
 
     getApiLimiter() {
         if (!this.limiterApi) {
-            this.limiterApi = newBottleneck({
+            this.limiterApi = new Bottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
                 reservoir: this.limits.normal, // Initial number of tokens in the reservoir
                 reservoirRefreshAmount: this.limits.normal, // Number of tokens added to the reservoir every minute

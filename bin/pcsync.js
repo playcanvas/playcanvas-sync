@@ -79,7 +79,7 @@ function runOverwriteAllLocal(cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
     const cb = function () {
-        return newOverwriteAllLocalWithRemote().run();
+        return new OverwriteAllLocalWithRemote().run();
     };
 
     return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
@@ -89,7 +89,7 @@ function runOverwriteAllRemote(cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);
 
     const cb = function () {
-        return newOverwriteAllRemoteWithLocal().run();
+        return new OverwriteAllRemoteWithLocal().run();
     };
 
     return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);

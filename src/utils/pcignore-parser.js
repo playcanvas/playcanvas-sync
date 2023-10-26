@@ -10,7 +10,7 @@ const specialTokenParts = [
     'source_branch_wins'
 ].join('|');
 
-const specialTokenReg = newRegExp(`\\s*(${specialTokenParts})\\s*(\\S+)?`);
+const specialTokenReg = new RegExp(`\\s*(${specialTokenParts})\\s*(\\S+)?`);
 
 class PcignoreParser {
     constructor(fileStr, extraFiles, extraReg) {
@@ -65,7 +65,7 @@ class PcignoreParser {
             this.addExtensions(val);
 
         } else if (type === 'ignore_regexp' && val) {
-            const r = newRegExp(val);
+            const r = new RegExp(val);
 
             this.ignoreRegs.push(r);
         }

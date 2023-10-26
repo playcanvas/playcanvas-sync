@@ -12,17 +12,17 @@ const SCUtils = {
     downloadSingleFile: function (remotePath) {
         const limitToItems = PathUtils.remotePathToData(remotePath);
 
-        return newOverwriteAllLocalWithRemote(limitToItems).run();
+        return new OverwriteAllLocalWithRemote(limitToItems).run();
     },
 
     uploadSingleFile: function (remotePath) {
         const limitToItems = PathUtils.remotePathToData(remotePath);
 
-        return newOverwriteAllRemoteWithLocal(limitToItems).run();
+        return new OverwriteAllRemoteWithLocal(limitToItems).run();
     },
 
     renameItem: async function (oldPath, newPath) {
-        const conf = await newGetConfig().run();
+        const conf = await new GetConfig().run();
 
         const h = {
             remoteOldPath: oldPath,
@@ -30,13 +30,13 @@ const SCUtils = {
             newFileName: path.basename(newPath)
         };
 
-        await newActionRenamed(h, conf).run();
+        await new ActionRenamed(h, conf).run();
 
         console.log(`Renamed ${oldPath} to ${newPath}`);
     },
 
     deleteItem: async function (remotePath) {
-        const conf = await newGetConfig().run();
+        const conf = await new GetConfig().run();
 
         await WatchUtils.actionDeleted(remotePath, conf);
 
@@ -44,19 +44,19 @@ const SCUtils = {
     },
 
     diffSingleFile: async function (remotePath) {
-        const conf = await newGetConfig().run();
+        const conf = await new GetConfig().run();
 
         const remoteStr = await SyncUtils.remoteFileStr(remotePath, conf);
 
         const localStr = SyncUtils.localFileStr(remotePath, conf);
 
-        newDiffStrings(remoteStr, localStr).run();
+        new DiffStrings(remoteStr, localStr).run();
     },
 
     reportIgnoredAssets: async function () {
         await SyncUtils.errorIfDifferent(false);
 
-        const conf = await newGetConfig().run();
+        const conf = await new GetConfig().run();
 
         SyncUtils.reportList(conf.store.activeAssets, 'Assets matched by pcignore.txt');
     }

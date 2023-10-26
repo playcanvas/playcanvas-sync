@@ -22,9 +22,9 @@ class OverwriteAllRemoteWithLocal {
     }
 
     async init() {
-        this.conf = await newGetConfig().run();
+        this.conf = await new GetConfig().run();
 
-        this.diff = await newComputeDiffAll(this.limitToItems).run();
+        this.diff = await new ComputeDiffAll(this.limitToItems).run();
     }
 
     async handleAllFolders() {
@@ -44,7 +44,7 @@ class OverwriteAllRemoteWithLocal {
     }
 
     async createItem(h) {
-        await newActionCreated(h, this.conf).run();
+        await new ActionCreated(h, this.conf).run();
 
         this.actionEnd('Created', h);
     }

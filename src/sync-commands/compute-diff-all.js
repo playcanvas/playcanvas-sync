@@ -45,7 +45,7 @@ class ComputeDiffAll {
     }
 
     async init() {
-        this.conf = await newGetConfig().run();
+        this.conf = await new GetConfig().run();
 
         this.remote = {
             folders: this.conf.store.folderAssets,

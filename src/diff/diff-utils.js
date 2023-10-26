@@ -71,7 +71,7 @@ const DiffUtils = {
 
     // https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs
     computeDiffs: function (s1, s2) {
-        const dmp = newdiff_match_patch();
+        const dmp = new diff_match_patch();
 
         const a = dmp.diff_linesToChars_(s1, s2);
 

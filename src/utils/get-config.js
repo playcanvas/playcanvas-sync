@@ -10,7 +10,7 @@ const PCIGNORE_FILE = 'pcignore.txt';
 
 class GetConfig {
     async run() {
-        this.result = await newConfigVars().run();
+        this.result = await new ConfigVars().run();
 
         this.setClient();
 
@@ -26,7 +26,7 @@ class GetConfig {
     }
 
     setClient() {
-        this.result.client = newApiClient(
+        this.result.client = new ApiClient(
             this.result.PLAYCANVAS_BASE_URL,
             this.result.PLAYCANVAS_API_KEY
         );
@@ -38,12 +38,12 @@ class GetConfig {
         const s = CUtils.fileToStr(p);
 
         this.result.ignParser = s ?
-            newPcignoreParser(s, [PCIGNORE_FILE], this.result.PLAYCANVAS_INCLUDE_REG).parse() :
-            newDummyIgnoreParser();
+            new PcignoreParser(s, [PCIGNORE_FILE], this.result.PLAYCANVAS_INCLUDE_REG).parse() :
+            new DummyIgnoreParser();
     }
 
     async setStore() {
-        this.result.store = await newAssetStore(this.result).populate();
+        this.result.store = await new AssetStore(this.result).populate();
     }
 
     async checkBranchMatch() {

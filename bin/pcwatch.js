@@ -26,7 +26,7 @@ async function run() {
 }
 
 async function startWatcher() {
-    const conf = await newGetConfig().run();
+    const conf = await new GetConfig().run();
 
     console.log(`Started in ${conf.PLAYCANVAS_TARGET_DIR}`);
 
@@ -42,14 +42,14 @@ async function startWatcher() {
 async function watchIteration(conf, pathToData) {
     await CUtils.waitMs(WatchUtils.WATCH_LOOP_INTERVAL);
 
-    const handler = newLocalWatcher(
+    const handler = new LocalWatcher(
         conf,
         pathToData,
         WatchUtils.WATCH_ITEM_INTERVAL,
         handleEvent
     );
 
-    return newLocalTraversal(conf.PLAYCANVAS_TARGET_DIR, handler).run();
+    return new LocalTraversal(conf.PLAYCANVAS_TARGET_DIR, handler).run();
 }
 
 async function handleEvent(e, conf) {
@@ -82,7 +82,7 @@ async function eventModified(e, conf) {
 
 async function eventCreated(e, conf) {
     if (!CUtils.eventHasAsset(e, conf)) {
-        const id = await newActionCreated(e, conf).run();
+        const id = await new ActionCreated(e, conf).run();
 
         WatchUtils.reportWatchAction(id, 'Created', conf);
     }
