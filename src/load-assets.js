@@ -1,4 +1,4 @@
-const CUtils = require('./utils/common-utils');
+const CUtils = require('./utils/common-utils.js');
 
 const ASSET_QRY_LIMIT = 100000;
 

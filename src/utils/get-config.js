@@ -1,10 +1,10 @@
-const ApiClient = require('../api-client');
-const AssetStore = require('../asset-store');
-const CUtils = require('./common-utils');
-const ConfigVars = require('./config-vars');
+const ApiClient = require('../api-client.js');
+const AssetStore = require('../asset-store.js');
+const CUtils = require('./common-utils.js');
+const ConfigVars = require('./config-vars.js');
 const path = require('path');
-const PcignoreParser = require('./pcignore-parser');
-const DummyIgnoreParser = require('./dummy-ignore-parser');
+const PcignoreParser = require('./pcignore-parser.js');
+const DummyIgnoreParser = require('./dummy-ignore-parser.js');
 
 const PCIGNORE_FILE = 'pcignore.txt';
 

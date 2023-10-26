@@ -1,4 +1,4 @@
-const CUtils = require('./common-utils');
+const CUtils = require('./common-utils.js');
 
 class LocalWatcher {
     constructor(conf, origPathToData, waitTime, callback) {

@@ -1,5 +1,5 @@
 const request = require('request-promise-native');
-const CUtils = require('./utils/common-utils');
+const CUtils = require('./utils/common-utils.js');
 const Bottleneck = require('bottleneck');
 
 const MAX_CONCURRENT = 10;

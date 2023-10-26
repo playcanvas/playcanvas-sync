@@ -1,6 +1,6 @@
-const GetConfig = require('../utils/get-config');
-const CUtils = require('../utils/common-utils');
-const CacheUtils = require('../utils/cache-utils');
+const GetConfig = require('../utils/get-config.js');
+const CUtils = require('../utils/common-utils.js');
+const CacheUtils = require('../utils/cache-utils.js');
 
 class ComputeDiffAll {
     constructor(limitToItems) {

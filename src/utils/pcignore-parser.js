@@ -1,4 +1,4 @@
-const CUtils = require('./common-utils');
+const CUtils = require('./common-utils.js');
 const gitParser = require('gitignore-parser');
 const path = require('path');
 

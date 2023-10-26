@@ -1,5 +1,5 @@
 const fs = require('fs');
-const CUtils = require('../utils/common-utils');
+const CUtils = require('../utils/common-utils.js');
 
 class ActionCreated {
     constructor(data, conf) {

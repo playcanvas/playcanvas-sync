@@ -1,4 +1,4 @@
-const DiffUtils = require('./diff-utils');
+const DiffUtils = require('./diff-utils.js');
 
 class ReportChunk {
     constructor(chunk) {

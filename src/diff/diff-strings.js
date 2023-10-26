@@ -1,6 +1,6 @@
-const DiffUtils = require('./diff-utils');
-const DiffChunks = require('./diff-chunks');
-const ReportChunk = require('./report-chunk');
+const DiffUtils = require('./diff-utils.js');
+const DiffChunks = require('./diff-chunks.js');
+const ReportChunk = require('./report-chunk.js');
 
 class DiffStrings {
     constructor(s1, s2) {

@@ -1,6 +1,6 @@
-const PathUtils = require('./path-utils');
-const CUtils = require('./common-utils');
-const TypeUtils = require('./type-utils');
+const PathUtils = require('./path-utils.js');
+const CUtils = require('./common-utils.js');
+const TypeUtils = require('./type-utils.js');
 
 class LocalContents {
     constructor(conf) {

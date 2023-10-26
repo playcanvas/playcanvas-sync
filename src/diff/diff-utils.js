@@ -1,5 +1,5 @@
-const CUtils = require('../utils/common-utils');
-const diff_match_patch = require('./diff_match_patch_uncompressed');
+const CUtils = require('../utils/common-utils.js');
+const diff_match_patch = require('./diff_match_patch_uncompressed.js');
 
 const diffValToType = {
     '-1': 'file_1_only',

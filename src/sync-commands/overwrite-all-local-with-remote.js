@@ -1,6 +1,6 @@
-const CUtils = require('../utils/common-utils');
-const GetConfig = require('../utils/get-config');
-const ComputeDiffAll = require('./compute-diff-all');
+const CUtils = require('../utils/common-utils.js');
+const GetConfig = require('../utils/get-config.js');
+const ComputeDiffAll = require('./compute-diff-all.js');
 
 class OverwriteAllLocalWithRemote {
     constructor(limitToItems) {

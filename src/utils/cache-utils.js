@@ -1,6 +1,6 @@
-const LoadAssets = require('../load-assets');
-const LocalContents = require('./local-contents');
-const LocalTraversal = require('./local-traversal');
+const LoadAssets = require('../load-assets.js');
+const LocalContents = require('./local-contents.js');
+const LocalTraversal = require('./local-traversal.js');
 
 const CacheUtils = {
     cachedData: {},

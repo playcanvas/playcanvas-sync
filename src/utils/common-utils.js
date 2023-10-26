@@ -1,8 +1,8 @@
-const PathUtils = require('./path-utils');
+const PathUtils = require('./path-utils.js');
 const fs = require('fs');
 const crypto = require('crypto');
-const UserError = require('./user-error');
-const FatalError = require('./fatal-error');
+const UserError = require('./user-error.js');
+const FatalError = require('./fatal-error.js');
 const mkdirp = require('mkdirp');
 const path = require('path');
 
