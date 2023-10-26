@@ -1,4 +1,3 @@
-const fs = require('fs').promises;
 const PathUtils = require('./path-utils.js');
 
 class LocalTraversal {

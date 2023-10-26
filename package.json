@@ -24,7 +24,10 @@
     "url": "https://github.com/playcanvas/playcanvas-sync.git"
   },
   "eslintConfig": {
-    "extends": "@playcanvas/eslint-config"
+    "extends": "@playcanvas/eslint-config",
+    "rules": {
+      "space-unary-ops": "off"
+    }
   },
   "eslintIgnore": [
     "src/diff/diff_match_patch_uncompressed.js"
@@ -44,7 +47,7 @@
     "eslint": "^8.52.0"
   },
   "scripts": {
-    "lint": "eslint --ext .js,.mjs src bin"
+    "lint": "eslint src bin"
   },
   "bin": {
     "pcsync": "./bin/pcsync.js",

@@ -2,7 +2,6 @@ const ActionCreated = require('../watch-actions/action-created.js');
 const WatchUtils = require('../watch-actions/watch-utils.js');
 const ComputeDiffAll = require('./compute-diff-all.js');
 const GetConfig = require('../utils/get-config.js');
-const CUtils = require('../utils/common-utils.js');
 
 class OverwriteAllRemoteWithLocal {
     constructor(limitToItems) {
