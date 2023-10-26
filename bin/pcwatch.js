@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-const GetConfig = require('./src/utils/get-config');
+const GetConfig = require('../src/utils/get-config');
 const program = require('commander');
 
-const CUtils = require('./src/utils/common-utils');
-const WatchUtils = require('./src/watch-actions/watch-utils');
-const ActionCreated = require('./src/watch-actions/action-created');
-const SyncUtils = require('./src/sync-commands/sync-utils');
-const LocalWatcher = require('./src/utils/local-watcher');
-const CacheUtils = require('./src/utils/cache-utils');
-const LocalTraversal = require('./src/utils/local-traversal');
+const CUtils = require('../src/utils/common-utils');
+const WatchUtils = require('../src/watch-actions/watch-utils');
+const ActionCreated = require('../src/watch-actions/action-created');
+const SyncUtils = require('../src/sync-commands/sync-utils');
+const LocalWatcher = require('../src/utils/local-watcher');
+const CacheUtils = require('../src/utils/cache-utils');
+const LocalTraversal = require('../src/utils/local-traversal');
 
 program.option('-f, --force', 'skip local/remote equality check');
 
