@@ -1,6 +1,6 @@
-const DiffUtils = require('./diff-utils');
-const DiffChunks = require('./diff-chunks');
-const ReportChunk = require('./report-chunk');
+const DiffUtils = require('./diff-utils.js');
+const DiffChunks = require('./diff-chunks.js');
+const ReportChunk = require('./report-chunk.js');
 
 class DiffStrings {
     constructor(s1, s2) {
@@ -26,14 +26,14 @@ class DiffStrings {
 
         DiffUtils.addLineNums(this.lineObjs);
 
-        this.chunks = new DiffChunks(this.lineObjs).run();
+        this.chunks = newDiffChunks(this.lineObjs).run();
     }
 
     report() {
         console.log('--- remote');
         console.log('+++ local');
 
-        this.chunks.forEach(h => new ReportChunk(h).run());
+        this.chunks.forEach(h => newReportChunk(h).run());
     }
 }
 

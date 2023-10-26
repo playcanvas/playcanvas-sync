@@ -1,8 +1,8 @@
-const PathUtils = require('./path-utils');
+const PathUtils = require('./path-utils.js');
 const fs = require('fs');
 const crypto = require('crypto');
-const UserError = require('./user-error');
-const FatalError = require('./fatal-error');
+const UserError = require('./user-error.js');
+const FatalError = require('./fatal-error.js');
 const mkdirp = require('mkdirp');
 const path = require('path');
 
@@ -48,7 +48,7 @@ const CUtils = {
     streamToString: function (stream) {
         const a = [];
 
-        return new Promise((resolve, reject) => {
+        return newPromise((resolve, reject) => {
             stream.on('data', s => a.push(s));
 
             stream.on('end', () => {
@@ -66,7 +66,7 @@ const CUtils = {
 
         readStream.pipe(writeStream);
 
-        return new Promise((resolve, reject) => {
+        return newPromise((resolve, reject) => {
             writeStream.on('finish', resolve);
             writeStream.on('error', reject);
         });
@@ -94,7 +94,7 @@ const CUtils = {
 
         const input = fs.createReadStream(file);
 
-        return new Promise((resolve, reject) => {
+        return newPromise((resolve, reject) => {
             input.on('data', s => hash.update(s));
 
             input.on('end', () => resolve(hash.digest('hex')));
@@ -127,11 +127,11 @@ const CUtils = {
     },
 
     throwUsError: function (msg) {
-        throw new UserError(msg);
+        throw newUserError(msg);
     },
 
     throwFtError: function (msg) {
-        throw new FatalError(msg);
+        throw newFatalError(msg);
     },
 
     addKeyVal: function (h, k, v) {
@@ -270,7 +270,7 @@ const CUtils = {
     },
 
     waitMs: function (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return newPromise(resolve => setTimeout(resolve, ms));
     },
 
     checkTargetExists: async function (fullPath) {

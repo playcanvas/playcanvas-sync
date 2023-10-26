@@ -1,7 +1,7 @@
 const path = require('path');
-const CUtils = require('./common-utils');
+const CUtils = require('./common-utils.js');
 const os = require('os');
-const PathUtils = require('./path-utils');
+const PathUtils = require('./path-utils.js');
 
 const HOME_CONFIG_FILE = '.pcconfig';
 const TARGET_CONFIG_FILE = 'pcconfig.json';
@@ -138,7 +138,7 @@ class ConfigVars {
     makeReg(field) {
         const v = this.result[field];
 
-        this.result[field] = v && new RegExp(v);
+        this.result[field] = v && newRegExp(v);
     }
 
     makeInt(field) {

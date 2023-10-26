@@ -1,5 +1,5 @@
 const request = require('request-promise-native');
-const CUtils = require('./utils/common-utils');
+const CUtils = require('./utils/common-utils.js');
 const Bottleneck = require('bottleneck');
 
 const MAX_CONCURRENT = 10;
@@ -29,7 +29,7 @@ class ApiClient {
 
     getDownloadLimiter() {
         if (!this.limiterDownload) {
-            this.limiterDownload = new Bottleneck({
+            this.limiterDownload = newBottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
                 reservoir: this.limits.download * 2, // Initial number of tokens in the reservoir
                 reservoirRefreshAmount: this.limits.download, // Number of tokens added to the reservoir every minute
@@ -42,7 +42,7 @@ class ApiClient {
 
     getUploadLimiter() {
         if (!this.limiterUpload) {
-            this.limiterUpload = new Bottleneck({
+            this.limiterUpload = newBottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
                 reservoir: this.limits.assets, // Initial number of tokens in the reservoir
                 reservoirRefreshAmount: this.limits.assets, // Number of tokens added to the reservoir every minute
@@ -55,7 +55,7 @@ class ApiClient {
 
     getApiLimiter() {
         if (!this.limiterApi) {
-            this.limiterApi = new Bottleneck({
+            this.limiterApi = newBottleneck({
                 maxConcurrent: MAX_CONCURRENT, // Max concurrent requests (if tokens)
                 reservoir: this.limits.normal, // Initial number of tokens in the reservoir
                 reservoirRefreshAmount: this.limits.normal, // Number of tokens added to the reservoir every minute

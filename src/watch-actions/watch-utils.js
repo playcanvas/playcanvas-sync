@@ -1,6 +1,6 @@
 const fs = require('fs');
-const CUtils = require('../utils/common-utils');
-const TypeUtils = require('../utils/type-utils');
+const CUtils = require('../utils/common-utils.js');
+const TypeUtils = require('../utils/type-utils.js');
 
 const WatchUtils = {
     WATCH_LOOP_INTERVAL: 1000,
@@ -15,7 +15,7 @@ const WatchUtils = {
             branchId: conf.PLAYCANVAS_BRANCH_ID,
             file: fs.createReadStream(data.fullPath)
         };
- 
+
         if (conf.PLAYCANVAS_CONVERT_TO_POW2 !== undefined) {
             h.pow2 = conf.PLAYCANVAS_CONVERT_TO_POW2 ? 'true' : 'false';
         }

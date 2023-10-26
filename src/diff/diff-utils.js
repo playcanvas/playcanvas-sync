@@ -1,5 +1,5 @@
-const CUtils = require('../utils/common-utils');
-const diff_match_patch = require('./diff_match_patch_uncompressed');
+const CUtils = require('../utils/common-utils.js');
+const diff_match_patch = require('./diff_match_patch_uncompressed.js');
 
 const diffValToType = {
     '-1': 'file_1_only',
@@ -71,7 +71,7 @@ const DiffUtils = {
 
     // https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs
     computeDiffs: function (s1, s2) {
-        const dmp = new diff_match_patch();
+        const dmp = newdiff_match_patch();
 
         const a = dmp.diff_linesToChars_(s1, s2);
 

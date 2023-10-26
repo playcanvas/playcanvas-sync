@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-const GetConfig = require('../src/utils/get-config');
+const GetConfig = require('../src/utils/get-config.js');
 const program = require('commander');
 
-const CUtils = require('../src/utils/common-utils');
-const WatchUtils = require('../src/watch-actions/watch-utils');
-const ActionCreated = require('../src/watch-actions/action-created');
-const SyncUtils = require('../src/sync-commands/sync-utils');
-const LocalWatcher = require('../src/utils/local-watcher');
-const CacheUtils = require('../src/utils/cache-utils');
-const LocalTraversal = require('../src/utils/local-traversal');
+const CUtils = require('../src/utils/common-utils.js');
+const WatchUtils = require('../src/watch-actions/watch-utils.js');
+const ActionCreated = require('../src/watch-actions/action-created.js');
+const SyncUtils = require('../src/sync-commands/sync-utils.js');
+const LocalWatcher = require('../src/utils/local-watcher.js');
+const CacheUtils = require('../src/utils/cache-utils.js');
+const LocalTraversal = require('../src/utils/local-traversal.js');
 
 program.option('-f, --force', 'skip local/remote equality check');
 
@@ -26,7 +26,7 @@ async function run() {
 }
 
 async function startWatcher() {
-    const conf = await new GetConfig().run();
+    const conf = await newGetConfig().run();
 
     console.log(`Started in ${conf.PLAYCANVAS_TARGET_DIR}`);
 
@@ -42,14 +42,14 @@ async function startWatcher() {
 async function watchIteration(conf, pathToData) {
     await CUtils.waitMs(WatchUtils.WATCH_LOOP_INTERVAL);
 
-    const handler = new LocalWatcher(
+    const handler = newLocalWatcher(
         conf,
         pathToData,
         WatchUtils.WATCH_ITEM_INTERVAL,
         handleEvent
     );
 
-    return new LocalTraversal(conf.PLAYCANVAS_TARGET_DIR, handler).run();
+    return newLocalTraversal(conf.PLAYCANVAS_TARGET_DIR, handler).run();
 }
 
 async function handleEvent(e, conf) {
@@ -82,7 +82,7 @@ async function eventModified(e, conf) {
 
 async function eventCreated(e, conf) {
     if (!CUtils.eventHasAsset(e, conf)) {
-        const id = await new ActionCreated(e, conf).run();
+        const id = await newActionCreated(e, conf).run();
 
         WatchUtils.reportWatchAction(id, 'Created', conf);
     }

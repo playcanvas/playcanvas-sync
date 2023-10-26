@@ -1,13 +1,13 @@
-const CUtils = require('../utils/common-utils');
-const ComputeDiffAll = require('./compute-diff-all');
+const CUtils = require('../utils/common-utils.js');
+const ComputeDiffAll = require('./compute-diff-all.js');
 const readline = require('readline');
 const FindProcess = require('find-process');
 const path = require('path');
-const GetConfig = require('../utils/get-config');
+const GetConfig = require('../utils/get-config.js');
 
 const SyncUtils = {
     reportDiffAll: async function () {
-        const h = await new ComputeDiffAll().run();
+        const h = await newComputeDiffAll().run();
 
         SyncUtils.reportList(h.filesThatDiffer, 'Files that Differ');
 
@@ -99,7 +99,7 @@ const SyncUtils = {
     },
 
     getWatchProcs: async function () {
-        const conf = await new GetConfig().run();
+        const conf = await newGetConfig().run();
 
         const a = await FindProcess('name', /pcwatch/);
 

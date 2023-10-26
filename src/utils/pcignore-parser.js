@@ -1,4 +1,4 @@
-const CUtils = require('./common-utils');
+const CUtils = require('./common-utils.js');
 const gitParser = require('gitignore-parser');
 const path = require('path');
 
@@ -10,7 +10,7 @@ const specialTokenParts = [
     'source_branch_wins'
 ].join('|');
 
-const specialTokenReg = new RegExp(`\\s*(${specialTokenParts})\\s*(\\S+)?`);
+const specialTokenReg = newRegExp(`\\s*(${specialTokenParts})\\s*(\\S+)?`);
 
 class PcignoreParser {
     constructor(fileStr, extraFiles, extraReg) {
@@ -65,7 +65,7 @@ class PcignoreParser {
             this.addExtensions(val);
 
         } else if (type === 'ignore_regexp' && val) {
-            const r = new RegExp(val);
+            const r = newRegExp(val);
 
             this.ignoreRegs.push(r);
         }

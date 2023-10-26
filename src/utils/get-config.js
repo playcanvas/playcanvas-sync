@@ -1,16 +1,16 @@
-const ApiClient = require('../api-client');
-const AssetStore = require('../asset-store');
-const CUtils = require('./common-utils');
-const ConfigVars = require('./config-vars');
+const ApiClient = require('../api-client.js');
+const AssetStore = require('../asset-store.js');
+const CUtils = require('./common-utils.js');
+const ConfigVars = require('./config-vars.js');
 const path = require('path');
-const PcignoreParser = require('./pcignore-parser');
-const DummyIgnoreParser = require('./dummy-ignore-parser');
+const PcignoreParser = require('./pcignore-parser.js');
+const DummyIgnoreParser = require('./dummy-ignore-parser.js');
 
 const PCIGNORE_FILE = 'pcignore.txt';
 
 class GetConfig {
     async run() {
-        this.result = await new ConfigVars().run();
+        this.result = await newConfigVars().run();
 
         this.setClient();
 
@@ -26,7 +26,7 @@ class GetConfig {
     }
 
     setClient() {
-        this.result.client = new ApiClient(
+        this.result.client = newApiClient(
             this.result.PLAYCANVAS_BASE_URL,
             this.result.PLAYCANVAS_API_KEY
         );
@@ -38,12 +38,12 @@ class GetConfig {
         const s = CUtils.fileToStr(p);
 
         this.result.ignParser = s ?
-            new PcignoreParser(s, [PCIGNORE_FILE], this.result.PLAYCANVAS_INCLUDE_REG).parse() :
-            new DummyIgnoreParser();
+            newPcignoreParser(s, [PCIGNORE_FILE], this.result.PLAYCANVAS_INCLUDE_REG).parse() :
+            newDummyIgnoreParser();
     }
 
     async setStore() {
-        this.result.store = await new AssetStore(this.result).populate();
+        this.result.store = await newAssetStore(this.result).populate();
     }
 
     async checkBranchMatch() {
