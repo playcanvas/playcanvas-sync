@@ -85,7 +85,6 @@ class ConfigVars {
             p = path.join(process.cwd(), name);
         }
         const h = CUtils.jsonFileToMap(p);
-        console.log("Config Json : ", h);
         this.fromEnvOrMap(h);
     }
 
