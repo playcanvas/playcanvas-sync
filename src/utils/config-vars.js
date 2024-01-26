@@ -80,7 +80,7 @@ class ConfigVars {
         start = start || '';
 
         const p = path.join(start, name);
-
+        console.log("Config File : ", p);
         const h = CUtils.jsonFileToMap(p);
 
         this.fromEnvOrMap(h);
