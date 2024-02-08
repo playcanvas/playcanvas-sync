@@ -1,6 +1,7 @@
 const path = require('path');
 const CUtils = require('./common-utils.js');
 const os = require('os');
+const fs = require('fs');
 const PathUtils = require('./path-utils.js');
 
 const HOME_CONFIG_FILE = '.pcconfig';
@@ -79,10 +80,11 @@ class ConfigVars {
     fromConfigFile(start, name) {
         start = start || '';
 
-        const p = path.join(start, name);
-
+        let p = path.join(start, name);
+        if (!fs.existsSync(p)) {
+            p = path.join(process.cwd(), name);
+        }
         const h = CUtils.jsonFileToMap(p);
-
         this.fromEnvOrMap(h);
     }
 
