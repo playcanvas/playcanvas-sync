@@ -13,6 +13,7 @@ program
     .description('compare all local and remote files and folders')
     .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
     .option('-e, --ext <extensions>', 'handle files with provided extensions')
+    .option('-p, --profile', 'Use the profile specified in the config file')
     .action(runCompAll);
 
 program
@@ -34,6 +35,7 @@ program
     .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
     .option('-e, --ext <extensions>', 'handle files with provided extensions')
     .option('-y, --yes', 'Automatically answer "yes" to any prompts that might print on the command line.')
+    .option('-p, --profile', 'Use the profile specified in the config file')
     .action(runOverwriteAllRemote);
 
 program
@@ -61,9 +63,9 @@ program
     .description('list assets matched by pcignore.txt')
     .action(runParse);
 
-function runCompAll(cmdObj) {
+function runCompAll(cmdObj, options) {
     CUtils.handleForceRegOpts(cmdObj);
-
+    console.log("Command Options: ", cmdObj,  options);
     CUtils.wrapUserErrors(() => {
         return SyncUtils.reportDiffAll();
     });
