@@ -12,16 +12,16 @@ const CacheUtils = require('../src/utils/cache-utils.js');
 const LocalTraversal = require('../src/utils/local-traversal.js');
 
 program.option('-f, --force', 'skip local/remote equality check');
+program.option('-p, --profile <profile>', 'Use the profile specified in the config file')
 
 program.parse(process.argv);
 
 async function run() {
+    CUtils.handleProfileOpts(program.opts());
     if (!program.opts().force) {
         await CUtils.wrapUserErrors(() => SyncUtils.errorIfDifferent(true));
-
         await CUtils.wrapUserErrors(SyncUtils.errorIfMultWatch);
     }
-
     await startWatcher();
 }
 
