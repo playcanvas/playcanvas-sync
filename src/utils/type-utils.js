@@ -10,7 +10,7 @@ const TEXTUAL_ASSET_TYPES = [
 ];
 
 const TYPE_TO_EXT = {
-    'script': ['.js'],
+    'script': ['.js', '.mjs'],
     'scene': ['.fbx', '.dae', '.obj', '.3ds'],
     'text': ['.txt', '.xml', '.atlas'],
     'html': ['.html'],
