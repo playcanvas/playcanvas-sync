@@ -1,3 +1,5 @@
+const path = require('path');
+
 const TEXTUAL_ASSET_TYPES = [
     'text',
     'script',
@@ -8,7 +10,7 @@ const TEXTUAL_ASSET_TYPES = [
 ];
 
 const TYPE_TO_EXT = {
-    'script': ['.js', '.mjs'],  // Add mjs extension
+    'script': ['.js', '.mjs'],  // Inclure .mjs dans les types de fichiers pour script
     'scene': ['.fbx', '.dae', '.obj', '.3ds'],
     'text': ['.txt', '.xml', '.atlas'],
     'html': ['.html'],
@@ -27,7 +29,7 @@ TEXTUAL_ASSET_TYPES.forEach((t) => {
     const a = TYPE_TO_EXT[t];
 
     a.forEach((ext) => {
-        TEXTUAL_EXTENSIONS[ext] = 1;
+        TEXTUAL_EXTENSIONS[ext.toLowerCase()] = 1;  // Assure-toi que toutes les extensions sont en minuscules
     });
 });
 
@@ -61,7 +63,7 @@ const TypeUtils = {
     },
 
     isTextualFile: function (s) {
-        const ext = path.extname(s);
+        const ext = path.extname(s).toLowerCase();  // Convertir l'extension en minuscule
 
         return TEXTUAL_EXTENSIONS[ext];
     },
