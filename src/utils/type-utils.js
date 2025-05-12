@@ -1,5 +1,3 @@
-const path = require('path');
-
 const TEXTUAL_ASSET_TYPES = [
     'text',
     'script',
@@ -10,7 +8,7 @@ const TEXTUAL_ASSET_TYPES = [
 ];
 
 const TYPE_TO_EXT = {
-    'script': ['.js', '.mjs'],
+    'script': ['.js', '.mjs'],  // Add mjs extension
     'scene': ['.fbx', '.dae', '.obj', '.3ds'],
     'text': ['.txt', '.xml', '.atlas'],
     'html': ['.html'],
