@@ -63,7 +63,7 @@ const TypeUtils = {
     },
 
     isTextualFile: function (s) {
-        const ext = path.extname(s).toLowerCase();  // Convertir l'extension en minuscule
+        const ext = path.extname(s).toLowerCase();  // Uppercase to lowercase to avoid case sensitivity
 
         return TEXTUAL_EXTENSIONS[ext];
     },
