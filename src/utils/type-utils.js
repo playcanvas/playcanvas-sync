@@ -29,7 +29,7 @@ TEXTUAL_ASSET_TYPES.forEach((t) => {
     const a = TYPE_TO_EXT[t];
 
     a.forEach((ext) => {
-        TEXTUAL_EXTENSIONS[ext] = 1;
+        TEXTUAL_EXTENSIONS[ext.toLowerCase()] = 1;
     });
 });
 
@@ -63,7 +63,7 @@ const TypeUtils = {
     },
 
     isTextualFile: function (s) {
-        const ext = path.extname(s);
+        const ext = path.extname(s).toLowerCase();  // Uppercase to lowercase to avoid case sensitivity
 
         return TEXTUAL_EXTENSIONS[ext];
     },
