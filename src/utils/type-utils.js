@@ -29,7 +29,7 @@ TEXTUAL_ASSET_TYPES.forEach((t) => {
     const a = TYPE_TO_EXT[t];
 
     a.forEach((ext) => {
-        TEXTUAL_EXTENSIONS[ext.toLowerCase()] = 1;
+        TEXTUAL_EXTENSIONS[ext] = 1;
     });
 });
 
