@@ -253,6 +253,11 @@ const CUtils = {
         CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', v);
     },
 
+    handleProfileOpts: function (cmdObj) {
+        const v = cmdObj.profile || '';
+        CUtils.checkSetEnv('PLAYCANVAS_PROFILE', v);
+    },
+
     extToReg: function (extensions) {
         let a = extensions.split(',');
 

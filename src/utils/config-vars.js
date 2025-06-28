@@ -5,7 +5,9 @@ const fs = require('fs');
 const PathUtils = require('./path-utils.js');
 
 const HOME_CONFIG_FILE = '.pcconfig';
-const TARGET_CONFIG_FILE = 'pcconfig.json';
+const TARGET_CONFIG_FILE = 'pcconfig';
+const CONFIG_FILE_EXT = 'json';
+const PROFILE_KEY = 'PLAYCANVAS_PROFILE';
 
 const requiredFields = [
     'PLAYCANVAS_API_KEY',
@@ -68,7 +70,7 @@ class ConfigVars {
 
         await this.checkPrepTarg();
 
-        this.fromConfigFile(this.result.PLAYCANVAS_TARGET_DIR, TARGET_CONFIG_FILE);
+        this.fromTargetConfigFile(this.result.PLAYCANVAS_TARGET_DIR, TARGET_CONFIG_FILE);
 
         await this.addSubdirToTarget();
 
@@ -79,10 +81,28 @@ class ConfigVars {
 
     fromConfigFile(start, name) {
         start = start || '';
-
         let p = path.join(start, name);
         if (!fs.existsSync(p)) {
-            p = path.join(process.cwd(), name);
+            start = process.cwd();
+            p = path.join(start, name);
+        }
+        const h = CUtils.jsonFileToMap(p);
+        this.fromEnvOrMap(h);
+    }
+
+    fromTargetConfigFile(start, name) {
+        const originalName = `${name}.${CONFIG_FILE_EXT}`;
+        name = process.env[PROFILE_KEY] ? `${name}-${process.env[PROFILE_KEY]}.${CONFIG_FILE_EXT}` : `${name}.${CONFIG_FILE_EXT}`;
+        let p = path.join(start, name);
+        if (!fs.existsSync(p)) {
+            start = process.cwd();
+            p = path.join(start, name);
+            if (!fs.existsSync(p)) {
+                p = path.join(start, originalName);
+                if (!fs.existsSync(p)) {
+                    console.log("Couldn't find either the default config file [%s] or the profile-specific config file [%s] from %s", originalName, name, start);
+                }
+            }
         }
         const h = CUtils.jsonFileToMap(p);
         this.fromEnvOrMap(h);
