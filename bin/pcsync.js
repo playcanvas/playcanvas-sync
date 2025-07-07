@@ -13,6 +13,7 @@ program
     .description('compare all local and remote files and folders')
     .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
     .option('-e, --ext <extensions>', 'handle files with provided extensions')
+    .option('-a, --all', 'handle all files (textual and binary)')
     .action(runCompAll);
 
 program
@@ -25,6 +26,7 @@ program
     .description('download all remote files, overwriting their local counterparts')
     .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
     .option('-e, --ext <extensions>', 'handle files with provided extensions')
+    .option('-a, --all', 'handle all files (textual and binary)')
     .option('-y, --yes', 'Automatically answer "yes" to any prompts that might print on the command line.')
     .action(runOverwriteAllLocal);
 
@@ -33,6 +35,7 @@ program
     .description('upload all local files, overwriting their remote counterparts')
     .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
     .option('-e, --ext <extensions>', 'handle files with provided extensions')
+    .option('-a, --all', 'handle all files (textual and binary)')
     .option('-y, --yes', 'Automatically answer "yes" to any prompts that might print on the command line.')
     .action(runOverwriteAllRemote);
 

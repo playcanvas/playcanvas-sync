@@ -48,6 +48,11 @@ class OverwriteAllLocalWithRemote {
     async fetchFile(h, action) {
         const asset = this.conf.store.pathToAsset[h.remotePath];
 
+        // Skip assets that don't have downloadable files (folders, containers, etc.)
+        if (asset.type === 'folder' || !asset.file) {
+            return;
+        }
+
         await this.conf.client.loadAssetToFile(asset, this.conf);
 
         this.actionEnd(action, h);

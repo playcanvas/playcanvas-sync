@@ -247,8 +247,13 @@ const CUtils = {
     },
 
     handleForceRegOpts: function (cmdObj) {
-        const v = cmdObj.regexp ||
+        let v = cmdObj.regexp ||
             (cmdObj.ext && CUtils.extToReg(cmdObj.ext));
+
+        // Handle --all option to match all files
+        if (cmdObj.all && !v) {
+            v = '.*'; // Match all files
+        }
 
         CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', v);
     },

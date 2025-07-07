@@ -12,10 +12,16 @@ const CacheUtils = require('../src/utils/cache-utils.js');
 const LocalTraversal = require('../src/utils/local-traversal.js');
 
 program.option('-f, --force', 'skip local/remote equality check');
+program.option('-r, --regexp <regexp>', 'handle files matching the provided regular expression');
+program.option('-e, --ext <extensions>', 'handle files with provided extensions');
+program.option('-a, --all', 'handle all files (textual and binary)');
 
 program.parse(process.argv);
 
 async function run() {
+    // Handle binary file options
+    CUtils.handleForceRegOpts(program.opts());
+
     if (!program.opts().force) {
         await CUtils.wrapUserErrors(() => SyncUtils.errorIfDifferent(true));
 
