@@ -62,6 +62,44 @@ const CUtils = {
     },
 
     streamToFile: function (readStream, file) {
+        // Check for path conflicts before creating the file
+        const dir = path.dirname(file);
+
+        // Check if the immediate parent directory is actually a file
+        if (fs.existsSync(dir)) {
+            const stat = fs.statSync(dir);
+            if (stat.isFile()) {
+                console.warn(`Skipping ${file} - parent path ${dir} is a file, not a directory`);
+                return Promise.resolve();
+            }
+        }
+
+        // Check if any parent directory in the path is actually a file
+        const pathParts = dir.split(path.sep);
+        let currentPath = '';
+
+        for (let i = 0; i < pathParts.length; i++) {
+            if (pathParts[i] === '') {
+                currentPath = path.sep; // Handle root path
+                continue;
+            }
+
+            currentPath = currentPath === path.sep ?
+                path.join(currentPath, pathParts[i]) :
+                path.join(currentPath, pathParts[i]);
+
+            if (fs.existsSync(currentPath)) {
+                const stat = fs.statSync(currentPath);
+                if (stat.isFile()) {
+                    console.warn(`Skipping ${file} - parent path ${currentPath} is a file, not a directory`);
+                    return Promise.resolve();
+                }
+            }
+        }
+
+        // Create directory structure if it doesn't exist
+        CUtils.makeDirP(dir);
+
         const writeStream = fs.createWriteStream(file);
 
         readStream.pipe(writeStream);
@@ -173,7 +211,7 @@ const CUtils = {
     sameHashAsRemote: async function (local, conf) {
         const remote = conf.store.pathToAsset[local.remotePath];
 
-        if (remote) {
+        if (remote && remote.file) {
             const md5 = await CUtils.fileToMd5Hash(local.fullPath);
 
             return md5 === remote.file.hash;
