@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const GetConfig = require('../utils/get-config.js');
 const CUtils = require('../utils/common-utils.js');
 const CacheUtils = require('../utils/cache-utils.js');
@@ -103,8 +105,70 @@ class ComputeDiffAll {
 
     selectRemoteOnly(field) {
         this.res.extraItems.remote[field] = this.remote[field].filter((h) => {
-            return !this.commonPaths[field][h.remotePath];
+            // First check if the file exists locally (original logic)
+            if (this.commonPaths[field][h.remotePath]) {
+                return false;
+            }
+
+            // For files, check if they can actually be downloaded
+            if (field === 'files') {
+                return this.canDownloadFile(h);
+            }
+
+            return true;
         });
+    }
+
+    canDownloadFile(h) {
+        // Skip assets that don't have downloadable files (folders, containers, etc.)
+        if (h.type === 'folder' || !h.file) {
+            return false;
+        }
+
+        // Check if downloading this file would cause a path conflict
+        if (this.wouldCausePathConflict(h)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    wouldCausePathConflict(h) {
+        // Get the full local path where this file would be saved
+        const fullPath = CUtils.assetToFullPath(h, this.conf);
+        const dir = path.dirname(fullPath);
+
+        // Check if the immediate parent directory is actually a file
+        if (fs.existsSync(dir)) {
+            const stat = fs.statSync(dir);
+            if (stat.isFile()) {
+                return true;
+            }
+        }
+
+        // Check if any parent directory in the path is actually a file
+        const pathParts = dir.split(path.sep);
+        let currentPath = '';
+
+        for (let i = 0; i < pathParts.length; i++) {
+            if (pathParts[i] === '') {
+                currentPath = path.sep; // Handle root path
+                continue;
+            }
+
+            currentPath = currentPath === path.sep ?
+                path.join(currentPath, pathParts[i]) :
+                path.join(currentPath, pathParts[i]);
+
+            if (fs.existsSync(currentPath)) {
+                const stat = fs.statSync(currentPath);
+                if (stat.isFile()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     addToCommonPaths(a, field) {

@@ -26,19 +26,24 @@ const WatchUtils = {
     },
 
     actionDeleted: async function (remotePath, conf) {
-        const assetId = conf.store.getAssetId(remotePath);
+        const asset = conf.store.pathToAsset[remotePath];
+        if (!asset) {
+            return false;
+        }
+
+        const assetId = asset.id;
 
         conf.store.handleDeletedAsset(assetId);
 
         const url = `/assets/${assetId}?branchId=${conf.PLAYCANVAS_BRANCH_ID}`;
 
         await conf.client.methodDelete(url);
+
+        return true;
     },
 
-    reportWatchAction: function (assetId, tag, conf) {
-        const remotePath = conf.store.idToPath[assetId];
-
-        const s = `${tag} ${remotePath}`;
+    reportWatchAction: function (remotePath, tag, conf) {
+        const s = `[${new Date().toLocaleTimeString('en-US', { hour12: true })}] ${tag} ${remotePath}`;
 
         console.log(s);
     },

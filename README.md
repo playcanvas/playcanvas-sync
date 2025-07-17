@@ -4,8 +4,9 @@ The `pcsync` and `pcwatch` utilities allow editing copies of
 JavaScript and other textual files of a PlayCanvas project
 locally on your own computer, in a text editor of your choice.
 
-`pcsync` also allows pushing and pulling of [binary files](#using-pcsync-for-binary-files), such as
-images and models.
+Both `pcsync` and `pcwatch` support working with [binary files](#using-pcsync-for-binary-files), such as
+images and models. `pcsync` can push and pull binary files, while `pcwatch` can monitor and
+automatically sync changes to binary files in real-time.
 
 In addition, if your project has a file called [`pcignore.txt`](#the-pcignoretxt-file),
 PlayCanvas merge will not affect the files listed in it,
@@ -70,7 +71,26 @@ automatically answer "yes" to confirmation prompts.
 
 # The `pcwatch` Utility
 
-`pcwatch` does not need any options.
+`pcwatch` detects changes to local files and folders (edits, removals and creation)
+as they happen and applies them to PlayCanvas in real time.
+
+By default, `pcwatch` only monitors textual files. To monitor binary files, use:
+
+```
+  -e, --ext <extensions>  handle files with provided extensions
+  -r, --regexp <regexp>   handle files matching the provided regular expression
+  -a, --all               handle all files (textual and binary)
+```
+
+For instance:
+
+```
+pcwatch -e jpeg,png
+pcwatch -r "\\.(png|jpeg)"
+pcwatch --all
+```
+
+The regular expression tests each file's path from the root.
 
 Moving or renaming a file or a folder
 will appear to `pcwatch` as a `remove + create`. In such cases it may be better to
@@ -144,12 +164,13 @@ Binary files include assets such as textures (JPG and PNG) and models (GLB).
 
 `push`, `pull` (single file) and `rm` work with binary file arguments without any special options.
 
-`pushAll`, `pullAll` and `diffAll` have two options that make them work with matching
+`pushAll`, `pullAll` and `diffAll` have three options that make them work with matching
 files only, including binary (without one of these options `pcsync` only works with textual files):
 
 ```
   -e, --ext <extensions>  handle files with provided extensions
   -r, --regexp <regexp>   handle files matching the provided regular expression
+  -a, --all               handle all files (textual and binary)
 ```
 
 For instance:
@@ -157,9 +178,54 @@ For instance:
 ```
 pcsync diffAll -e jpeg,png
 pcsync pushAll -r "\\.(png|jpeg)"
+pcsync pullAll --all
 ```
 
 The regular expression tests each file's path from the root.
+
+## Pulling All Files
+
+To pull all files (both textual and binary) without specifying file types:
+
+```bash
+# Pull all files - easiest option
+pcsync pullAll --all
+
+# Alternative: Use regex to match all files
+pcsync pullAll -r ".*"
+
+# Skip confirmation prompt
+pcsync pullAll --all -y
+```
+
+The `--all` flag is the simplest way to work with all file types without having to manually specify extensions or regex patterns.
+
+# Using `pcwatch` for Binary Files
+
+Similar to `pcsync`, `pcwatch` can monitor and automatically sync binary files such as textures (JPG and PNG) and models (GLB) in real-time.
+
+To use `pcwatch` with binary files, use the same options as `pcsync`:
+
+```
+  -e, --ext <extensions>  handle files with provided extensions
+  -r, --regexp <regexp>   handle files matching the provided regular expression
+  -a, --all               handle all files (textual and binary)
+```
+
+For instance:
+
+```
+pcwatch -e jpeg,png,glb
+pcwatch -r "\\.(png|jpeg|glb)$"
+pcwatch --all
+```
+
+The easiest way to monitor all file types is to use the `--all` option.
+
+When monitoring binary files, `pcwatch` will:
+- Detect when binary files are created, modified, or deleted
+- Automatically upload changes to PlayCanvas in real-time
+- Use the same MD5 hash comparison as `pcsync` to detect actual file changes
 
 # Installation
 
@@ -299,7 +365,7 @@ to print the current values of all config variables and other useful data.
 
 * Run `pcsync pullAll` to download existing textual files
   from PlayCanvas
-* Launch `pcwatch`
+* Launch `pcwatch` (or `pcwatch --all` to also monitor binary files)
 * Start editing/creating files locally in your own text editor
 
 To merge changes from another PlayCanvas branch into your branch without `git`:
@@ -316,7 +382,7 @@ To merge changes from another PlayCanvas branch into your branch without `git`:
 * Create a git branch for your work, and make it your local target directory
 * Create a [`pcignore.txt`](#the-pcignoretxt-file) file, listing all files 
 you intend to keep in git, create a PlayCanvas checkpoint that includes your `pcignore.txt`
-* Launch `pcwatch`
+* Launch `pcwatch` (or `pcwatch --all` to also monitor binary files)
 * Start editing/creating files locally in your own text editor
 * When necessary, merge in `git` the branch of another group member into your branch 
 * Use `pcsync pushAll` to update your remote branch after git merge

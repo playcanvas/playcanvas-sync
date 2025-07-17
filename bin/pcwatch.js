@@ -12,10 +12,16 @@ const CacheUtils = require('../src/utils/cache-utils.js');
 const LocalTraversal = require('../src/utils/local-traversal.js');
 
 program.option('-f, --force', 'skip local/remote equality check');
+program.option('-r, --regexp <regexp>', 'handle files matching the provided regular expression');
+program.option('-e, --ext <extensions>', 'handle files with provided extensions');
+program.option('-a, --all', 'handle all files (textual and binary)');
 
 program.parse(process.argv);
 
 async function run() {
+    // Handle binary file options
+    CUtils.handleForceRegOpts(program.opts());
+
     if (!program.opts().force) {
         await CUtils.wrapUserErrors(() => SyncUtils.errorIfDifferent(true));
 
@@ -63,28 +69,35 @@ async function handleGoodEvent(e, conf) {
         await eventModified(e, conf);
 
     } else if (e.action === 'ACTION_DELETED') {
-        await WatchUtils.actionDeleted(e.remotePath, conf);
-
-        console.log(`Deleted ${e.remotePath}`);
+        await eventDeleted(e, conf);
 
     } else if (e.action === 'ACTION_CREATED') {
         await eventCreated(e, conf);
     }
 }
 
+async function eventDeleted(e, conf) {
+    const deleted = await WatchUtils.actionDeleted(e.remotePath, conf);
+    if (deleted) {
+        WatchUtils.reportWatchAction(e.remotePath, 'Deleted', conf);
+    } else {
+        WatchUtils.reportWatchAction(e.remotePath, 'Deleted locally. Doesn\'t exist on remote.', conf);
+    }
+}
+
 async function eventModified(e, conf) {
     if (CUtils.eventHasAsset(e, conf)) {
-        const id = await WatchUtils.actionModified(e, conf);
+        await WatchUtils.actionModified(e, conf);
 
-        WatchUtils.reportWatchAction(id, 'Updated', conf);
+        WatchUtils.reportWatchAction(e.remotePath, 'Updated', conf);
     }
 }
 
 async function eventCreated(e, conf) {
     if (!CUtils.eventHasAsset(e, conf)) {
-        const id = await new ActionCreated(e, conf).run();
+        await new ActionCreated(e, conf).run();
 
-        WatchUtils.reportWatchAction(id, 'Created', conf);
+        WatchUtils.reportWatchAction(e.remotePath, 'Created', conf);
     }
 }
 

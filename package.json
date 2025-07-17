@@ -33,14 +33,13 @@
     "src/diff/diff_match_patch_uncompressed.js"
   ],
   "dependencies": {
+    "axios": "^1.7.7",
     "bottleneck": "^2.19.5",
     "commander": "^9.0.0",
     "diff": "^5.0.0",
     "find-process": "^1.4.7",
     "gitignore-parser": "0.0.2",
-    "mkdirp": "^1.0.4",
-    "request": "^2.88.2",
-    "request-promise-native": "^1.0.9"
+    "mkdirp": "^1.0.4"
   },
   "devDependencies": {
     "@playcanvas/eslint-config": "^1.7.1",
