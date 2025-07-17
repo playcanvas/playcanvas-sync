@@ -42,9 +42,7 @@ const WatchUtils = {
         return true;
     },
 
-    reportWatchAction: function (assetId, tag, conf) {
-        const remotePath = conf.store.idToPath[assetId];
-
+    reportWatchAction: function (remotePath, tag, conf) {
         const s = `[${new Date().toLocaleTimeString('en-US', { hour12: true })}] ${tag} ${remotePath}`;
 
         console.log(s);
