@@ -1,8 +1,8 @@
+const path = require('path');
+const fs = require('fs');
 const GetConfig = require('../utils/get-config.js');
 const CUtils = require('../utils/common-utils.js');
 const CacheUtils = require('../utils/cache-utils.js');
-const path = require('path');
-const fs = require('fs');
 
 class ComputeDiffAll {
     constructor(limitToItems) {
