@@ -25,18 +25,16 @@
   },
   "dependencies": {
     "bottleneck": "^2.19.5",
-    "commander": "^9.0.0",
-    "diff": "^5.0.0",
-    "find-process": "^1.4.7",
+    "commander": "^14.0.3",
+    "find-process": "^2.0.0",
     "gitignore-parser": "0.0.2",
-    "mkdirp": "^1.0.4",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9"
   },
   "devDependencies": {
     "@playcanvas/eslint-config": "^2.1.0",
     "eslint": "^9.39.2",
-    "globals": "^16.2.0"
+    "globals": "^17.3.0"
   },
   "scripts": {
     "lint": "eslint src bin"

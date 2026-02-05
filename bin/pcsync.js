@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-const program = require('commander');
+const { Command } = require('commander');
+const program = new Command();
 
 const OverwriteAllLocalWithRemote = require('../src/sync-commands/overwrite-all-local-with-remote.js');
 const OverwriteAllRemoteWithLocal = require('../src/sync-commands/overwrite-all-remote-with-local.js');
