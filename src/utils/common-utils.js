@@ -113,10 +113,7 @@ const CUtils = {
             return await callback(...args);
 
         } catch (e) {
-            if (e instanceof UserError) {
-                console.log(e.message);
-
-            } else if (e instanceof FatalError) {
+            if (e instanceof UserError || e instanceof FatalError) {
                 console.log(e.message);
 
                 process.exit(1);

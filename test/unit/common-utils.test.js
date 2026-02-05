@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import sinon from 'sinon';
 import CUtils from '../../src/utils/common-utils.js';
 
 describe('CUtils', function () {
@@ -446,6 +447,49 @@ describe('CUtils', function () {
 
         it('should throw for non-URL strings', function () {
             expect(() => CUtils.checkHttps('not-a-url')).to.throw();
+        });
+    });
+
+    describe('#wrapUserErrors', function () {
+        let exitStub;
+
+        beforeEach(function () {
+            exitStub = sinon.stub(process, 'exit');
+        });
+
+        afterEach(function () {
+            exitStub.restore();
+        });
+
+        it('should exit with code 1 on UserError', async function () {
+            await CUtils.wrapUserErrors(() => {
+                CUtils.throwUsError('test error');
+            });
+            expect(exitStub.calledOnceWith(1)).to.be.true;
+        });
+
+        it('should exit with code 1 on FatalError', async function () {
+            await CUtils.wrapUserErrors(() => {
+                CUtils.throwFtError('fatal error');
+            });
+            expect(exitStub.calledOnceWith(1)).to.be.true;
+        });
+
+        it('should rethrow unknown errors', async function () {
+            try {
+                await CUtils.wrapUserErrors(() => {
+                    throw new TypeError('unexpected');
+                });
+                expect.fail('should have thrown');
+            } catch (e) {
+                expect(e).to.be.instanceOf(TypeError);
+            }
+        });
+
+        it('should return callback result on success', async function () {
+            const result = await CUtils.wrapUserErrors(() => 42);
+            expect(result).to.equal(42);
+            expect(exitStub.called).to.be.false;
         });
     });
 
