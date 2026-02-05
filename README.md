@@ -163,51 +163,71 @@ The regular expression tests each file's path from the root.
 
 # Installation
 
-Use a recent stable version of `node`. We recommend using `nvm`.
+Requires Node.js >= 18. We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage Node versions.
 
-Download or clone https://github.com/playcanvas/playcanvas-sync
-
-On a Mac, install Command Line Tools. On Catalina, you may also need:
-```
-sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-```
-
-From the `playcanvas-sync` folder run:
+Install globally from npm:
 
 ```
-npm install
+npm install -g playcanvas-sync
 ```
 
-Now [set your config variables](#config-variables) and you can
-use the tool from this folder, e.g.
+This makes the `pcsync` and `pcwatch` commands available system-wide.
+
+To uninstall:
 
 ```
-node pcwatch.js diffAll
+npm uninstall -g playcanvas-sync
 ```
-
-or install it globally with:
-
-```
-npm install -g
-```
-
-To uninstall globally, run
-
-```
-npm uninstall -g
-```
-
-(all from the `playcanvas-sync` folder).
 
 # Config Variables
 
-Config variables can be set 
+Config variables can be set
 in a file called `.pcconfig` in your home directory,
 in `pcconfig.json` in your target directory
 (and your remote PlayCanvas branch),
 or provided as environment variables (which would have the highest precedence).
 
-Sample config file:
+The home directory location is:
+
+* Windows: `C:\Users\<username>`
+* Mac/Linux: `/Users/<username>` or `/home/<username>`
+
+## Getting Your API Key
+
+Get your PlayCanvas API key (token) from your PlayCanvas account page
+(playcanvas.com/&lt;username&gt;/account). See the
+[User Manual](https://developer.playcanvas.com/user-manual/api/#authorization)
+for detailed instructions.
+
+## Getting Your Branch and Project IDs
+
+From the Chrome Developer Tools console (on the PlayCanvas Editor page) run:
+
+```
+copy({
+  PLAYCANVAS_BRANCH_ID: config.self.branch.id,
+  PLAYCANVAS_PROJECT_ID: config.project.id
+})
+```
+
+This will copy your branch and project id to the clipboard.
+
+![](https://raw.githubusercontent.com/playcanvas/playcanvas-sync/main/docs/images/branch-id-project-id-clipboard.gif)
+
+Alternatively, you can get your branch id from the
+Version Control Panel of the PlayCanvas Editor, and
+your project id from its home page url, e.g.
+for `playcanvas.com/project/10/overview/test_proj` the id is 10.
+See the [User Manual](https://developer.playcanvas.com/user-manual/api/#parameters)
+for more details.
+
+## Sample Config File
+
+Create a directory for the local versions of your PlayCanvas files, e.g.
+`proj1`. Add its full path to `.pcconfig` in your home directory, along
+with your API key and the branch/project IDs.
+
+A sample `.pcconfig` should look like this:
 
 ```
 {
@@ -220,26 +240,6 @@ Sample config file:
   "PLAYCANVAS_CONVERT_TO_POW2": 0
 }
 ```
-
-You can get your api key (token) from your PlayCanvas account page
-(playcanvas.com/&lt;username&gt;/account).
-
-You can use 
-
-```
-copy({
-  PLAYCANVAS_BRANCH_ID: config.self.branch.id,
-  PLAYCANVAS_PROJECT_ID: config.project.id
-})
-```
-
-from the Chrome Developer Tools console (on the PlayCanvas Editor page) 
-to copy your branch and project id to the clipboard.
-
-Alternatively, you can get your branch id from the
-Version Control Panel of the PlayCanvas Editor, and
-your project id from its home page url, e.g.
-for `playcanvas.com/project/10/overview/test_proj` the id is 10.
 
 All listed key-value pairs are necessary. You can split them between
 `.pcconfig` (in your home directory), `pcconfig.json` (in your project target directory),
