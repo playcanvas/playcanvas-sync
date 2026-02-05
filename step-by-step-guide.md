@@ -40,7 +40,7 @@ copy({
 ```
 This will copy your branch and project id to the clipboard.
 
-![](docs/images/branch-id-project-id-clipboard.gif)
+![](https://raw.githubusercontent.com/playcanvas/playcanvas-sync/main/docs/images/branch-id-project-id-clipboard.gif)
 
 Paste them into a file called `.pcconfig` in your home directory.
 
