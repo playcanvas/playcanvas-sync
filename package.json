@@ -33,13 +33,13 @@
     "gitignore-parser": "0.0.2"
   },
   "devDependencies": {
-    "@playcanvas/eslint-config": "^2.1.0",
-    "chai": "^6.2.2",
-    "eslint": "^9.39.2",
-    "globals": "^17.3.0",
-    "mocha": "^11.7.5",
-    "nock": "^14.0.10",
-    "sinon": "^21.0.1"
+    "@playcanvas/eslint-config": "2.1.0",
+    "chai": "6.2.2",
+    "eslint": "9.39.2",
+    "globals": "17.3.0",
+    "mocha": "11.7.5",
+    "nock": "14.0.10",
+    "sinon": "21.0.1"
   },
   "scripts": {
     "lint": "eslint src bin test",
