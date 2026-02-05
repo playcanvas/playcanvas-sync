@@ -116,6 +116,8 @@ const CUtils = {
             if (e instanceof UserError) {
                 console.log(e.message);
 
+                process.exit(1);
+
             } else if (e instanceof FatalError) {
                 console.log(e.message);
 
