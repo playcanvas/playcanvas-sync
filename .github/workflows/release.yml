@@ -12,8 +12,8 @@ jobs:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      # TODO: Add back in after linting issues have been resolved.
-      # - run: npm lint
+      - run: npm run lint
+      - run: npm test
       - run: npm version ${{ github.event.release.tag_name }} --no-git-tag-version
       - run: npm publish
         env:
