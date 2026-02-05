@@ -1,6 +1,7 @@
-const request = require('request-promise-native');
-const CUtils = require('./utils/common-utils.js');
 const Bottleneck = require('bottleneck');
+const request = require('request-promise-native');
+
+const CUtils = require('./utils/common-utils.js');
 
 const MAX_CONCURRENT = 10;
 const MINUTE_INTERVAL = 60 * 1000;
@@ -175,7 +176,7 @@ class ApiClient {
     }
 
     async fetchLimits(projectId, branchId, skip, limit) {
-        const url = `/ratelimits`;
+        const url = '/ratelimits';
         const resp = await this.methodGet(url, ASSETS_PREF, false);
 
         this.limits = (JSON.parse(resp)).limits;
@@ -198,32 +199,6 @@ class ApiClient {
         const resp = await this.methodGet(url, EDITOR_PREF, true);
 
         return JSON.parse(resp);
-    }
-
-    async getEditorBranches(projectId) {
-        const url = `/projects/${projectId}/branches`;
-
-        const branches = [];
-        let hasMore = true;
-        let branchId;
-
-        while (hasMore) {
-            const resp = await this.methodGet(
-                url + (branchId ? "skip=" + branchId : ""),
-                BRANCHES_PREF,
-                true
-            );
-
-            const respData = JSON.parse(resp);
-
-            hasMore = respData.pagination.hasMore;
-
-            branches.push(...respData.result);
-
-            branchId = respData.result[respData.result.length - 1].id;
-        }
-
-        return branches;
     }
 }
 

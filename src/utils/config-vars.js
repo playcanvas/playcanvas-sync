@@ -1,7 +1,8 @@
-const path = require('path');
-const CUtils = require('./common-utils.js');
-const os = require('os');
 const fs = require('fs');
+const os = require('os');
+const path = require('path');
+
+const CUtils = require('./common-utils.js');
 const PathUtils = require('./path-utils.js');
 
 const HOME_CONFIG_FILE = '.pcconfig';

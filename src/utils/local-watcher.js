@@ -24,7 +24,7 @@ class LocalWatcher {
 
         const removed = a.filter(s => !this.curPathToData[s]);
 
-        removed.sort(function (a, b) { // children before parents
+        removed.sort((a, b) => { // children before parents
             return b.length - a.length;
         });
 

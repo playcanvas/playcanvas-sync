@@ -23,15 +23,6 @@
     "type": "git",
     "url": "https://github.com/playcanvas/playcanvas-sync.git"
   },
-  "eslintConfig": {
-    "extends": "@playcanvas/eslint-config",
-    "rules": {
-      "space-unary-ops": "off"
-    }
-  },
-  "eslintIgnore": [
-    "src/diff/diff_match_patch_uncompressed.js"
-  ],
   "dependencies": {
     "bottleneck": "^2.19.5",
     "commander": "^9.0.0",
@@ -43,8 +34,9 @@
     "request-promise-native": "^1.0.9"
   },
   "devDependencies": {
-    "@playcanvas/eslint-config": "^1.7.1",
-    "eslint": "^8.52.0"
+    "@playcanvas/eslint-config": "^2.1.0",
+    "eslint": "^9.39.2",
+    "globals": "^16.2.0"
   },
   "scripts": {
     "lint": "eslint src bin"

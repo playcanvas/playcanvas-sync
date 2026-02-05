@@ -1,65 +1,66 @@
 #!/usr/bin/env node
 
-const OverwriteAllLocalWithRemote = require('../src/sync-commands/overwrite-all-local-with-remote.js');
-const OverwriteAllRemoteWithLocal = require('../src/sync-commands/overwrite-all-remote-with-local.js');
-const CUtils = require('../src/utils/common-utils.js');
-const SyncUtils = require('../src/sync-commands/sync-utils.js');
-const SCUtils = require('../src/sync-commands/sync-command-utils.js');
-
 const program = require('commander');
 
-program
-    .command('diffAll')
-    .description('compare all local and remote files and folders')
-    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
-    .option('-e, --ext <extensions>', 'handle files with provided extensions')
-    .action(runCompAll);
+const OverwriteAllLocalWithRemote = require('../src/sync-commands/overwrite-all-local-with-remote.js');
+const OverwriteAllRemoteWithLocal = require('../src/sync-commands/overwrite-all-remote-with-local.js');
+const SCUtils = require('../src/sync-commands/sync-command-utils.js');
+const SyncUtils = require('../src/sync-commands/sync-utils.js');
+const CUtils = require('../src/utils/common-utils.js');
+
 
 program
-    .command('diff <filePath>')
-    .description('show line-by-line diff of the remote and local files at filePath')
-    .action(runDiff);
+.command('diffAll')
+.description('compare all local and remote files and folders')
+.option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+.option('-e, --ext <extensions>', 'handle files with provided extensions')
+.action(runCompAll);
 
 program
-    .command('pullAll')
-    .description('download all remote files, overwriting their local counterparts')
-    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
-    .option('-e, --ext <extensions>', 'handle files with provided extensions')
-    .option('-y, --yes', 'Automatically answer "yes" to any prompts that might print on the command line.')
-    .action(runOverwriteAllLocal);
+.command('diff <filePath>')
+.description('show line-by-line diff of the remote and local files at filePath')
+.action(runDiff);
 
 program
-    .command('pushAll')
-    .description('upload all local files, overwriting their remote counterparts')
-    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
-    .option('-e, --ext <extensions>', 'handle files with provided extensions')
-    .option('-y, --yes', 'Automatically answer "yes" to any prompts that might print on the command line.')
-    .action(runOverwriteAllRemote);
+.command('pullAll')
+.description('download all remote files, overwriting their local counterparts')
+.option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+.option('-e, --ext <extensions>', 'handle files with provided extensions')
+.option('-y, --yes', 'Automatically answer "yes" to any prompts that might print on the command line.')
+.action(runOverwriteAllLocal);
 
 program
-    .command('pull <filePath>')
-    .description('download remote file, creating local folders if needed')
-    .action(runDownloadSingle);
+.command('pushAll')
+.description('upload all local files, overwriting their remote counterparts')
+.option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+.option('-e, --ext <extensions>', 'handle files with provided extensions')
+.option('-y, --yes', 'Automatically answer "yes" to any prompts that might print on the command line.')
+.action(runOverwriteAllRemote);
 
 program
-    .command('push <filePath>')
-    .description('upload local file, creating remote folders if needed')
-    .action(runUploadSingle);
+.command('pull <filePath>')
+.description('download remote file, creating local folders if needed')
+.action(runDownloadSingle);
 
 program
-    .command('rename <oldPath> <newPath>')
-    .description('rename remote file or folder, change its parent folder if needed')
-    .action(runRename);
+.command('push <filePath>')
+.description('upload local file, creating remote folders if needed')
+.action(runUploadSingle);
 
 program
-    .command('rm <filePath>')
-    .description('remove remote file or folder')
-    .action(runDelete);
+.command('rename <oldPath> <newPath>')
+.description('rename remote file or folder, change its parent folder if needed')
+.action(runRename);
 
 program
-    .command('parseIgnore')
-    .description('list assets matched by pcignore.txt')
-    .action(runParse);
+.command('rm <filePath>')
+.description('remove remote file or folder')
+.action(runDelete);
+
+program
+.command('parseIgnore')
+.description('list assets matched by pcignore.txt')
+.action(runParse);
 
 function runCompAll(cmdObj) {
     CUtils.handleForceRegOpts(cmdObj);

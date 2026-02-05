@@ -1,8 +1,10 @@
-const CUtils = require('../utils/common-utils.js');
-const ComputeDiffAll = require('./compute-diff-all.js');
-const readline = require('readline');
-const FindProcess = require('find-process');
 const path = require('path');
+const readline = require('readline');
+
+const FindProcess = require('find-process');
+
+const ComputeDiffAll = require('./compute-diff-all.js');
+const CUtils = require('../utils/common-utils.js');
 const GetConfig = require('../utils/get-config.js');
 
 const SyncUtils = {
@@ -33,9 +35,11 @@ const SyncUtils = {
     compareAndPrompt: async function (callback) {
         const h = await CUtils.wrapUserErrors(SyncUtils.reportDiffAll);
 
-        h.anyDiffFound ?
-            SyncUtils.promptAndRun(callback) :
+        if (h.anyDiffFound) {
+            SyncUtils.promptAndRun(callback);
+        } else {
             console.log('No differences found between local and remote.');
+        }
     },
 
     promptAndRun: function (callback) {
@@ -80,8 +84,8 @@ const SyncUtils = {
 
         if (h.anyDiffFound) {
             const s = 'Differences found between local and remote. ' +
-                'Use \'pcsync\' to fix' +
-                SyncUtils.forceMsg(canForce);
+                `Use 'pcsync' to fix${
+                    SyncUtils.forceMsg(canForce)}`;
 
             CUtils.throwFtError(s);
         }
@@ -91,8 +95,8 @@ const SyncUtils = {
         const a = await SyncUtils.getWatchProcs();
 
         if (a.length > 1) { // 1 (this process) is expected
-            const s = 'Other running instances of \'pcwatch\' detected. Stop them' +
-                SyncUtils.forceMsg(true);
+            const s = `Other running instances of 'pcwatch' detected. Stop them${
+                SyncUtils.forceMsg(true)}`;
 
             CUtils.throwFtError(s);
         }

@@ -1,12 +1,13 @@
+const path = require('path');
+
 const OverwriteAllLocalWithRemote = require('./overwrite-all-local-with-remote.js');
 const OverwriteAllRemoteWithLocal = require('./overwrite-all-remote-with-local.js');
-const PathUtils = require('../utils/path-utils.js');
 const SyncUtils = require('./sync-utils.js');
-const ActionRenamed = require('../watch-actions/action-renamed.js');
-const GetConfig = require('../utils/get-config.js');
-const WatchUtils = require('../watch-actions/watch-utils.js');
 const DiffStrings = require('../diff/diff-strings.js');
-const path = require('path');
+const GetConfig = require('../utils/get-config.js');
+const PathUtils = require('../utils/path-utils.js');
+const ActionRenamed = require('../watch-actions/action-renamed.js');
+const WatchUtils = require('../watch-actions/watch-utils.js');
 
 const SCUtils = {
     downloadSingleFile: function (remotePath) {
