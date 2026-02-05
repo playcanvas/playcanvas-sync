@@ -380,7 +380,7 @@ Create a `jsconfig.json` file in your target directory with the following conten
 
 Your folder structure should look like this:
 
-![](src/readme-imgs/vscode-target-directory-file-structure.png)
+![](docs/images/vscode-target-directory-file-structure.png)
 
 Add `jsconfig.json` and `typings` to `PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG`, e.g.
 
@@ -392,4 +392,4 @@ Add `jsconfig.json` and `typings` to `PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_B
 Now you are ready to start using `pcsync` and `pcwatch` 
 to sync your PlayCanvas project and edit with VS Code goodness 🚀
 
-![](src/readme-imgs/vs-code-demo.gif) 
+![](docs/images/vs-code-demo.gif) 
