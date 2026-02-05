@@ -27,9 +27,7 @@
     "bottleneck": "^2.19.5",
     "commander": "^14.0.3",
     "find-process": "^2.0.0",
-    "gitignore-parser": "0.0.2",
-    "request": "^2.88.2",
-    "request-promise-native": "^1.0.9"
+    "gitignore-parser": "0.0.2"
   },
   "devDependencies": {
     "@playcanvas/eslint-config": "^2.1.0",
