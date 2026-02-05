@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-const program = require('commander');
+const { Command } = require('commander');
+const program = new Command();
 
 const SyncUtils = require('../src/sync-commands/sync-utils.js');
 const CacheUtils = require('../src/utils/cache-utils.js');

@@ -2,8 +2,6 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
-const mkdirp = require('mkdirp');
-
 const FatalError = require('./fatal-error.js');
 const PathUtils = require('./path-utils.js');
 const UserError = require('./user-error.js');
@@ -110,7 +108,7 @@ const CUtils = {
         return conf.PLAYCANVAS_BAD_FOLDER_REG.test(s);
     },
 
-    wrapUserErrors: async function (callback, args) {
+    wrapUserErrors: async function (callback, args = []) {
         try {
             return await callback(...args);
 
@@ -153,7 +151,7 @@ const CUtils = {
 
     makeDirP: function (s) {
         if (!fs.existsSync(s)) {
-            mkdirp.sync(s);
+            fs.mkdirSync(s, { recursive: true });
         }
     },
 

@@ -1,7 +1,7 @@
 const path = require('path');
 const readline = require('readline');
 
-const FindProcess = require('find-process');
+const FindProcess = require('find-process').default;
 
 const ComputeDiffAll = require('./compute-diff-all.js');
 const CUtils = require('../utils/common-utils.js');
