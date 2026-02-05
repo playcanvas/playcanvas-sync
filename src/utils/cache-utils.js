@@ -1,6 +1,6 @@
-const LoadAssets = require('../load-assets.js');
-const LocalContents = require('./local-contents.js');
-const LocalTraversal = require('./local-traversal.js');
+import LoadAssets from '../load-assets.js';
+import LocalContents from './local-contents.js';
+import LocalTraversal from './local-traversal.js';
 
 const CacheUtils = {
     cachedData: {},
@@ -32,4 +32,4 @@ const CacheUtils = {
     }
 };
 
-module.exports = CacheUtils;
+export default CacheUtils;

@@ -36,4 +36,4 @@ class ActionRenamed {
     }
 }
 
-module.exports = ActionRenamed;
+export default ActionRenamed;

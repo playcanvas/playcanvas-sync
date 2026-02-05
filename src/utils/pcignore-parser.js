@@ -1,8 +1,8 @@
-const path = require('path');
+import path from 'path';
 
-const gitParser = require('gitignore-parser');
+import gitParser from 'gitignore-parser';
 
-const CUtils = require('./common-utils.js');
+import CUtils from './common-utils.js';
 
 const specialTokenParts = [
     'ignore_all_textual_files',
@@ -105,4 +105,4 @@ class PcignoreParser {
     }
 }
 
-module.exports = PcignoreParser;
+export default PcignoreParser;

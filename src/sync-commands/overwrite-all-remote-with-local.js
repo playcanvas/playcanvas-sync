@@ -1,7 +1,7 @@
-const ComputeDiffAll = require('./compute-diff-all.js');
-const GetConfig = require('../utils/get-config.js');
-const ActionCreated = require('../watch-actions/action-created.js');
-const WatchUtils = require('../watch-actions/watch-utils.js');
+import ComputeDiffAll from './compute-diff-all.js';
+import GetConfig from '../utils/get-config.js';
+import ActionCreated from '../watch-actions/action-created.js';
+import WatchUtils from '../watch-actions/watch-utils.js';
 
 class OverwriteAllRemoteWithLocal {
     constructor(limitToItems) {
@@ -61,4 +61,4 @@ class OverwriteAllRemoteWithLocal {
     }
 }
 
-module.exports = OverwriteAllRemoteWithLocal;
+export default OverwriteAllRemoteWithLocal;

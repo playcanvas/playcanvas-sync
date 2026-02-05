@@ -1,6 +1,6 @@
-const ComputeDiffAll = require('./compute-diff-all.js');
-const CUtils = require('../utils/common-utils.js');
-const GetConfig = require('../utils/get-config.js');
+import ComputeDiffAll from './compute-diff-all.js';
+import CUtils from '../utils/common-utils.js';
+import GetConfig from '../utils/get-config.js';
 
 class OverwriteAllLocalWithRemote {
     constructor(limitToItems) {
@@ -60,4 +60,4 @@ class OverwriteAllLocalWithRemote {
     }
 }
 
-module.exports = OverwriteAllLocalWithRemote;
+export default OverwriteAllLocalWithRemote;

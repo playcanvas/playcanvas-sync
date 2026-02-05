@@ -1,5 +1,5 @@
-const diff_match_patch = require('./diff_match_patch_uncompressed.js');
-const CUtils = require('../utils/common-utils.js');
+import diff_match_patch from './diff_match_patch_uncompressed.cjs';
+import CUtils from '../utils/common-utils.js';
 
 const diffValToType = {
     '-1': 'file_1_only',
@@ -160,4 +160,4 @@ const DiffUtils = {
     }
 };
 
-module.exports = DiffUtils;
+export default DiffUtils;

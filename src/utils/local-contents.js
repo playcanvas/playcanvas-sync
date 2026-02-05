@@ -1,6 +1,6 @@
-const CUtils = require('./common-utils.js');
-const PathUtils = require('./path-utils.js');
-const TypeUtils = require('./type-utils.js');
+import CUtils from './common-utils.js';
+import PathUtils from './path-utils.js';
+import TypeUtils from './type-utils.js';
 
 class LocalContents {
     constructor(conf) {
@@ -43,4 +43,4 @@ class LocalContents {
     }
 }
 
-module.exports = LocalContents;
+export default LocalContents;

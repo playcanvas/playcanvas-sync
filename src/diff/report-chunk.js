@@ -1,4 +1,4 @@
-const DiffUtils = require('./diff-utils.js');
+import DiffUtils from './diff-utils.js';
 
 class ReportChunk {
     constructor(chunk) {
@@ -26,4 +26,4 @@ class ReportChunk {
     }
 }
 
-module.exports = ReportChunk;
+export default ReportChunk;

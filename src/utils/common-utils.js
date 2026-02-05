@@ -1,10 +1,10 @@
-const crypto = require('crypto');
-const fs = require('fs');
-const path = require('path');
+import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
 
-const FatalError = require('./fatal-error.js');
-const PathUtils = require('./path-utils.js');
-const UserError = require('./user-error.js');
+import FatalError from './fatal-error.js';
+import PathUtils from './path-utils.js';
+import UserError from './user-error.js';
 
 
 const HTTPS_PREF_REG = /^https:\/\//;
@@ -290,4 +290,4 @@ const CUtils = {
     }
 };
 
-module.exports = CUtils;
+export default CUtils;

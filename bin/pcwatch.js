@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 
-const { Command } = require('commander');
-const program = new Command();
+import { Command } from 'commander';
 
-const SyncUtils = require('../src/sync-commands/sync-utils.js');
-const CacheUtils = require('../src/utils/cache-utils.js');
-const CUtils = require('../src/utils/common-utils.js');
-const GetConfig = require('../src/utils/get-config.js');
-const LocalTraversal = require('../src/utils/local-traversal.js');
-const LocalWatcher = require('../src/utils/local-watcher.js');
-const ActionCreated = require('../src/watch-actions/action-created.js');
-const WatchUtils = require('../src/watch-actions/watch-utils.js');
+import SyncUtils from '../src/sync-commands/sync-utils.js';
+import CacheUtils from '../src/utils/cache-utils.js';
+import CUtils from '../src/utils/common-utils.js';
+import GetConfig from '../src/utils/get-config.js';
+import LocalTraversal from '../src/utils/local-traversal.js';
+import LocalWatcher from '../src/utils/local-watcher.js';
+import ActionCreated from '../src/watch-actions/action-created.js';
+import WatchUtils from '../src/watch-actions/watch-utils.js';
+
+const program = new Command();
 
 program.option('-f, --force', 'skip local/remote equality check');
 

@@ -1,6 +1,6 @@
-const DiffChunks = require('./diff-chunks.js');
-const DiffUtils = require('./diff-utils.js');
-const ReportChunk = require('./report-chunk.js');
+import DiffChunks from './diff-chunks.js';
+import DiffUtils from './diff-utils.js';
+import ReportChunk from './report-chunk.js';
 
 class DiffStrings {
     constructor(s1, s2) {
@@ -37,4 +37,4 @@ class DiffStrings {
     }
 }
 
-module.exports = DiffStrings;
+export default DiffStrings;

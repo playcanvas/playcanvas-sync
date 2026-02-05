@@ -4,4 +4,4 @@ class DummyIgnoreParser {
     }
 }
 
-module.exports = DummyIgnoreParser;
+export default DummyIgnoreParser;

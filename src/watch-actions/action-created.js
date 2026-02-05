@@ -1,6 +1,6 @@
-const fs = require('fs');
+import fs from 'fs';
 
-const CUtils = require('../utils/common-utils.js');
+import CUtils from '../utils/common-utils.js';
 
 class ActionCreated {
     constructor(data, conf) {
@@ -66,4 +66,4 @@ class ActionCreated {
     }
 }
 
-module.exports = ActionCreated;
+export default ActionCreated;

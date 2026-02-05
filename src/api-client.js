@@ -1,10 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const { Readable } = require('stream');
+import fs from 'fs';
+import path from 'path';
+import { Readable } from 'stream';
 
-const Bottleneck = require('bottleneck');
+import Bottleneck from 'bottleneck';
 
-const CUtils = require('./utils/common-utils.js');
+import CUtils from './utils/common-utils.js';
 
 const MAX_CONCURRENT = 10;
 const MINUTE_INTERVAL = 60 * 1000;
@@ -235,4 +235,4 @@ class ApiClient {
     }
 }
 
-module.exports = ApiClient;
+export default ApiClient;

@@ -14,8 +14,8 @@
     "docs",
     "src"
   ],
+  "type": "module",
   "license": "MIT",
-  "main": "index.js",
   "bugs": {
     "url": "https://github.com/playcanvas/playcanvas-sync/issues"
   },
@@ -40,9 +40,9 @@
   },
   "scripts": {
     "lint": "eslint src bin test",
-    "test": "mocha test/**/*.test.mjs",
-    "test:unit": "mocha test/unit/**/*.test.mjs",
-    "test:integration": "mocha test/integration/**/*.test.mjs"
+    "test": "mocha test/**/*.test.js",
+    "test:unit": "mocha test/unit/**/*.test.js",
+    "test:integration": "mocha test/integration/**/*.test.js"
   },
   "bin": {
     "pcsync": "./bin/pcsync.js",
