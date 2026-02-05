@@ -1,4 +1,4 @@
-const PathUtils = require('./path-utils.js');
+import PathUtils from './path-utils.js';
 
 class LocalTraversal {
     constructor(rootDir, handler) {
@@ -43,4 +43,4 @@ class LocalTraversal {
     }
 }
 
-module.exports = LocalTraversal;
+export default LocalTraversal;

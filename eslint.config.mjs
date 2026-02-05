@@ -17,7 +17,7 @@ export default [
         }
     },
     {
-        files: ['test/**/*.mjs'],
+        files: ['test/**/*.js'],
         languageOptions: {
             globals: {
                 ...globals.mocha,
@@ -34,6 +34,6 @@ export default [
         }
     },
     {
-        ignores: ['src/diff/diff_match_patch_uncompressed.js']
+        ignores: ['src/diff/diff_match_patch_uncompressed.cjs']
     }
 ];

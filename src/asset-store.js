@@ -1,6 +1,6 @@
-const CacheUtils = require('./utils/cache-utils.js');
-const CUtils = require('./utils/common-utils.js');
-const TypeUtils = require('./utils/type-utils.js');
+import CacheUtils from './utils/cache-utils.js';
+import CUtils from './utils/common-utils.js';
+import TypeUtils from './utils/type-utils.js';
 
 class AssetStore {
     constructor(conf) {
@@ -116,4 +116,4 @@ class AssetStore {
     }
 }
 
-module.exports = AssetStore;
+export default AssetStore;

@@ -1,7 +1,7 @@
-const fs = require('fs');
+import fs from 'fs';
 
-const CUtils = require('../utils/common-utils.js');
-const TypeUtils = require('../utils/type-utils.js');
+import CUtils from '../utils/common-utils.js';
+import TypeUtils from '../utils/type-utils.js';
 
 const WatchUtils = {
     WATCH_LOOP_INTERVAL: 1000,
@@ -72,4 +72,4 @@ const WatchUtils = {
     }
 };
 
-module.exports = WatchUtils;
+export default WatchUtils;

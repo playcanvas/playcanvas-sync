@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
-const { Command } = require('commander');
-const program = new Command();
+import { Command } from 'commander';
 
-const OverwriteAllLocalWithRemote = require('../src/sync-commands/overwrite-all-local-with-remote.js');
-const OverwriteAllRemoteWithLocal = require('../src/sync-commands/overwrite-all-remote-with-local.js');
-const SCUtils = require('../src/sync-commands/sync-command-utils.js');
-const SyncUtils = require('../src/sync-commands/sync-utils.js');
-const CUtils = require('../src/utils/common-utils.js');
+import OverwriteAllLocalWithRemote from '../src/sync-commands/overwrite-all-local-with-remote.js';
+import OverwriteAllRemoteWithLocal from '../src/sync-commands/overwrite-all-remote-with-local.js';
+import SCUtils from '../src/sync-commands/sync-command-utils.js';
+import SyncUtils from '../src/sync-commands/sync-utils.js';
+import CUtils from '../src/utils/common-utils.js';
+
+const program = new Command();
 
 
 program

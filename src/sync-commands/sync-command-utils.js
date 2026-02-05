@@ -1,13 +1,13 @@
-const path = require('path');
+import path from 'path';
 
-const OverwriteAllLocalWithRemote = require('./overwrite-all-local-with-remote.js');
-const OverwriteAllRemoteWithLocal = require('./overwrite-all-remote-with-local.js');
-const SyncUtils = require('./sync-utils.js');
-const DiffStrings = require('../diff/diff-strings.js');
-const GetConfig = require('../utils/get-config.js');
-const PathUtils = require('../utils/path-utils.js');
-const ActionRenamed = require('../watch-actions/action-renamed.js');
-const WatchUtils = require('../watch-actions/watch-utils.js');
+import OverwriteAllLocalWithRemote from './overwrite-all-local-with-remote.js';
+import OverwriteAllRemoteWithLocal from './overwrite-all-remote-with-local.js';
+import SyncUtils from './sync-utils.js';
+import DiffStrings from '../diff/diff-strings.js';
+import GetConfig from '../utils/get-config.js';
+import PathUtils from '../utils/path-utils.js';
+import ActionRenamed from '../watch-actions/action-renamed.js';
+import WatchUtils from '../watch-actions/watch-utils.js';
 
 const SCUtils = {
     downloadSingleFile: function (remotePath) {
@@ -63,4 +63,4 @@ const SCUtils = {
     }
 };
 
-module.exports = SCUtils;
+export default SCUtils;

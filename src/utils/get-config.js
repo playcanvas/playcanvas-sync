@@ -1,11 +1,11 @@
-const path = require('path');
+import path from 'path';
 
-const ApiClient = require('../api-client.js');
-const AssetStore = require('../asset-store.js');
-const CUtils = require('./common-utils.js');
-const ConfigVars = require('./config-vars.js');
-const DummyIgnoreParser = require('./dummy-ignore-parser.js');
-const PcignoreParser = require('./pcignore-parser.js');
+import ApiClient from '../api-client.js';
+import AssetStore from '../asset-store.js';
+import CUtils from './common-utils.js';
+import ConfigVars from './config-vars.js';
+import DummyIgnoreParser from './dummy-ignore-parser.js';
+import PcignoreParser from './pcignore-parser.js';
 
 const PCIGNORE_FILE = 'pcignore.txt';
 
@@ -69,4 +69,4 @@ class GetConfig {
     }
 }
 
-module.exports = GetConfig;
+export default GetConfig;

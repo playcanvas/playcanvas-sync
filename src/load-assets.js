@@ -1,4 +1,4 @@
-const CUtils = require('./utils/common-utils.js');
+import CUtils from './utils/common-utils.js';
 
 const ASSET_QRY_LIMIT = 100000;
 
@@ -40,4 +40,4 @@ class LoadAssets {
     }
 }
 
-module.exports = LoadAssets;
+export default LoadAssets;

@@ -1,9 +1,12 @@
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const CUtils = require('./common-utils.js');
-const PathUtils = require('./path-utils.js');
+import CUtils from './common-utils.js';
+import PathUtils from './path-utils.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const HOME_CONFIG_FILE = '.pcconfig';
 const TARGET_CONFIG_FILE = 'pcconfig.json';
@@ -96,7 +99,7 @@ class ConfigVars {
 
         s = PathUtils.rmLastSlash(s);
 
-        if (s === require.main.path) {
+        if (s === path.resolve(__dirname, '../..')) {
             CUtils.throwFtError('Error: do not use the playcanvas-sync directory as target');
         }
 
@@ -166,4 +169,4 @@ class ConfigVars {
     }
 }
 
-module.exports = ConfigVars;
+export default ConfigVars;

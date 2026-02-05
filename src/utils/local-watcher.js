@@ -1,4 +1,4 @@
-const CUtils = require('./common-utils.js');
+import CUtils from './common-utils.js';
 
 class LocalWatcher {
     constructor(conf, origPathToData, waitTime, callback) {
@@ -92,4 +92,4 @@ class LocalWatcher {
     }
 }
 
-module.exports = LocalWatcher;
+export default LocalWatcher;

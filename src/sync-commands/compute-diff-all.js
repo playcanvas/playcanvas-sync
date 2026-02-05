@@ -1,6 +1,6 @@
-const CacheUtils = require('../utils/cache-utils.js');
-const CUtils = require('../utils/common-utils.js');
-const GetConfig = require('../utils/get-config.js');
+import CacheUtils from '../utils/cache-utils.js';
+import CUtils from '../utils/common-utils.js';
+import GetConfig from '../utils/get-config.js';
 
 class ComputeDiffAll {
     constructor(limitToItems) {
@@ -124,4 +124,4 @@ class ComputeDiffAll {
     }
 }
 
-module.exports = ComputeDiffAll;
+export default ComputeDiffAll;

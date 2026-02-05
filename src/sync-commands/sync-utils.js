@@ -1,11 +1,11 @@
-const path = require('path');
-const readline = require('readline');
+import path from 'path';
+import readline from 'readline';
 
-const FindProcess = require('find-process').default;
+import FindProcess from 'find-process';
 
-const ComputeDiffAll = require('./compute-diff-all.js');
-const CUtils = require('../utils/common-utils.js');
-const GetConfig = require('../utils/get-config.js');
+import ComputeDiffAll from './compute-diff-all.js';
+import CUtils from '../utils/common-utils.js';
+import GetConfig from '../utils/get-config.js';
 
 const SyncUtils = {
     reportDiffAll: async function () {
@@ -119,4 +119,4 @@ const SyncUtils = {
     }
 };
 
-module.exports = SyncUtils;
+export default SyncUtils;

@@ -1,4 +1,4 @@
-const DiffUtils = require('./diff-utils.js');
+import DiffUtils from './diff-utils.js';
 
 const numContextLines = 3;
 
@@ -58,4 +58,4 @@ class DiffChunks {
     }
 }
 
-module.exports = DiffChunks;
+export default DiffChunks;

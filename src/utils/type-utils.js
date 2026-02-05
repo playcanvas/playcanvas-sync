@@ -1,4 +1,4 @@
-const path = require('path');
+import path from 'path';
 
 const TEXTUAL_ASSET_TYPES = [
     'text',
@@ -77,4 +77,4 @@ const TypeUtils = {
     }
 };
 
-module.exports = TypeUtils;
+export default TypeUtils;
