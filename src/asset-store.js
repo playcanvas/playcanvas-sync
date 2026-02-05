@@ -1,6 +1,6 @@
+const CacheUtils = require('./utils/cache-utils.js');
 const CUtils = require('./utils/common-utils.js');
 const TypeUtils = require('./utils/type-utils.js');
-const CacheUtils = require('./utils/cache-utils.js');
 
 class AssetStore {
     constructor(conf) {

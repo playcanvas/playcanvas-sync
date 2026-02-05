@@ -1,6 +1,8 @@
-const CUtils = require('./common-utils.js');
-const gitParser = require('gitignore-parser');
 const path = require('path');
+
+const gitParser = require('gitignore-parser');
+
+const CUtils = require('./common-utils.js');
 
 const specialTokenParts = [
     'ignore_all_textual_files',
@@ -50,8 +52,11 @@ class PcignoreParser {
     handleLine(s) {
         const match = specialTokenReg.exec(s);
 
-        match ? this.handleSpecial(match[1], match[2]) :
+        if (match) {
+            this.handleSpecial(match[1], match[2]);
+        } else {
             this.gitLines.push(s);
+        }
     }
 
     handleSpecial(type, val) {

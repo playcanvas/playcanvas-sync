@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-const GetConfig = require('../src/utils/get-config.js');
 const program = require('commander');
 
-const CUtils = require('../src/utils/common-utils.js');
-const WatchUtils = require('../src/watch-actions/watch-utils.js');
-const ActionCreated = require('../src/watch-actions/action-created.js');
 const SyncUtils = require('../src/sync-commands/sync-utils.js');
-const LocalWatcher = require('../src/utils/local-watcher.js');
 const CacheUtils = require('../src/utils/cache-utils.js');
+const CUtils = require('../src/utils/common-utils.js');
+const GetConfig = require('../src/utils/get-config.js');
 const LocalTraversal = require('../src/utils/local-traversal.js');
+const LocalWatcher = require('../src/utils/local-watcher.js');
+const ActionCreated = require('../src/watch-actions/action-created.js');
+const WatchUtils = require('../src/watch-actions/watch-utils.js');
 
 program.option('-f, --force', 'skip local/remote equality check');
 
@@ -53,9 +53,9 @@ async function watchIteration(conf, pathToData) {
 }
 
 async function handleEvent(e, conf) {
-    return WatchUtils.shouldKeepEvent(e, conf) &&
-        !conf.PLAYCANVAS_DRY_RUN &&
-        handleGoodEvent(e, conf);
+    if (WatchUtils.shouldKeepEvent(e, conf) && !conf.PLAYCANVAS_DRY_RUN) {
+        return await handleGoodEvent(e, conf);
+    }
 }
 
 async function handleGoodEvent(e, conf) {

@@ -1,10 +1,13 @@
-const PathUtils = require('./path-utils.js');
-const fs = require('fs');
 const crypto = require('crypto');
-const UserError = require('./user-error.js');
-const FatalError = require('./fatal-error.js');
-const mkdirp = require('mkdirp');
+const fs = require('fs');
 const path = require('path');
+
+const mkdirp = require('mkdirp');
+
+const FatalError = require('./fatal-error.js');
+const PathUtils = require('./path-utils.js');
+const UserError = require('./user-error.js');
+
 
 const HTTPS_PREF_REG = /^https:\/\//;
 
@@ -109,7 +112,7 @@ const CUtils = {
 
     wrapUserErrors: async function (callback, args) {
         try {
-            return await callback.apply(null, args);
+            return await callback(...args);
 
         } catch (e) {
             if (e instanceof UserError) {
@@ -256,7 +259,7 @@ const CUtils = {
     extToReg: function (extensions) {
         let a = extensions.split(',');
 
-        a = a.map(s => '\\.' + s);
+        a = a.map(s => `\\.${s}`);
 
         const reg = a.join('|');
 
@@ -270,7 +273,9 @@ const CUtils = {
     },
 
     waitMs: function (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+        });
     },
 
     checkTargetExists: async function (fullPath) {
