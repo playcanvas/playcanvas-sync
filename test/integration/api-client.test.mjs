@@ -408,7 +408,7 @@ describe('ApiClient', function () {
     });
 
     describe('#makeDownloadStream', function () {
-        it('should create download stream with correct URL', function (done) {
+        it('should create download stream with correct URL', async function () {
             const asset = {
                 id: 456,
                 file: { filename: 'texture.png' }
@@ -420,19 +420,16 @@ describe('ApiClient', function () {
             .query({ branchId: branchId })
             .reply(200, 'binary-content');
 
-            // makeDownloadStream returns a request stream
-            const stream = client.makeDownloadStream(asset, branchId);
+            // makeDownloadStream returns a promise that resolves to a Node.js Readable
+            const stream = await client.makeDownloadStream(asset, branchId);
 
             // Consume the stream using events
-            let data = '';
-            stream.on('data', (chunk) => {
-                data += chunk;
-            });
-            stream.on('end', () => {
-                expect(data).to.equal('binary-content');
-                done();
-            });
-            stream.on('error', done);
+            const chunks = [];
+            for await (const chunk of stream) {
+                chunks.push(chunk);
+            }
+            const data = Buffer.concat(chunks).toString('utf8');
+            expect(data).to.equal('binary-content');
         });
     });
 

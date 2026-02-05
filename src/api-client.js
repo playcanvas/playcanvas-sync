@@ -1,5 +1,8 @@
+const fs = require('fs');
+const path = require('path');
+const { Readable } = require('stream');
+
 const Bottleneck = require('bottleneck');
-const request = require('request-promise-native');
 
 const CUtils = require('./utils/common-utils.js');
 
@@ -26,6 +29,37 @@ class ApiClient {
         this.limits = null;
 
         CUtils.checkHttps(baseUrl);
+    }
+
+    async _fetch(url, options = {}) {
+        const response = await fetch(url, {
+            ...options,
+            headers: { ...this.headers, ...options.headers }
+        });
+
+        if (!response.ok) {
+            const error = new Error(`HTTP ${response.status}`);
+            error.statusCode = response.status;
+            throw error;
+        }
+
+        return response;
+    }
+
+    _objectToFormData(data) {
+        const formData = new FormData();
+
+        for (const [key, value] of Object.entries(data)) {
+            if (value && typeof value.pipe === 'function' && value.path) {
+                const buffer = fs.readFileSync(value.path);
+                const filename = path.basename(value.path);
+                formData.append(key, new Blob([buffer]), filename);
+            } else if (value !== undefined && value !== null) {
+                formData.append(key, String(value));
+            }
+        }
+
+        return formData;
     }
 
     getDownloadLimiter() {
@@ -72,12 +106,13 @@ class ApiClient {
 
         const limiter = this.getUploadLimiter();
 
-        return limiter.schedule(() => {
-            return request.post({
-                url: url,
-                formData: data,
-                headers: this.headers
+        return limiter.schedule(async () => {
+            const formData = this._objectToFormData(data);
+            const response = await this._fetch(url, {
+                method: 'POST',
+                body: formData
             });
+            return response.text();
         });
     }
 
@@ -86,11 +121,13 @@ class ApiClient {
 
         const limiter = this.getUploadLimiter();
 
-        return limiter.schedule(() => {
-            return request.put(url, {
-                formData: data,
-                headers: this.headers
+        return limiter.schedule(async () => {
+            const formData = this._objectToFormData(data);
+            const response = await this._fetch(url, {
+                method: 'PUT',
+                body: formData
             });
+            return response.text();
         });
     }
 
@@ -99,40 +136,38 @@ class ApiClient {
 
         const limiter = this.getApiLimiter();
 
-        return limiter.schedule(() => {
-            return request.delete(url, {
-                headers: this.headers
+        return limiter.schedule(async () => {
+            const response = await this._fetch(url, {
+                method: 'DELETE'
             });
+            return response.text();
         });
     }
 
-    methodGet(url, pref, addToken) {
+    async methodGet(url, pref, addToken) {
         url = this.fullUrl(url, pref);
 
         if (addToken) {
             url = `${url}?access_token=${this.apiKey}`;
         }
 
-        return request({
-            url: url,
-            headers: this.headers
-        });
+        const response = await this._fetch(url);
+        return response.text();
     }
 
-    methodPost(url, pref, addToken, payload) {
+    async methodPost(url, pref, addToken, payload) {
         url = this.fullUrl(url, pref);
 
         if (addToken) {
             url = `${url}?access_token=${this.apiKey}`;
         }
 
-        return request({
+        const response = await this._fetch(url, {
             method: 'POST',
-            url: url,
-            headers: this.headers,
-            body: payload,
-            json: true
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
+        return response.json();
     }
 
     assetsUrl(s) {
@@ -150,29 +185,27 @@ class ApiClient {
 
         const limiter = this.getDownloadLimiter();
 
-        return limiter.schedule({ }, () => {
-            const stream = this.makeDownloadStream(h, conf.PLAYCANVAS_BRANCH_ID);
+        return limiter.schedule({ }, async () => {
+            const stream = await this.makeDownloadStream(h, conf.PLAYCANVAS_BRANCH_ID);
             return CUtils.streamToFile(stream, file);
         });
     }
 
-    loadAssetToStr(asset, branchId) {
-        const stream = this.makeDownloadStream(asset, branchId);
+    async loadAssetToStr(asset, branchId) {
+        const stream = await this.makeDownloadStream(asset, branchId);
 
         return CUtils.streamToString(stream);
     }
 
-    makeDownloadStream(asset, branchId) {
+    async makeDownloadStream(asset, branchId) {
         const name = asset.file.filename;
 
         const s = `/assets/${asset.id}/file/${name}?branchId=${branchId}`;
 
         const url = this.assetsUrl(s);
 
-        return request({
-            url: url,
-            headers: this.headers
-        });
+        const response = await this._fetch(url);
+        return Readable.fromWeb(response.body);
     }
 
     async fetchLimits(projectId, branchId, skip, limit) {
