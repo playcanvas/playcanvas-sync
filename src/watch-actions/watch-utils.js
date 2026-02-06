@@ -29,11 +29,21 @@ const WatchUtils = {
     actionDeleted: async function (remotePath, conf) {
         const assetId = conf.store.getAssetId(remotePath);
 
+        const asset = conf.store.idToAsset[assetId];
+
+        // Don't delete remote folders that still contain unsynced assets
+        // (e.g. templates, textures) to prevent data loss (#68)
+        if (asset.type === 'folder' && conf.store.hasChildren(assetId)) {
+            return false;
+        }
+
         conf.store.handleDeletedAsset(assetId);
 
         const url = `/assets/${assetId}?branchId=${conf.PLAYCANVAS_BRANCH_ID}`;
 
         await conf.client.methodDelete(url);
+
+        return true;
     },
 
     reportWatchAction: function (assetId, tag, conf) {
