@@ -33,7 +33,7 @@ const WatchUtils = {
 
         // Don't delete remote folders that still contain unsynced assets
         // (e.g. templates, textures) to prevent data loss (#68)
-        if (asset.type === 'folder' && conf.store.hasChildren(assetId)) {
+        if (asset && asset.type === 'folder' && conf.store.hasChildren(assetId)) {
             return false;
         }
 
