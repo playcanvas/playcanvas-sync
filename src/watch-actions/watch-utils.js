@@ -4,8 +4,7 @@ import CUtils from '../utils/common-utils.js';
 import TypeUtils from '../utils/type-utils.js';
 
 const WatchUtils = {
-    WATCH_LOOP_INTERVAL: 1000,
-    WATCH_ITEM_INTERVAL: 10,
+    DEBOUNCE_MS: 200,
 
     actionModified: async function (data, conf) {
         const assetId = conf.store.getAssetId(data.remotePath);
