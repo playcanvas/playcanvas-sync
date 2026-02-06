@@ -109,6 +109,10 @@ class AssetStore {
         this.folderAssets.push(h);
     }
 
+    hasChildren(folderId) {
+        return this.allAssets.some(a => a.parent === folderId);
+    }
+
     assertNew(id) {
         if (this.idToAsset[id]) {
             CUtils.throwUsError(`Asset with id ${id} already exists`);

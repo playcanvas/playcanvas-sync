@@ -65,9 +65,13 @@ async function handleGoodEvent(e, conf) {
         await eventModified(e, conf);
 
     } else if (e.action === 'ACTION_DELETED') {
-        await WatchUtils.actionDeleted(e.remotePath, conf);
+        const deleted = await WatchUtils.actionDeleted(e.remotePath, conf);
 
-        console.log(`Deleted ${e.remotePath}`);
+        if (deleted) {
+            console.log(`Deleted ${e.remotePath}`);
+        } else {
+            console.log(`Skipped deletion of remote folder ${e.remotePath} (contains unsynced assets)`);
+        }
 
     } else if (e.action === 'ACTION_CREATED') {
         await eventCreated(e, conf);
