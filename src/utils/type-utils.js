@@ -37,7 +37,7 @@ const CONFIG_FILES = ['pcconfig.json', '.pcconfig'];
 
 const TypeUtils = {
     isBadFile: function (name, remotePath, conf) {
-        if (CONFIG_FILES.includes(name)) {
+        if (CONFIG_FILES.includes(name.toLowerCase())) {
             return true;
         }
         return TypeUtils.hasForceReg(conf) ?
