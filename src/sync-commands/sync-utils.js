@@ -1,7 +1,9 @@
 import path from 'path';
 import readline from 'readline';
 
-import FindProcess from 'find-process';
+import FindProcessModule from 'find-process';
+
+const FindProcess = FindProcessModule.default || FindProcessModule;
 
 import ComputeDiffAll from './compute-diff-all.js';
 import CUtils from '../utils/common-utils.js';
