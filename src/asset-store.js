@@ -89,7 +89,8 @@ class AssetStore {
     }
 
     addToActive(h) {
-        if (TypeUtils.isActiveAsset(h, this.conf)) {
+        if (TypeUtils.isActiveAsset(h, this.conf) &&
+            !CUtils.isInBadDir(h, this.idToAsset, this.conf)) {
             this.activeAssets.push(h);
 
             CUtils.addPathToFolders(h, this.idToAsset, this.foldersWithActive);

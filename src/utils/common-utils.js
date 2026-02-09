@@ -108,6 +108,20 @@ const CUtils = {
         return conf.PLAYCANVAS_BAD_FOLDER_REG.test(s);
     },
 
+    isInBadDir: function (asset, idToAsset, conf) {
+        let current = asset.parent && idToAsset[asset.parent];
+
+        while (current) {
+            if (current.type === 'folder' && CUtils.isBadDir(current.remotePath, conf)) {
+                return true;
+            }
+
+            current = current.parent && idToAsset[current.parent];
+        }
+
+        return false;
+    },
+
     wrapUserErrors: async function (callback, args = []) {
         try {
             return await callback(...args);

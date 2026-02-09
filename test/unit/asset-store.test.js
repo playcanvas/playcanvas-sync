@@ -52,4 +52,78 @@ describe('AssetStore', function () {
             expect(store.hasChildren(4)).to.be.false;
         });
     });
+
+    describe('#addToActive', function () {
+        let store;
+
+        function createStore(conf) {
+            store = Object.create(AssetStore.prototype);
+            store.conf = conf;
+            store.activeAssets = [];
+            store.foldersWithActive = {};
+            store.idToAsset = {};
+            return store;
+        }
+
+        it('should exclude assets inside bad folders', function () {
+            const conf = {
+                PLAYCANVAS_BAD_FOLDER_REG: /\./,
+                PLAYCANVAS_FORCE_REG: null,
+                ignParser: { isMatch: () => true }
+            };
+
+            createStore(conf);
+
+            const folder = { id: 1, name: 'basis.js', type: 'folder', parent: null, remotePath: 'basis.js' };
+            const file = { id: 2, name: 'basis.js', type: 'script', parent: 1, remotePath: 'basis.js/basis.js' };
+
+            store.idToAsset[1] = folder;
+            store.idToAsset[2] = file;
+
+            store.addToActive(file);
+
+            expect(store.activeAssets).to.have.lengthOf(0);
+        });
+
+        it('should include assets in good folders', function () {
+            const conf = {
+                PLAYCANVAS_BAD_FOLDER_REG: /\./,
+                PLAYCANVAS_FORCE_REG: null,
+                ignParser: { isMatch: () => true }
+            };
+
+            createStore(conf);
+
+            const folder = { id: 1, name: 'scripts', type: 'folder', parent: null, remotePath: 'scripts' };
+            const file = { id: 2, name: 'main.js', type: 'script', parent: 1, remotePath: 'scripts/main.js' };
+
+            store.idToAsset[1] = folder;
+            store.idToAsset[2] = file;
+
+            store.addToActive(file);
+
+            expect(store.activeAssets).to.have.lengthOf(1);
+            expect(store.activeAssets[0].name).to.equal('main.js');
+        });
+
+        it('should not mark bad folder in foldersWithActive', function () {
+            const conf = {
+                PLAYCANVAS_BAD_FOLDER_REG: /\./,
+                PLAYCANVAS_FORCE_REG: null,
+                ignParser: { isMatch: () => true }
+            };
+
+            createStore(conf);
+
+            const folder = { id: 1, name: 'basis.js', type: 'folder', parent: null, remotePath: 'basis.js' };
+            const file = { id: 2, name: 'basis.js', type: 'script', parent: 1, remotePath: 'basis.js/basis.js' };
+
+            store.idToAsset[1] = folder;
+            store.idToAsset[2] = file;
+
+            store.addToActive(file);
+
+            expect(store.foldersWithActive).to.not.have.property('1');
+        });
+    });
 });

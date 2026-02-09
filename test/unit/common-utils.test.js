@@ -507,4 +507,68 @@ describe('CUtils', function () {
         });
     });
 
+    describe('#isInBadDir', function () {
+        const conf = { PLAYCANVAS_BAD_FOLDER_REG: /\./ };
+
+        it('should return false for root-level asset with no parent', function () {
+            const assets = {
+                1: { id: 1, name: 'script.js', type: 'script', parent: null }
+            };
+            expect(CUtils.isInBadDir(assets[1], assets, conf)).to.be.false;
+        });
+
+        it('should return false for asset in a good folder', function () {
+            const assets = {
+                1: { id: 1, name: 'scripts', type: 'folder', parent: null, remotePath: 'scripts' },
+                2: { id: 2, name: 'main.js', type: 'script', parent: 1 }
+            };
+            expect(CUtils.isInBadDir(assets[2], assets, conf)).to.be.false;
+        });
+
+        it('should return true for asset in a bad folder (folder name contains a dot)', function () {
+            const assets = {
+                1: { id: 1, name: 'basis.js', type: 'folder', parent: null, remotePath: 'basis.js' },
+                2: { id: 2, name: 'basis.js', type: 'script', parent: 1 }
+            };
+            expect(CUtils.isInBadDir(assets[2], assets, conf)).to.be.true;
+        });
+
+        it('should return true for deeply nested asset where grandparent is bad', function () {
+            // Use a regex that matches only the grandparent name, not the parent,
+            // to verify isInBadDir walks beyond the immediate parent.
+            const grandparentConf = { PLAYCANVAS_BAD_FOLDER_REG: /^banned$/ };
+            const assets = {
+                1: { id: 1, name: 'banned', type: 'folder', parent: null, remotePath: 'banned' },
+                2: { id: 2, name: 'utils', type: 'folder', parent: 1, remotePath: 'banned/utils' },
+                3: { id: 3, name: 'helper.js', type: 'script', parent: 2 }
+            };
+            expect(CUtils.isInBadDir(assets[3], assets, grandparentConf)).to.be.true;
+        });
+
+        it('should return true for asset in nested bad folder under good parent', function () {
+            const assets = {
+                1: { id: 1, name: 'libs', type: 'folder', parent: null, remotePath: 'libs' },
+                2: { id: 2, name: 'basis.js', type: 'folder', parent: 1, remotePath: 'libs/basis.js' },
+                3: { id: 3, name: 'basis.js', type: 'script', parent: 2 }
+            };
+            expect(CUtils.isInBadDir(assets[3], assets, conf)).to.be.true;
+        });
+
+        it('should return false when parent is missing from idToAsset', function () {
+            const assets = {
+                2: { id: 2, name: 'orphan.js', type: 'script', parent: 999 }
+            };
+            expect(CUtils.isInBadDir(assets[2], assets, conf)).to.be.false;
+        });
+
+        it('should work with explicit basis.js pattern', function () {
+            const basisConf = { PLAYCANVAS_BAD_FOLDER_REG: /(\.|Templates|basis\.js)/ };
+            const assets = {
+                1: { id: 1, name: 'basis.js', type: 'folder', parent: null, remotePath: 'basis.js' },
+                2: { id: 2, name: 'basis.wasm.js', type: 'script', parent: 1 }
+            };
+            expect(CUtils.isInBadDir(assets[2], assets, basisConf)).to.be.true;
+        });
+    });
+
 });
