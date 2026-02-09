@@ -1,6 +1,6 @@
 {
   "name": "playcanvas-sync",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "author": "PlayCanvas <support@playcanvas.com>",
   "homepage": "https://playcanvas.com",
   "description": "Real-time synchronization of files between PlayCanvas and your local machine",
