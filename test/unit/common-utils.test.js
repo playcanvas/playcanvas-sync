@@ -562,7 +562,7 @@ describe('CUtils', function () {
         });
 
         it('should work with explicit basis.js pattern', function () {
-            const basisConf = { PLAYCANVAS_BAD_FOLDER_REG: /(\\.|Templates|basis\.js)/ };
+            const basisConf = { PLAYCANVAS_BAD_FOLDER_REG: new RegExp('(\\.|Templates|basis\\.js)') };
             const assets = {
                 1: { id: 1, name: 'basis.js', type: 'folder', parent: null, remotePath: 'basis.js' },
                 2: { id: 2, name: 'basis.wasm.js', type: 'script', parent: 1 }
