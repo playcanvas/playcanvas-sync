@@ -97,7 +97,7 @@ const SyncUtils = {
         const a = await SyncUtils.getWatchProcs();
 
         if (a.length > 1) { // 1 (this process) is expected
-            const s = `Other running instances of 'pcwatch' detected. Stop them${
+            const s = `Other running watch instances detected. Stop them${
                 SyncUtils.forceMsg(true)}`;
 
             CUtils.throwFtError(s);
@@ -107,7 +107,8 @@ const SyncUtils = {
     getWatchProcs: async function () {
         const conf = await new GetConfig().run();
 
-        const a = await FindProcess('name', /pcwatch/);
+        // detect both legacy 'pcwatch' and new 'pcsync watch' processes
+        const a = await FindProcess('name', /pcsync|pcwatch/);
 
         if (conf.PLAYCANVAS_VERBOSE) {
             console.log(a);
