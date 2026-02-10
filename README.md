@@ -114,7 +114,7 @@ The regular expression tests each file's path from the root.
 
 # Installation
 
-Requires Node.js >= 18. We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage Node versions.
+Requires Node.js >= 20. We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage Node versions.
 
 Install globally from npm:
 
