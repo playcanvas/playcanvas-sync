@@ -107,14 +107,28 @@ const SyncUtils = {
     getWatchProcs: async function () {
         const conf = await new GetConfig().run();
 
-        // detect both legacy 'pcwatch' and new 'pcsync watch' processes
-        const a = await FindProcess('name', /pcsync|pcwatch/);
+        // Find node processes, then filter by command line to detect:
+        // - legacy 'pcwatch' or 'pcwatch.js'
+        // - new 'pcsync watch' or 'pcsync.js watch'
+        const a = await FindProcess('name', /node|pcsync|pcwatch/);
+
+        const watchProcs = a.filter((h) => {
+            if (h.name === 'winpty.exe') return false; // git bash on windows
+
+            const cmd = h.cmd || '';
+            // Match legacy pcwatch
+            if (/pcwatch(?:\.js)?(?:\s|$|")/.test(cmd)) return true;
+            // Match new pcsync watch (pcsync.js watch or pcsync watch)
+            if (/pcsync(?:\.js)?\s+watch(?:\s|$|")/.test(cmd)) return true;
+
+            return false;
+        });
 
         if (conf.PLAYCANVAS_VERBOSE) {
-            console.log(a);
+            console.log(watchProcs);
         }
 
-        return a.filter(h => h.name !== 'winpty.exe'); // git bash on wind
+        return watchProcs;
     },
 
     forceMsg: function (canForce) {
