@@ -33,13 +33,8 @@ TEXTUAL_ASSET_TYPES.forEach((t) => {
     });
 });
 
-const CONFIG_FILES = ['pcconfig.json', '.pcconfig'];
-
 const TypeUtils = {
     isBadFile: function (name, remotePath, conf) {
-        if (CONFIG_FILES.includes(name.toLowerCase())) {
-            return true;
-        }
         return TypeUtils.hasForceReg(conf) ?
             !TypeUtils.isForceFile(remotePath, conf) :
             TypeUtils.isBadTextual(name, remotePath, conf);
