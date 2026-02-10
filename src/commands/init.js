@@ -44,11 +44,15 @@ async function runInit() {
 
     rl.close();
 
+    const parsedProjectId = parseInt(projectId, 10);
+    const playcanvasProjectId = Number.isNaN(parsedProjectId) ? projectId : parsedProjectId;
+    const resolvedTargetDir = targetDir === '' ? process.cwd() : targetDir;
+
     const config = {
         PLAYCANVAS_API_KEY: apiKey,
-        PLAYCANVAS_PROJECT_ID: parseInt(projectId, 10) || projectId,
+        PLAYCANVAS_PROJECT_ID: playcanvasProjectId,
         PLAYCANVAS_BRANCH_ID: branchId,
-        PLAYCANVAS_TARGET_DIR: targetDir || process.cwd(),
+        PLAYCANVAS_TARGET_DIR: resolvedTargetDir,
         PLAYCANVAS_BAD_FILE_REG: '^\\.|~$',
         PLAYCANVAS_BAD_FOLDER_REG: '\\.',
         PLAYCANVAS_CONVERT_TO_POW2: 0
