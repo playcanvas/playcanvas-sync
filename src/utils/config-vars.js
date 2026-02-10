@@ -49,32 +49,6 @@ const regexFields = [
 ];
 
 class ConfigVars {
-    /**
-     * Apply CLI option overrides as environment variables so they take
-     * highest priority when config is loaded. Call before constructing
-     * or running ConfigVars.
-     *
-     * @param {object} opts - Parsed Commander global options.
-     */
-    static applyCliOverrides(opts) {
-        const mapping = {
-            apiKey: 'PLAYCANVAS_API_KEY',
-            projectId: 'PLAYCANVAS_PROJECT_ID',
-            branchId: 'PLAYCANVAS_BRANCH_ID',
-            targetDir: 'PLAYCANVAS_TARGET_DIR',
-            baseUrl: 'PLAYCANVAS_BASE_URL'
-        };
-
-        for (const [opt, envVar] of Object.entries(mapping)) {
-            if (opts[opt]) {
-                process.env[envVar] = opts[opt];
-            }
-        }
-
-        if (opts.dryRun) process.env.PLAYCANVAS_DRY_RUN = '1';
-        if (opts.verbose) process.env.PLAYCANVAS_VERBOSE = '1';
-    }
-
     constructor() {
         this.result = {};
     }
