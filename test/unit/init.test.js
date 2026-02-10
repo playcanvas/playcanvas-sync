@@ -7,8 +7,6 @@ import { runInit } from '../../src/commands/init.js';
 describe('init command', function () {
     let fsExistsStub;
     let fsWriteStub;
-    let cwdStub;
-    let rlStub;
     let consoleLogStub;
 
     // Helper to create a mock readline interface
@@ -25,7 +23,7 @@ describe('init command', function () {
     beforeEach(function () {
         fsExistsStub = sinon.stub(fs, 'existsSync');
         fsWriteStub = sinon.stub(fs, 'writeFileSync');
-        cwdStub = sinon.stub(process, 'cwd').returns('/test/dir');
+        sinon.stub(process, 'cwd').returns('/test/dir');
         consoleLogStub = sinon.stub(console, 'log');
     });
 
@@ -38,7 +36,7 @@ describe('init command', function () {
             fsExistsStub.returns(false);
 
             const answers = ['test-api-key', '12345', 'branch-uuid', ''];
-            rlStub = sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
+            sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
 
             await runInit();
 
@@ -59,7 +57,7 @@ describe('init command', function () {
             fsExistsStub.returns(false);
 
             const answers = ['key', '999', 'branch', ''];
-            rlStub = sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
+            sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
 
             await runInit();
 
@@ -72,7 +70,7 @@ describe('init command', function () {
             fsExistsStub.returns(false);
 
             const answers = ['key', 'not-a-number', 'branch', ''];
-            rlStub = sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
+            sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
 
             await runInit();
 
@@ -84,7 +82,7 @@ describe('init command', function () {
             fsExistsStub.returns(false);
 
             const answers = ['key', '123', 'branch', ''];
-            rlStub = sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
+            sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
 
             await runInit();
 
@@ -96,7 +94,7 @@ describe('init command', function () {
             fsExistsStub.returns(false);
 
             const answers = ['key', '123', 'branch', ''];
-            rlStub = sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
+            sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
 
             await runInit();
 
@@ -117,7 +115,7 @@ describe('init command', function () {
                 },
                 close: () => {}
             };
-            rlStub = sinon.stub(readline, 'createInterface').returns(mockRl);
+            sinon.stub(readline, 'createInterface').returns(mockRl);
 
             await runInit();
 
@@ -134,7 +132,7 @@ describe('init command', function () {
                 },
                 close: () => {}
             };
-            rlStub = sinon.stub(readline, 'createInterface').returns(mockRl);
+            sinon.stub(readline, 'createInterface').returns(mockRl);
 
             await runInit();
 
@@ -151,7 +149,7 @@ describe('init command', function () {
                 },
                 close: () => {}
             };
-            rlStub = sinon.stub(readline, 'createInterface').returns(mockRl);
+            sinon.stub(readline, 'createInterface').returns(mockRl);
 
             await runInit();
 
@@ -173,7 +171,7 @@ describe('init command', function () {
                 },
                 close: () => {}
             };
-            rlStub = sinon.stub(readline, 'createInterface').returns(mockRl);
+            sinon.stub(readline, 'createInterface').returns(mockRl);
 
             await runInit();
 
@@ -191,7 +189,7 @@ describe('init command', function () {
                 },
                 close: () => {}
             };
-            rlStub = sinon.stub(readline, 'createInterface').returns(mockRl);
+            sinon.stub(readline, 'createInterface').returns(mockRl);
 
             await runInit();
 
@@ -205,7 +203,7 @@ describe('init command', function () {
             fsExistsStub.returns(false);
 
             const answers = ['key', '123', 'branch', ''];
-            rlStub = sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
+            sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
 
             await runInit();
 
@@ -217,7 +215,7 @@ describe('init command', function () {
             fsExistsStub.returns(false);
 
             const answers = ['key', '123', 'branch', '/custom/path'];
-            rlStub = sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
+            sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
 
             await runInit();
 
@@ -229,7 +227,7 @@ describe('init command', function () {
             fsExistsStub.returns(false);
 
             const answers = ['  key  ', '  123  ', '  branch  ', '  /path  '];
-            rlStub = sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
+            sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
 
             await runInit();
 
@@ -244,7 +242,7 @@ describe('init command', function () {
             fsExistsStub.returns(false);
 
             const answers = ['', '123', 'branch', ''];
-            rlStub = sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
+            sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
 
             await runInit();
 
@@ -256,7 +254,7 @@ describe('init command', function () {
             fsExistsStub.returns(false);
 
             const answers = ['key', '123', '', ''];
-            rlStub = sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
+            sinon.stub(readline, 'createInterface').returns(createMockReadline(answers));
 
             await runInit();
 
