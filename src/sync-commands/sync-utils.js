@@ -97,7 +97,7 @@ const SyncUtils = {
         const a = await SyncUtils.getWatchProcs();
 
         if (a.length > 1) { // 1 (this process) is expected
-            const s = `Other running instances of 'pcwatch' detected. Stop them${
+            const s = `Other running watch instances detected. Stop them${
                 SyncUtils.forceMsg(true)}`;
 
             CUtils.throwFtError(s);
@@ -107,13 +107,28 @@ const SyncUtils = {
     getWatchProcs: async function () {
         const conf = await new GetConfig().run();
 
-        const a = await FindProcess('name', /pcwatch/);
+        // Find node processes, then filter by command line to detect:
+        // - legacy 'pcwatch' or 'pcwatch.js'
+        // - new 'pcsync watch' or 'pcsync.js watch'
+        const a = await FindProcess('name', /node|pcsync|pcwatch/);
+
+        const watchProcs = a.filter((h) => {
+            if (h.name === 'winpty.exe') return false; // git bash on windows
+
+            const cmd = h.cmd || '';
+            // Match legacy pcwatch
+            if (/pcwatch(?:\.js)?(?:\s|$|")/.test(cmd)) return true;
+            // Match new pcsync watch (pcsync.js watch or pcsync watch)
+            if (/pcsync(?:\.js)?\s+watch(?:\s|$|")/.test(cmd)) return true;
+
+            return false;
+        });
 
         if (conf.PLAYCANVAS_VERBOSE) {
-            console.log(a);
+            console.log(watchProcs);
         }
 
-        return a.filter(h => h.name !== 'winpty.exe'); // git bash on wind
+        return watchProcs;
     },
 
     forceMsg: function (canForce) {
