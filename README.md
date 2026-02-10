@@ -132,10 +132,7 @@ npm uninstall -g playcanvas-sync
 
 # Config Variables
 
-Config variables can be set in a file called `.pcconfig` in your home directory, in `pcconfig.json` in your target directory, or provided as environment variables (which would have the highest precedence).
-
-> [!IMPORTANT]
-> `pcconfig.json` and `.pcconfig` are automatically excluded from uploads to prevent accidental exposure of your API key.
+Config variables can be set in a file called `.pcconfig` in your home directory, in `pcconfig.json` in your target directory (and your remote PlayCanvas branch), or provided as environment variables (which would have the highest precedence).
 
 The home directory location is:
 

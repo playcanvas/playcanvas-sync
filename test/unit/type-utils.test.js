@@ -220,60 +220,6 @@ describe('TypeUtils', function () {
             expect(TypeUtils.isBadFile('script.js', 'folder/script.js', conf)).to.be.false;
             expect(TypeUtils.isBadFile('image.png', 'folder/image.png', conf)).to.be.true;
         });
-
-        it('should exclude pcconfig.json', function () {
-            const conf = {
-                PLAYCANVAS_FORCE_REG: null,
-                PLAYCANVAS_BAD_FILE_REG: /^\./,
-                ignParser: { isMatch: () => true }
-            };
-            expect(TypeUtils.isBadFile('pcconfig.json', 'pcconfig.json', conf)).to.be.true;
-        });
-
-        it('should exclude pcconfig.json in a subdirectory', function () {
-            const conf = {
-                PLAYCANVAS_FORCE_REG: null,
-                PLAYCANVAS_BAD_FILE_REG: /^\./,
-                ignParser: { isMatch: () => true }
-            };
-            expect(TypeUtils.isBadFile('pcconfig.json', 'folder/pcconfig.json', conf)).to.be.true;
-        });
-
-        it('should exclude .pcconfig', function () {
-            const conf = {
-                PLAYCANVAS_FORCE_REG: null,
-                PLAYCANVAS_BAD_FILE_REG: /^\./,
-                ignParser: { isMatch: () => true }
-            };
-            expect(TypeUtils.isBadFile('.pcconfig', '.pcconfig', conf)).to.be.true;
-        });
-
-        it('should exclude .pcconfig in a subdirectory', function () {
-            const conf = {
-                PLAYCANVAS_FORCE_REG: null,
-                PLAYCANVAS_BAD_FILE_REG: /^\./,
-                ignParser: { isMatch: () => true }
-            };
-            expect(TypeUtils.isBadFile('.pcconfig', 'folder/.pcconfig', conf)).to.be.true;
-        });
-
-        it('should exclude pcconfig.json even when PLAYCANVAS_FORCE_REG is set', function () {
-            const conf = {
-                PLAYCANVAS_FORCE_REG: /\.json$/,
-                PLAYCANVAS_BAD_FILE_REG: /^\./,
-                ignParser: { isMatch: () => true }
-            };
-            expect(TypeUtils.isBadFile('pcconfig.json', 'pcconfig.json', conf)).to.be.true;
-        });
-
-        it('should not exclude other json files', function () {
-            const conf = {
-                PLAYCANVAS_FORCE_REG: null,
-                PLAYCANVAS_BAD_FILE_REG: /^\./,
-                ignParser: { isMatch: () => true }
-            };
-            expect(TypeUtils.isBadFile('data.json', 'folder/data.json', conf)).to.be.false;
-        });
     });
 
     describe('#isActiveTextual', function () {
