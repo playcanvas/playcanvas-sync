@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import sinon from 'sinon';
+import { stub } from 'sinon';
 import CUtils from '../../src/utils/common-utils.js';
 
 describe('CUtils', function () {
@@ -454,7 +454,7 @@ describe('CUtils', function () {
         let exitStub;
 
         beforeEach(function () {
-            exitStub = sinon.stub(process, 'exit');
+            exitStub = stub(process, 'exit');
         });
 
         afterEach(function () {
