@@ -127,10 +127,16 @@ async function processChange(fullPath, conf, pathToData) {
 }
 
 async function handleKnownFile(itemData, cached, pathToData, conf) {
-    // If the hash was not yet computed, compute it for future comparisons
+    // If the hash was not yet computed, compute it now.
+    // If modTime also changed, the file was modified before we had a
+    // baseline hash, so trigger the sync event immediately.
     if (!cached.hash) {
         itemData.hash = await CUtils.fileToMd5Hash(itemData.fullPath);
         pathToData[itemData.fullPath] = itemData;
+
+        if (itemData.modTime !== cached.modTime) {
+            await triggerEvent('ACTION_MODIFIED', itemData, conf);
+        }
         return;
     }
 
