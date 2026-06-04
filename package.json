@@ -32,7 +32,7 @@
     "gitignore-parser": "0.0.2"
   },
   "devDependencies": {
-    "@playcanvas/eslint-config": "2.1.0",
+    "@playcanvas/eslint-config": "3.0.0-beta.5",
     "chai": "6.2.2",
     "eslint": "9.39.4",
     "globals": "17.4.0",
