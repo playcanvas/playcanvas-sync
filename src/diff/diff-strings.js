@@ -33,7 +33,7 @@ class DiffStrings {
         console.log('--- remote');
         console.log('+++ local');
 
-        this.chunks.forEach(h => new ReportChunk(h).run());
+        this.chunks.forEach((h) => new ReportChunk(h).run());
     }
 }
 

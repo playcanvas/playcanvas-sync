@@ -37,9 +37,7 @@ const fieldsWithDefaults = {
     PLAYCANVAS_BASE_URL: 'https://playcanvas.com'
 };
 
-const integerFields = [
-    'PLAYCANVAS_PROJECT_ID'
-];
+const integerFields = ['PLAYCANVAS_PROJECT_ID'];
 
 const regexFields = [
     'PLAYCANVAS_INCLUDE_REG',
@@ -93,9 +91,7 @@ class ConfigVars {
     }
 
     async checkPrepTarg() {
-        let s = this.result.PLAYCANVAS_TARGET_DIR ||
-            (this.result.PLAYCANVAS_USE_CWD_AS_TARGET && process.cwd()) ||
-            '';
+        let s = this.result.PLAYCANVAS_TARGET_DIR || (this.result.PLAYCANVAS_USE_CWD_AS_TARGET && process.cwd()) || '';
 
         s = PathUtils.rmLastSlash(s);
 
@@ -132,10 +128,7 @@ class ConfigVars {
         if (s) {
             s = PathUtils.rmLastSlash(s);
 
-            this.result.PLAYCANVAS_TARGET_DIR = path.join(
-                this.result.PLAYCANVAS_TARGET_DIR,
-                s
-            );
+            this.result.PLAYCANVAS_TARGET_DIR = path.join(this.result.PLAYCANVAS_TARGET_DIR, s);
 
             await CUtils.checkTargetExists(this.result.PLAYCANVAS_TARGET_DIR);
         }
@@ -160,8 +153,7 @@ class ConfigVars {
     }
 
     reportVars() {
-        const a = this.result.PLAYCANVAS_VERBOSE ?
-            allConfigFields : [];
+        const a = this.result.PLAYCANVAS_VERBOSE ? allConfigFields : [];
 
         a.forEach((field) => {
             console.log(`${field}: ${this.result[field]}`);

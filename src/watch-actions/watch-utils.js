@@ -70,8 +70,9 @@ const WatchUtils = {
     },
 
     shouldKeepEvent: function (h, conf) {
-        let res = (h.isFile && !TypeUtils.isBadFile(h.itemName, h.remotePath, conf)) ||
-      (h.isDirectory && !CUtils.isBadDir(h.remotePath, conf));
+        let res =
+            (h.isFile && !TypeUtils.isBadFile(h.itemName, h.remotePath, conf)) ||
+            (h.isDirectory && !CUtils.isBadDir(h.remotePath, conf));
 
         res = res && !CUtils.isBadDir(h.parentRemote, conf);
 

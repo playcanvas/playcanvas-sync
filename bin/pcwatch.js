@@ -10,7 +10,7 @@
 import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
-console.warn('Warning: \'pcwatch\' is deprecated. Use \'pcsync watch\' instead.');
+console.warn("Warning: 'pcwatch' is deprecated. Use 'pcsync watch' instead.");
 
 const pcsyncBin = fileURLToPath(new URL('./pcsync.js', import.meta.url));
 

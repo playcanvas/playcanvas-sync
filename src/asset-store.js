@@ -40,8 +40,7 @@ class AssetStore {
     }
 
     getAssetAtPath(remotePath) {
-        return this.pathToAsset[remotePath] ||
-            CUtils.throwUsError(`Could not find asset at ${remotePath}`);
+        return this.pathToAsset[remotePath] || CUtils.throwUsError(`Could not find asset at ${remotePath}`);
     }
 
     handleAddedAsset(h) {
@@ -89,8 +88,7 @@ class AssetStore {
     }
 
     addToActive(h) {
-        if (TypeUtils.isActiveAsset(h, this.conf) &&
-            !CUtils.isInBadDir(h, this.idToAsset, this.conf)) {
+        if (TypeUtils.isActiveAsset(h, this.conf) && !CUtils.isInBadDir(h, this.idToAsset, this.conf)) {
             this.activeAssets.push(h);
 
             CUtils.addPathToFolders(h, this.idToAsset, this.foldersWithActive);
@@ -98,8 +96,7 @@ class AssetStore {
     }
 
     checkAddFolder(h) {
-        const shouldAdd = h.type === 'folder' &&
-            this.foldersWithActive[h.id];
+        const shouldAdd = h.type === 'folder' && this.foldersWithActive[h.id];
 
         if (shouldAdd) {
             this.addToFolder(h);
@@ -111,7 +108,7 @@ class AssetStore {
     }
 
     hasChildren(folderId) {
-        return this.allAssets.some(a => a.parent === folderId);
+        return this.allAssets.some((a) => a.parent === folderId);
     }
 
     assertNew(id) {

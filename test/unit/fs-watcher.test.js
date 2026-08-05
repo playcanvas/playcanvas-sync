@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import WatchUtils from '../../src/watch-actions/watch-utils.js';
 
 describe('fs.watch integration', function () {
-
     describe('WatchUtils.DEBOUNCE_MS', function () {
         it('should be a positive number', function () {
             expect(WatchUtils.DEBOUNCE_MS).to.be.a('number');
@@ -109,12 +108,7 @@ describe('fs.watch integration', function () {
     describe('deletion ordering', function () {
         it('should sort children before parents when processing deletions', function () {
             // This tests the sorting logic used in pcwatch.js handleDeletion
-            const paths = [
-                '/root/dir',
-                '/root/dir/sub/file.js',
-                '/root/dir/file.js',
-                '/root/dir/sub'
-            ];
+            const paths = ['/root/dir', '/root/dir/sub/file.js', '/root/dir/file.js', '/root/dir/sub'];
 
             // Sort longest first (children before parents)
             paths.sort((a, b) => b.length - a.length);
@@ -131,7 +125,7 @@ describe('fs.watch integration', function () {
                 '/root/dir/file.js',
                 '/root/dir/sub/file.js',
                 '/root/other/file.js',
-                '/root/directory/file.js'  // should NOT match (starts with "dir" but different dir)
+                '/root/directory/file.js' // should NOT match (starts with "dir" but different dir)
             ];
 
             const affected = allPaths.filter((p) => {

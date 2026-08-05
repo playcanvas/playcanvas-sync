@@ -10,8 +10,7 @@ class ActionCreated {
     }
 
     async run() {
-        this.parentId = this.data.parentRemote &&
-        this.conf.store.getAssetId(this.data.parentRemote);
+        this.parentId = this.data.parentRemote && this.conf.store.getAssetId(this.data.parentRemote);
 
         const response = await this.createRemote();
 
@@ -25,7 +24,6 @@ class ActionCreated {
     createRemote() {
         if (this.data.isFile) {
             return this.createFile();
-
         } else if (this.data.isDirectory) {
             return this.createDirectory();
         }

@@ -27,10 +27,7 @@ class GetConfig {
     }
 
     setClient() {
-        this.result.client = new ApiClient(
-            this.result.PLAYCANVAS_BASE_URL,
-            this.result.PLAYCANVAS_API_KEY
-        );
+        this.result.client = new ApiClient(this.result.PLAYCANVAS_BASE_URL, this.result.PLAYCANVAS_API_KEY);
     }
 
     setParser() {
@@ -38,9 +35,9 @@ class GetConfig {
 
         const s = CUtils.fileToStr(p);
 
-        this.result.ignParser = s ?
-            new PcignoreParser(s, [PCIGNORE_FILE], this.result.PLAYCANVAS_INCLUDE_REG).parse() :
-            new DummyIgnoreParser();
+        this.result.ignParser = s
+            ? new PcignoreParser(s, [PCIGNORE_FILE], this.result.PLAYCANVAS_INCLUDE_REG).parse()
+            : new DummyIgnoreParser();
     }
 
     async setStore() {
@@ -60,7 +57,6 @@ class GetConfig {
             const h = await this.result.client.getCurEditorBranch(this.result.PLAYCANVAS_PROJECT_ID);
 
             return h.id;
-
         } catch (e) {
             console.log(e.message);
 

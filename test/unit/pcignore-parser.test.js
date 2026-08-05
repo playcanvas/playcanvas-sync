@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import PcignoreParser from '../../src/utils/pcignore-parser.js';
 
 describe('PcignoreParser', function () {
-
     describe('constructor', function () {
         it('should initialize with file string and extra files', function () {
             const parser = new PcignoreParser('# comment', ['extra.js'], null);
@@ -220,5 +219,4 @@ describe('PcignoreParser', function () {
             expect(parser.ignoreExtensions).to.include('.js');
         });
     });
-
 });

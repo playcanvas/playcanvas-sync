@@ -71,9 +71,7 @@ describe('ApiClient', function () {
                 }
             };
 
-            nock(BASE_URL)
-            .get('/api/ratelimits')
-            .reply(200, JSON.stringify(limitsResponse));
+            nock(BASE_URL).get('/api/ratelimits').reply(200, JSON.stringify(limitsResponse));
 
             const result = await client.fetchLimits();
 
@@ -83,9 +81,9 @@ describe('ApiClient', function () {
 
         it('should include authorization header', async function () {
             nock(BASE_URL)
-            .get('/api/ratelimits')
-            .matchHeader('Authorization', `Bearer ${API_KEY}`)
-            .reply(200, JSON.stringify({ limits: { normal: 100, download: 100, assets: 100 } }));
+                .get('/api/ratelimits')
+                .matchHeader('Authorization', `Bearer ${API_KEY}`)
+                .reply(200, JSON.stringify({ limits: { normal: 100, download: 100, assets: 100 } }));
 
             await client.fetchLimits();
             expect(nock.isDone()).to.be.true;
@@ -108,13 +106,13 @@ describe('ApiClient', function () {
             };
 
             nock(BASE_URL)
-            .get(`/api/projects/${projectId}/assets`)
-            .query({
-                branchId: branchId,
-                skip: skip.toString(),
-                limit: limit.toString()
-            })
-            .reply(200, JSON.stringify(assetsResponse));
+                .get(`/api/projects/${projectId}/assets`)
+                .query({
+                    branchId: branchId,
+                    skip: skip.toString(),
+                    limit: limit.toString()
+                })
+                .reply(200, JSON.stringify(assetsResponse));
 
             const result = await client.fetchAssets(projectId, branchId, skip, limit);
 
@@ -126,9 +124,9 @@ describe('ApiClient', function () {
             const branchId = 'main-branch-id';
 
             nock(BASE_URL)
-            .get(`/api/projects/${projectId}/assets`)
-            .query(true)
-            .reply(200, JSON.stringify({ result: [], pagination: { total: 0 } }));
+                .get(`/api/projects/${projectId}/assets`)
+                .query(true)
+                .reply(200, JSON.stringify({ result: [], pagination: { total: 0 } }));
 
             const result = await client.fetchAssets(projectId, branchId, 0, 100);
 
@@ -145,9 +143,9 @@ describe('ApiClient', function () {
             };
 
             nock(BASE_URL)
-            .get(`/editor/project/${projectId}/branch`)
-            .query({ access_token: API_KEY })
-            .reply(200, JSON.stringify(branchResponse));
+                .get(`/editor/project/${projectId}/branch`)
+                .query({ access_token: API_KEY })
+                .reply(200, JSON.stringify(branchResponse));
 
             const result = await client.getCurEditorBranch(projectId);
 
@@ -158,9 +156,9 @@ describe('ApiClient', function () {
             const projectId = 12345;
 
             nock(BASE_URL)
-            .get(`/editor/project/${projectId}/branch`)
-            .query(query => query.access_token === API_KEY)
-            .reply(200, JSON.stringify({ id: 'branch-123' }));
+                .get(`/editor/project/${projectId}/branch`)
+                .query((query) => query.access_token === API_KEY)
+                .reply(200, JSON.stringify({ id: 'branch-123' }));
 
             await client.getCurEditorBranch(projectId);
             expect(nock.isDone()).to.be.true;
@@ -173,8 +171,8 @@ describe('ApiClient', function () {
             const formData = { name: 'test.js', file: 'content' };
 
             nock(BASE_URL)
-            .post('/api/assets')
-            .reply(200, JSON.stringify({ id: 123 }));
+                .post('/api/assets')
+                .reply(200, JSON.stringify({ id: 123 }));
 
             const result = await client.postForm(url, formData);
 
@@ -183,9 +181,9 @@ describe('ApiClient', function () {
 
         it('should include authorization header', async function () {
             nock(BASE_URL)
-            .post('/api/assets')
-            .matchHeader('Authorization', `Bearer ${API_KEY}`)
-            .reply(200, JSON.stringify({ success: true }));
+                .post('/api/assets')
+                .matchHeader('Authorization', `Bearer ${API_KEY}`)
+                .reply(200, JSON.stringify({ success: true }));
 
             await client.postForm('/assets', {});
             expect(nock.isDone()).to.be.true;
@@ -198,8 +196,8 @@ describe('ApiClient', function () {
             const formData = { name: 'updated.js' };
 
             nock(BASE_URL)
-            .put('/api/assets/123')
-            .reply(200, JSON.stringify({ id: 123, name: 'updated.js' }));
+                .put('/api/assets/123')
+                .reply(200, JSON.stringify({ id: 123, name: 'updated.js' }));
 
             const result = await client.putForm(url, formData);
 
@@ -208,9 +206,9 @@ describe('ApiClient', function () {
 
         it('should include authorization header', async function () {
             nock(BASE_URL)
-            .put('/api/assets/123')
-            .matchHeader('Authorization', `Bearer ${API_KEY}`)
-            .reply(200, JSON.stringify({ success: true }));
+                .put('/api/assets/123')
+                .matchHeader('Authorization', `Bearer ${API_KEY}`)
+                .reply(200, JSON.stringify({ success: true }));
 
             await client.putForm('/assets/123', {});
             expect(nock.isDone()).to.be.true;
@@ -222,8 +220,8 @@ describe('ApiClient', function () {
             const url = '/assets/123';
 
             nock(BASE_URL)
-            .delete('/api/assets/123')
-            .reply(200, JSON.stringify({ success: true }));
+                .delete('/api/assets/123')
+                .reply(200, JSON.stringify({ success: true }));
 
             const result = await client.methodDelete(url);
 
@@ -232,9 +230,9 @@ describe('ApiClient', function () {
 
         it('should include authorization header', async function () {
             nock(BASE_URL)
-            .delete('/api/assets/123')
-            .matchHeader('Authorization', `Bearer ${API_KEY}`)
-            .reply(200, JSON.stringify({ success: true }));
+                .delete('/api/assets/123')
+                .matchHeader('Authorization', `Bearer ${API_KEY}`)
+                .reply(200, JSON.stringify({ success: true }));
 
             await client.methodDelete('/assets/123');
             expect(nock.isDone()).to.be.true;
@@ -243,9 +241,7 @@ describe('ApiClient', function () {
 
     describe('#methodGet', function () {
         it('should make GET request with prefix', async function () {
-            nock(BASE_URL)
-            .get('/api/test')
-            .reply(200, 'response');
+            nock(BASE_URL).get('/api/test').reply(200, 'response');
 
             const result = await client.methodGet('/test', '/api', false);
 
@@ -253,10 +249,7 @@ describe('ApiClient', function () {
         });
 
         it('should add access_token when addToken is true', async function () {
-            nock(BASE_URL)
-            .get('/api/test')
-            .query({ access_token: API_KEY })
-            .reply(200, 'response');
+            nock(BASE_URL).get('/api/test').query({ access_token: API_KEY }).reply(200, 'response');
 
             await client.methodGet('/test', '/api', true);
             expect(nock.isDone()).to.be.true;
@@ -267,9 +260,7 @@ describe('ApiClient', function () {
         it('should make POST request with JSON body', async function () {
             const payload = { data: 'test' };
 
-            nock(BASE_URL)
-            .post('/api/test', payload)
-            .reply(200, { success: true });
+            nock(BASE_URL).post('/api/test', payload).reply(200, { success: true });
 
             const result = await client.methodPost('/test', '/api', false, payload);
 
@@ -277,10 +268,7 @@ describe('ApiClient', function () {
         });
 
         it('should add access_token when addToken is true', async function () {
-            nock(BASE_URL)
-            .post('/api/test')
-            .query({ access_token: API_KEY })
-            .reply(200, { success: true });
+            nock(BASE_URL).post('/api/test').query({ access_token: API_KEY }).reply(200, { success: true });
 
             await client.methodPost('/test', '/api', true, {});
             expect(nock.isDone()).to.be.true;
@@ -330,10 +318,7 @@ describe('ApiClient', function () {
 
     describe('error handling', function () {
         it('should throw on 404 response', async function () {
-            nock(BASE_URL)
-            .get('/api/projects/999/assets')
-            .query(true)
-            .reply(404, { error: 'Not found' });
+            nock(BASE_URL).get('/api/projects/999/assets').query(true).reply(404, { error: 'Not found' });
 
             try {
                 await client.fetchAssets(999, 'branch', 0, 100);
@@ -344,9 +329,7 @@ describe('ApiClient', function () {
         });
 
         it('should throw on 401 unauthorized', async function () {
-            nock(BASE_URL)
-            .get('/api/ratelimits')
-            .reply(401, { error: 'Unauthorized' });
+            nock(BASE_URL).get('/api/ratelimits').reply(401, { error: 'Unauthorized' });
 
             try {
                 await client.fetchLimits();
@@ -357,9 +340,7 @@ describe('ApiClient', function () {
         });
 
         it('should throw on 500 server error', async function () {
-            nock(BASE_URL)
-            .get('/api/ratelimits')
-            .reply(500, { error: 'Internal server error' });
+            nock(BASE_URL).get('/api/ratelimits').reply(500, { error: 'Internal server error' });
 
             try {
                 await client.fetchLimits();
@@ -380,9 +361,9 @@ describe('ApiClient', function () {
             const fileContent = 'console.log("hello");';
 
             nock(BASE_URL)
-            .get(`/api/assets/${asset.id}/file/${asset.file.filename}`)
-            .query({ branchId: branchId })
-            .reply(200, fileContent);
+                .get(`/api/assets/${asset.id}/file/${asset.file.filename}`)
+                .query({ branchId: branchId })
+                .reply(200, fileContent);
 
             const result = await client.loadAssetToStr(asset, branchId);
 
@@ -397,9 +378,9 @@ describe('ApiClient', function () {
             const branchId = 'branch-123';
 
             nock(BASE_URL)
-            .get('/api/assets/123/file/my%20script.js')
-            .query({ branchId: branchId })
-            .reply(200, 'content');
+                .get('/api/assets/123/file/my%20script.js')
+                .query({ branchId: branchId })
+                .reply(200, 'content');
 
             const result = await client.loadAssetToStr(asset, branchId);
 
@@ -416,9 +397,9 @@ describe('ApiClient', function () {
             const branchId = 'branch-abc';
 
             nock(BASE_URL)
-            .get(`/api/assets/${asset.id}/file/${asset.file.filename}`)
-            .query({ branchId: branchId })
-            .reply(200, 'binary-content');
+                .get(`/api/assets/${asset.id}/file/${asset.file.filename}`)
+                .query({ branchId: branchId })
+                .reply(200, 'binary-content');
 
             // makeDownloadStream returns a promise that resolves to a Node.js Readable
             const stream = await client.makeDownloadStream(asset, branchId);
@@ -432,5 +413,4 @@ describe('ApiClient', function () {
             expect(data).to.equal('binary-content');
         });
     });
-
 });

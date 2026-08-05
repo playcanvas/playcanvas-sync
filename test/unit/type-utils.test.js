@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import TypeUtils from '../../src/utils/type-utils.js';
 
 describe('TypeUtils', function () {
-
     describe('#isTextualType', function () {
         it('should return true for text type', function () {
             expect(TypeUtils.isTextualType('text')).to.be.true;
@@ -274,5 +273,4 @@ describe('TypeUtils', function () {
             expect(TypeUtils.isActiveAsset(jsAsset, conf)).to.be.true;
         });
     });
-
 });

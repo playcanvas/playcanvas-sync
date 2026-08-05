@@ -3,7 +3,6 @@ import { stub } from 'sinon';
 import CUtils from '../../src/utils/common-utils.js';
 
 describe('CUtils', function () {
-
     describe('#pushArToAr', function () {
         it('should push all elements from second array to first', function () {
             const a1 = [1, 2];
@@ -170,7 +169,7 @@ describe('CUtils', function () {
             const arr = [{ id: 1 }, { id: 2 }, { id: 3 }];
             const result = CUtils.rmObjById(arr, 2);
             expect(result).to.have.lengthOf(2);
-            expect(result.map(o => o.id)).to.deep.equal([1, 3]);
+            expect(result.map((o) => o.id)).to.deep.equal([1, 3]);
         });
 
         it('should return same array if id not found', function () {
@@ -242,20 +241,13 @@ describe('CUtils', function () {
 
     describe('#sortByStrField', function () {
         it('should sort array by string field', function () {
-            const arr = [
-                { name: 'charlie' },
-                { name: 'alpha' },
-                { name: 'bravo' }
-            ];
+            const arr = [{ name: 'charlie' }, { name: 'alpha' }, { name: 'bravo' }];
             CUtils.sortByStrField(arr, 'name');
-            expect(arr.map(o => o.name)).to.deep.equal(['alpha', 'bravo', 'charlie']);
+            expect(arr.map((o) => o.name)).to.deep.equal(['alpha', 'bravo', 'charlie']);
         });
 
         it('should handle mixed case sorting using localeCompare', function () {
-            const arr = [
-                { name: 'Bravo' },
-                { name: 'alpha' }
-            ];
+            const arr = [{ name: 'Bravo' }, { name: 'alpha' }];
             CUtils.sortByStrField(arr, 'name');
             // localeCompare sorts case-insensitively in modern environments
             // 'alpha' comes before 'Bravo'
@@ -331,15 +323,8 @@ describe('CUtils', function () {
     describe('#applyItemLimit', function () {
         it('should filter folders and files based on limit', function () {
             const data = {
-                folders: [
-                    { remotePath: 'scripts' },
-                    { remotePath: 'scripts/utils' },
-                    { remotePath: 'textures' }
-                ],
-                files: [
-                    { remotePath: 'scripts/utils/helper.js' },
-                    { remotePath: 'scripts/main.js' }
-                ]
+                folders: [{ remotePath: 'scripts' }, { remotePath: 'scripts/utils' }, { remotePath: 'textures' }],
+                files: [{ remotePath: 'scripts/utils/helper.js' }, { remotePath: 'scripts/main.js' }]
             };
             const limit = {
                 folders: ['scripts', 'scripts/utils'],
@@ -372,11 +357,7 @@ describe('CUtils', function () {
 
     describe('#partitionFolders', function () {
         it('should partition folders into remote and non-remote', function () {
-            const folders = [
-                { remotePath: 'exists' },
-                { remotePath: 'new' },
-                { remotePath: 'also-exists' }
-            ];
+            const folders = [{ remotePath: 'exists' }, { remotePath: 'new' }, { remotePath: 'also-exists' }];
             const conf = {
                 store: {
                     pathToAsset: {
@@ -570,5 +551,4 @@ describe('CUtils', function () {
             expect(CUtils.isInBadDir(assets[2], assets, basisConf)).to.be.true;
         });
     });
-
 });

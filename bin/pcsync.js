@@ -80,150 +80,150 @@ function preprocessArgs(argv) {
 const program = new Command();
 
 program
-.name('pcsync')
-.description('Sync files between PlayCanvas and your local machine')
-.version(pkg.version)
-.option('-k, --api-key <key>', 'PlayCanvas API key (overrides config)')
-.option('-p, --project-id <id>', 'PlayCanvas project ID (overrides config)')
-.option('-b, --branch-id <id>', 'PlayCanvas branch ID (overrides config)')
-.option('-t, --target-dir <dir>', 'local target directory (overrides config)')
-.option('--base-url <url>', 'PlayCanvas API base URL (overrides config)')
-.option('-n, --dry-run', 'show what would happen without making changes')
-.option('--verbose', 'print detailed output including config values');
+    .name('pcsync')
+    .description('Sync files between PlayCanvas and your local machine')
+    .version(pkg.version)
+    .option('-k, --api-key <key>', 'PlayCanvas API key (overrides config)')
+    .option('-p, --project-id <id>', 'PlayCanvas project ID (overrides config)')
+    .option('-b, --branch-id <id>', 'PlayCanvas branch ID (overrides config)')
+    .option('-t, --target-dir <dir>', 'local target directory (overrides config)')
+    .option('--base-url <url>', 'PlayCanvas API base URL (overrides config)')
+    .option('-n, --dry-run', 'show what would happen without making changes')
+    .option('--verbose', 'print detailed output including config values');
 
 // ---- diff [file] ----
 
 program
-.command('diff [file]')
-.description('compare local and remote files (all files if no file specified)')
-.option('-r, --regexp <pattern>', 'filter files matching the provided regular expression')
-.option('-e, --ext <extensions>', 'filter files by extension (comma-separated, e.g. jpg,png)')
-.action((file, cmdObj) => {
-    if (file) {
-        CUtils.wrapUserErrors(() => {
-            return SCUtils.diffSingleFile(file);
-        });
-    } else {
-        CUtils.handleForceRegOpts(cmdObj);
+    .command('diff [file]')
+    .description('compare local and remote files (all files if no file specified)')
+    .option('-r, --regexp <pattern>', 'filter files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'filter files by extension (comma-separated, e.g. jpg,png)')
+    .action((file, cmdObj) => {
+        if (file) {
+            CUtils.wrapUserErrors(() => {
+                return SCUtils.diffSingleFile(file);
+            });
+        } else {
+            CUtils.handleForceRegOpts(cmdObj);
 
-        CUtils.wrapUserErrors(() => {
-            return SyncUtils.reportDiffAll();
-        });
-    }
-});
+            CUtils.wrapUserErrors(() => {
+                return SyncUtils.reportDiffAll();
+            });
+        }
+    });
 
 // ---- pull [file] ----
 
 program
-.command('pull [file]')
-.description('download remote files to local (all files if no file specified)')
-.option('-r, --regexp <pattern>', 'filter files matching the provided regular expression')
-.option('-e, --ext <extensions>', 'filter files by extension (comma-separated, e.g. jpg,png)')
-.option('-y, --yes', 'skip confirmation prompt')
-.action((file, cmdObj) => {
-    if (file) {
-        CUtils.setForceEnv(file);
+    .command('pull [file]')
+    .description('download remote files to local (all files if no file specified)')
+    .option('-r, --regexp <pattern>', 'filter files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'filter files by extension (comma-separated, e.g. jpg,png)')
+    .option('-y, --yes', 'skip confirmation prompt')
+    .action((file, cmdObj) => {
+        if (file) {
+            CUtils.setForceEnv(file);
 
-        CUtils.wrapUserErrors(() => {
-            return SCUtils.downloadSingleFile(file);
-        });
-    } else {
-        CUtils.handleForceRegOpts(cmdObj);
+            CUtils.wrapUserErrors(() => {
+                return SCUtils.downloadSingleFile(file);
+            });
+        } else {
+            CUtils.handleForceRegOpts(cmdObj);
 
-        const cb = function () {
-            return new OverwriteAllLocalWithRemote().run();
-        };
+            const cb = function () {
+                return new OverwriteAllLocalWithRemote().run();
+            };
 
-        return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
-    }
-});
+            return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
+        }
+    });
 
 // ---- push [file] ----
 
 program
-.command('push [file]')
-.description('upload local files to remote (all files if no file specified)')
-.option('-r, --regexp <pattern>', 'filter files matching the provided regular expression')
-.option('-e, --ext <extensions>', 'filter files by extension (comma-separated, e.g. jpg,png)')
-.option('-y, --yes', 'skip confirmation prompt')
-.action((file, cmdObj) => {
-    if (file) {
-        CUtils.setForceEnv(file);
+    .command('push [file]')
+    .description('upload local files to remote (all files if no file specified)')
+    .option('-r, --regexp <pattern>', 'filter files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'filter files by extension (comma-separated, e.g. jpg,png)')
+    .option('-y, --yes', 'skip confirmation prompt')
+    .action((file, cmdObj) => {
+        if (file) {
+            CUtils.setForceEnv(file);
 
-        CUtils.wrapUserErrors(() => {
-            return SCUtils.uploadSingleFile(file);
-        });
-    } else {
-        CUtils.handleForceRegOpts(cmdObj);
+            CUtils.wrapUserErrors(() => {
+                return SCUtils.uploadSingleFile(file);
+            });
+        } else {
+            CUtils.handleForceRegOpts(cmdObj);
 
-        const cb = function () {
-            return new OverwriteAllRemoteWithLocal().run();
-        };
+            const cb = function () {
+                return new OverwriteAllRemoteWithLocal().run();
+            };
 
-        return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
-    }
-});
+            return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
+        }
+    });
 
 // ---- rename ----
 
 program
-.command('rename <oldPath> <newPath>')
-.description('rename or move a remote file or folder')
-.action((oldPath, newPath) => {
-    CUtils.wrapUserErrors(() => {
-        return SCUtils.renameItem(oldPath, newPath);
+    .command('rename <oldPath> <newPath>')
+    .description('rename or move a remote file or folder')
+    .action((oldPath, newPath) => {
+        CUtils.wrapUserErrors(() => {
+            return SCUtils.renameItem(oldPath, newPath);
+        });
     });
-});
 
 // ---- rm ----
 
 program
-.command('rm <path>')
-.description('remove a remote file or folder')
-.action((filePath) => {
-    CUtils.setForceEnv(filePath);
+    .command('rm <path>')
+    .description('remove a remote file or folder')
+    .action((filePath) => {
+        CUtils.setForceEnv(filePath);
 
-    CUtils.wrapUserErrors(() => {
-        return SCUtils.deleteItem(filePath);
+        CUtils.wrapUserErrors(() => {
+            return SCUtils.deleteItem(filePath);
+        });
     });
-});
 
 // ---- watch ----
 
 program
-.command('watch')
-.description('watch local directory and sync changes to remote in real-time')
-.option('-f, --force', 'skip local/remote equality and multi-instance checks')
-.action(async (cmdObj) => {
-    if (!cmdObj.force) {
-        await CUtils.wrapUserErrors(() => SyncUtils.errorIfDifferent(true));
+    .command('watch')
+    .description('watch local directory and sync changes to remote in real-time')
+    .option('-f, --force', 'skip local/remote equality and multi-instance checks')
+    .action(async (cmdObj) => {
+        if (!cmdObj.force) {
+            await CUtils.wrapUserErrors(() => SyncUtils.errorIfDifferent(true));
 
-        await CUtils.wrapUserErrors(SyncUtils.errorIfMultWatch);
-    }
+            await CUtils.wrapUserErrors(SyncUtils.errorIfMultWatch);
+        }
 
-    await startWatcher();
-});
+        await startWatcher();
+    });
 
 // ---- ignore ----
 
 program
-.command('ignore')
-.description('list assets matched by pcignore.txt')
-.action(() => {
-    CUtils.wrapUserErrors(() => {
-        return SCUtils.reportIgnoredAssets();
+    .command('ignore')
+    .description('list assets matched by pcignore.txt')
+    .action(() => {
+        CUtils.wrapUserErrors(() => {
+            return SCUtils.reportIgnoredAssets();
+        });
     });
-});
 
 // ---- init ----
 
 program
-.command('init')
-.description('create a pcconfig.json in the current directory')
-.action(async () => {
-    const { runInit } = await import('../src/commands/init.js');
-    await runInit();
-});
+    .command('init')
+    .description('create a pcconfig.json in the current directory')
+    .action(async () => {
+        const { runInit } = await import('../src/commands/init.js');
+        await runInit();
+    });
 
 // ---- deprecated commands (hidden from help) ----
 
@@ -233,55 +233,54 @@ function deprecationWarning(oldCmd, newCmd) {
 
 const diffAllCmd = new Command('diffAll');
 diffAllCmd
-.option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
-.option('-e, --ext <extensions>', 'handle files with provided extensions')
-.action((cmdObj) => {
-    deprecationWarning('pcsync diffAll', 'pcsync diff');
-    CUtils.handleForceRegOpts(cmdObj);
+    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'handle files with provided extensions')
+    .action((cmdObj) => {
+        deprecationWarning('pcsync diffAll', 'pcsync diff');
+        CUtils.handleForceRegOpts(cmdObj);
 
-    CUtils.wrapUserErrors(() => {
-        return SyncUtils.reportDiffAll();
+        CUtils.wrapUserErrors(() => {
+            return SyncUtils.reportDiffAll();
+        });
     });
-});
 program.addCommand(diffAllCmd, { hidden: true });
 
 const pullAllCmd = new Command('pullAll');
 pullAllCmd
-.option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
-.option('-e, --ext <extensions>', 'handle files with provided extensions')
-.option('-y, --yes', 'Automatically answer "yes" to any prompts.')
-.action((cmdObj) => {
-    deprecationWarning('pcsync pullAll', 'pcsync pull');
-    CUtils.handleForceRegOpts(cmdObj);
+    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'handle files with provided extensions')
+    .option('-y, --yes', 'Automatically answer "yes" to any prompts.')
+    .action((cmdObj) => {
+        deprecationWarning('pcsync pullAll', 'pcsync pull');
+        CUtils.handleForceRegOpts(cmdObj);
 
-    const cb = function () {
-        return new OverwriteAllLocalWithRemote().run();
-    };
+        const cb = function () {
+            return new OverwriteAllLocalWithRemote().run();
+        };
 
-    return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
-});
+        return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
+    });
 program.addCommand(pullAllCmd, { hidden: true });
 
 const pushAllCmd = new Command('pushAll');
 pushAllCmd
-.option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
-.option('-e, --ext <extensions>', 'handle files with provided extensions')
-.option('-y, --yes', 'Automatically answer "yes" to any prompts.')
-.action((cmdObj) => {
-    deprecationWarning('pcsync pushAll', 'pcsync push');
-    CUtils.handleForceRegOpts(cmdObj);
+    .option('-r, --regexp <regexp>', 'handle files matching the provided regular expression')
+    .option('-e, --ext <extensions>', 'handle files with provided extensions')
+    .option('-y, --yes', 'Automatically answer "yes" to any prompts.')
+    .action((cmdObj) => {
+        deprecationWarning('pcsync pushAll', 'pcsync push');
+        CUtils.handleForceRegOpts(cmdObj);
 
-    const cb = function () {
-        return new OverwriteAllRemoteWithLocal().run();
-    };
+        const cb = function () {
+            return new OverwriteAllRemoteWithLocal().run();
+        };
 
-    return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
-});
+        return cmdObj.yes ? cb() : SyncUtils.compareAndPrompt(cb);
+    });
 program.addCommand(pushAllCmd, { hidden: true });
 
 const parseIgnoreCmd = new Command('parseIgnore');
-parseIgnoreCmd
-.action(() => {
+parseIgnoreCmd.action(() => {
     deprecationWarning('pcsync parseIgnore', 'pcsync ignore');
 
     CUtils.wrapUserErrors(() => {
@@ -303,27 +302,23 @@ async function startWatcher() {
 
     const debounceTimers = {};
 
-    const watcher = fs.watch(
-        conf.PLAYCANVAS_TARGET_DIR,
-        { recursive: true },
-        (eventType, filename) => {
-            if (!filename) return;
+    const watcher = fs.watch(conf.PLAYCANVAS_TARGET_DIR, { recursive: true }, (eventType, filename) => {
+        if (!filename) return;
 
-            // Normalize path separators to OS-native format
-            const relativePath = filename.replace(/[\\/]/g, path.sep);
-            const fullPath = path.join(conf.PLAYCANVAS_TARGET_DIR, relativePath);
+        // Normalize path separators to OS-native format
+        const relativePath = filename.replace(/[\\/]/g, path.sep);
+        const fullPath = path.join(conf.PLAYCANVAS_TARGET_DIR, relativePath);
 
-            // Debounce: reset timer for this path on every event
-            if (debounceTimers[fullPath]) {
-                clearTimeout(debounceTimers[fullPath]);
-            }
-
-            debounceTimers[fullPath] = setTimeout(() => {
-                delete debounceTimers[fullPath];
-                processChange(fullPath, conf, pathToData);
-            }, WatchUtils.DEBOUNCE_MS);
+        // Debounce: reset timer for this path on every event
+        if (debounceTimers[fullPath]) {
+            clearTimeout(debounceTimers[fullPath]);
         }
-    );
+
+        debounceTimers[fullPath] = setTimeout(() => {
+            delete debounceTimers[fullPath];
+            processChange(fullPath, conf, pathToData);
+        }, WatchUtils.DEBOUNCE_MS);
+    });
 
     // Keep process alive and handle clean shutdown
     process.on('SIGINT', () => {
@@ -456,7 +451,6 @@ async function handleEvent(e, conf) {
 async function handleGoodEvent(e, conf) {
     if (e.action === 'ACTION_MODIFIED') {
         await eventModified(e, conf);
-
     } else if (e.action === 'ACTION_DELETED') {
         const deleted = await WatchUtils.actionDeleted(e.remotePath, conf);
 
@@ -465,7 +459,6 @@ async function handleGoodEvent(e, conf) {
         } else {
             console.log(`Skipped deletion of remote folder ${e.remotePath} (contains unsynced assets)`);
         }
-
     } else if (e.action === 'ACTION_CREATED') {
         await eventCreated(e, conf);
     }

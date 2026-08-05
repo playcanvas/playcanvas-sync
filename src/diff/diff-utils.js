@@ -3,8 +3,8 @@ import CUtils from '../utils/common-utils.js';
 
 const diffValToType = {
     '-1': 'file_1_only',
-    '1': 'file_2_only',
-    '0': 'both_files'
+    1: 'file_2_only',
+    0: 'both_files'
 };
 
 const diffTypeToSign = {
@@ -24,7 +24,7 @@ const DiffUtils = {
 
         diffs.forEach(DiffUtils.addDiffType);
 
-        diffs.forEach(h => DiffUtils.handleLines(h, res));
+        diffs.forEach((h) => DiffUtils.handleLines(h, res));
 
         return res;
     },
@@ -36,7 +36,7 @@ const DiffUtils = {
     handleLines: function (h, res) {
         const a = DiffUtils.diffToLineStrs(h[1]);
 
-        const lineObjs = a.map(s => DiffUtils.makeLineObj(s, h.type));
+        const lineObjs = a.map((s) => DiffUtils.makeLineObj(s, h.type));
 
         CUtils.pushArToAr(res, lineObjs);
     },
@@ -50,8 +50,7 @@ const DiffUtils = {
     rmLastIfEmpty: function (a) {
         const lastInd = a.length - 1;
 
-        return a[lastInd] ?
-            a : a.slice(0, lastInd);
+        return a[lastInd] ? a : a.slice(0, lastInd);
     },
 
     makeLineObj: function (s, type) {
@@ -98,11 +97,9 @@ const DiffUtils = {
                 count2++;
                 h.num_in_1 = count1;
                 h.num_in_2 = count2;
-
             } else if (h.type === 'file_1_only') {
                 count1++;
                 h.num_in_1 = count1;
-
             } else if (h.type === 'file_2_only') {
                 count2++;
                 h.num_in_2 = count2;
@@ -156,7 +153,7 @@ const DiffUtils = {
     },
 
     limitForFile: function (a, type) {
-        return a.find(h => h.type === type || h.type === 'both_files');
+        return a.find((h) => h.type === type || h.type === 'both_files');
     }
 };
 

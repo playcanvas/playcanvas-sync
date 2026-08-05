@@ -3,7 +3,6 @@ import { stub } from 'sinon';
 import WatchUtils from '../../src/watch-actions/watch-utils.js';
 
 describe('WatchUtils', function () {
-
     describe('#actionDeleted', function () {
         let conf;
         let deleteSpy;
@@ -25,7 +24,7 @@ describe('WatchUtils', function () {
                         return asset ? asset.id : undefined;
                     },
                     hasChildren(folderId) {
-                        return this.allAssets.some(a => a.parent === folderId);
+                        return this.allAssets.some((a) => a.parent === folderId);
                     },
                     handleDeletedAsset: stub()
                 },

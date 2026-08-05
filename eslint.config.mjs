@@ -1,4 +1,5 @@
 import javascriptConfig from '@playcanvas/eslint-config/javascript';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import globals from 'globals';
 
 export default [
@@ -33,6 +34,7 @@ export default [
             'import/order': 'off'
         }
     },
+    eslintConfigPrettier,
     {
         ignores: ['src/diff/diff_match_patch_uncompressed.cjs']
     }

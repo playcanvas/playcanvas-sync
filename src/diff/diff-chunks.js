@@ -36,7 +36,7 @@ class DiffChunks {
     }
 
     setEndInds() {
-        this.endInds = this.startInds.map(i => DiffUtils.getChunkEnd(this.lineObjs, i));
+        this.endInds = this.startInds.map((i) => DiffUtils.getChunkEnd(this.lineObjs, i));
     }
 
     makeChunk(startInd, i) {

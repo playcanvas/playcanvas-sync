@@ -86,9 +86,7 @@ class ComputeDiffAll {
     }
 
     handleLocalFile(h) {
-        return CUtils.isItemOnRemote(h, this.conf) ?
-            this.handleFileOnBoth(h) :
-            this.res.extraItems.local.files.push(h);
+        return CUtils.isItemOnRemote(h, this.conf) ? this.handleFileOnBoth(h) : this.res.extraItems.local.files.push(h);
     }
 
     async handleFileOnBoth(h) {
@@ -120,7 +118,7 @@ class ComputeDiffAll {
             this.res.extraItems.remote.files
         ];
 
-        this.res.anyDiffFound = allResArrays.some(a => a.length);
+        this.res.anyDiffFound = allResArrays.some((a) => a.length);
     }
 }
 

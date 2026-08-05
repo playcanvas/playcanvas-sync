@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import AssetStore from '../../src/asset-store.js';
 
 describe('AssetStore', function () {
-
     describe('#hasChildren', function () {
         let store;
 
@@ -31,7 +30,7 @@ describe('AssetStore', function () {
 
         it('should reflect removal of children', function () {
             // Remove child assets
-            store.allAssets = store.allAssets.filter(a => a.parent !== 1);
+            store.allAssets = store.allAssets.filter((a) => a.parent !== 1);
 
             expect(store.hasChildren(1)).to.be.false;
         });

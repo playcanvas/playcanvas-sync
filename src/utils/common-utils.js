@@ -6,7 +6,6 @@ import FatalError from './fatal-error.js';
 import PathUtils from './path-utils.js';
 import UserError from './user-error.js';
 
-
 const HTTPS_PREF_REG = /^https:\/\//;
 
 const CUtils = {
@@ -17,7 +16,7 @@ const CUtils = {
     assetPathStr: function (asset, idToAsset) {
         let a = CUtils.assetPathItems(asset, idToAsset);
 
-        a = a.map(h => h.name);
+        a = a.map((h) => h.name);
 
         return PathUtils.arToSlashForwPath(a);
     },
@@ -50,7 +49,7 @@ const CUtils = {
         const a = [];
 
         return new Promise((resolve, reject) => {
-            stream.on('data', s => a.push(s));
+            stream.on('data', (s) => a.push(s));
 
             stream.on('end', () => {
                 const s = Buffer.concat(a).toString('utf8');
@@ -78,13 +77,12 @@ const CUtils = {
             const s = fs.readFileSync(file, 'utf8');
 
             return CUtils.replaceCarriage(s);
-
         }
         return null;
-
     },
 
-    replaceCarriage: function (s) { // for windows
+    replaceCarriage: function (s) {
+        // for windows
         return s.replace(/\r\n?/g, '\n');
     },
 
@@ -96,7 +94,7 @@ const CUtils = {
         const input = fs.createReadStream(file);
 
         return new Promise((resolve, reject) => {
-            input.on('data', s => hash.update(s));
+            input.on('data', (s) => hash.update(s));
 
             input.on('end', () => resolve(hash.digest('hex')));
 
@@ -125,13 +123,11 @@ const CUtils = {
     wrapUserErrors: async function (callback, args = []) {
         try {
             return await callback(...args);
-
         } catch (e) {
             if (e instanceof UserError || e instanceof FatalError) {
                 console.log(e.message);
 
                 process.exit(1);
-
             } else {
                 throw e;
             }
@@ -153,7 +149,7 @@ const CUtils = {
     },
 
     rmObjById: function (a, id) {
-        return a.filter(h => h.id !== id);
+        return a.filter((h) => h.id !== id);
     },
 
     eventHasAsset: function (e, conf) {
@@ -189,10 +185,8 @@ const CUtils = {
             const md5 = await CUtils.fileToMd5Hash(local.fullPath);
 
             return md5 === remote.file.hash;
-
         }
         return false;
-
     },
 
     partitionFolders: function (a, conf) {
@@ -202,9 +196,7 @@ const CUtils = {
         };
 
         a.forEach((h) => {
-            const field = CUtils.isItemOnRemote(h, conf) ?
-                'isOnRemote' :
-                'isNotOnRemote';
+            const field = CUtils.isItemOnRemote(h, conf) ? 'isOnRemote' : 'isNotOnRemote';
 
             res[field].push(h);
         });
@@ -227,9 +219,7 @@ const CUtils = {
     },
 
     jsonFileToMap: function (p) {
-        return fs.existsSync(p) ?
-            CUtils.readJson(p) :
-            {};
+        return fs.existsSync(p) ? CUtils.readJson(p) : {};
     },
 
     readJson: function (p) {
@@ -254,13 +244,13 @@ const CUtils = {
         CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', s);
     },
 
-    escapeRegExp: function (s) { // from MDN
+    escapeRegExp: function (s) {
+        // from MDN
         return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     },
 
     handleForceRegOpts: function (cmdObj) {
-        const v = cmdObj.regexp ||
-            (cmdObj.ext && CUtils.extToReg(cmdObj.ext));
+        const v = cmdObj.regexp || (cmdObj.ext && CUtils.extToReg(cmdObj.ext));
 
         CUtils.checkSetEnv('PLAYCANVAS_FORCE_REG', v);
     },
@@ -268,7 +258,7 @@ const CUtils = {
     extToReg: function (extensions) {
         let a = extensions.split(',');
 
-        a = a.map(s => `\\.${s}`);
+        a = a.map((s) => `\\.${s}`);
 
         const reg = a.join('|');
 
@@ -293,8 +283,7 @@ const CUtils = {
         const good = stat && stat.isDirectory;
 
         if (!good) {
-            const s = `Error: could not find target directory: ${fullPath}. ` +
-                'Check capitalization.';
+            const s = `Error: could not find target directory: ${fullPath}. Check capitalization.`;
 
             CUtils.throwFtError(s);
         }

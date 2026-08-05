@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import PathUtils from '../../src/utils/path-utils.js';
 
 describe('PathUtils', function () {
-
     describe('#arToSlashForwPath', function () {
         it('should join array with forward slashes', function () {
             expect(PathUtils.arToSlashForwPath(['a', 'b', 'c'])).to.equal('a/b/c');
@@ -122,10 +121,7 @@ describe('PathUtils', function () {
 
     describe('#allFilePaths', function () {
         it('should collect all path parts from files', function () {
-            const files = [
-                { remotePath: 'a/b/file1.js' },
-                { remotePath: 'a/c/file2.js' }
-            ];
+            const files = [{ remotePath: 'a/b/file1.js' }, { remotePath: 'a/c/file2.js' }];
             const result = PathUtils.allFilePaths(files);
             expect(result).to.have.property('');
             expect(result).to.have.property('a');
@@ -173,21 +169,14 @@ describe('PathUtils', function () {
     describe('#rmEmptyFolders', function () {
         it('should remove folders that have no files', function () {
             const data = {
-                folders: [
-                    { remotePath: 'scripts' },
-                    { remotePath: 'scripts/utils' },
-                    { remotePath: 'empty' }
-                ],
-                files: [
-                    { remotePath: 'scripts/utils/file.js' }
-                ]
+                folders: [{ remotePath: 'scripts' }, { remotePath: 'scripts/utils' }, { remotePath: 'empty' }],
+                files: [{ remotePath: 'scripts/utils/file.js' }]
             };
             PathUtils.rmEmptyFolders(data);
             // Only folders that are in the path of existing files should remain
             expect(data.folders).to.have.lengthOf(2);
-            expect(data.folders.map(f => f.remotePath)).to.include('scripts');
-            expect(data.folders.map(f => f.remotePath)).to.include('scripts/utils');
+            expect(data.folders.map((f) => f.remotePath)).to.include('scripts');
+            expect(data.folders.map((f) => f.remotePath)).to.include('scripts/utils');
         });
     });
-
 });

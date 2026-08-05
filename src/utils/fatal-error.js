@@ -1,4 +1,3 @@
-class FatalError extends Error {
-}
+class FatalError extends Error {}
 
 export default FatalError;

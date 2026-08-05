@@ -36,11 +36,13 @@ class PcignoreParser {
     }
 
     isMatch(s) {
-        return this.extraFiles.includes(s) ||
+        return (
+            this.extraFiles.includes(s) ||
             this.ignoreAll ||
             this.checkExtension(s) ||
             this.checkRegex(s) ||
-            this.gitignore.denies(s);
+            this.gitignore.denies(s)
+        );
     }
 
     handleAllLines() {
@@ -62,13 +64,10 @@ class PcignoreParser {
     handleSpecial(type, val) {
         if (type === 'ignore_all_textual_files') {
             this.ignoreAll = true;
-
         } else if (type === 'ignore_all_js_files') {
             this.ignoreExtensions.push('.js');
-
         } else if (type === 'ignore_all_files_with_extension' && val) {
             this.addExtensions(val);
-
         } else if (type === 'ignore_regexp' && val) {
             const r = new RegExp(val);
 
@@ -97,7 +96,7 @@ class PcignoreParser {
     }
 
     checkRegex(s) {
-        return this.ignoreRegs.some(r => r.test(s));
+        return this.ignoreRegs.some((r) => r.test(s));
     }
 
     addDotIfNeeded(s) {

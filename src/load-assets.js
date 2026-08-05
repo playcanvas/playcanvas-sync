@@ -20,8 +20,7 @@ class LoadAssets {
     }
 
     souldContinue() {
-        return this.dbTotal === undefined ||
-      this.result.length < this.dbTotal;
+        return this.dbTotal === undefined || this.result.length < this.dbTotal;
     }
 
     async callApi() {

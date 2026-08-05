@@ -28,12 +28,10 @@ class LocalContents {
     visitDir(h) {
         if (CUtils.isBadDir(h.remotePath, this.conf)) {
             return false;
-
         }
         this.addToRes('folders', h);
 
         return true;
-
     }
 
     addToRes(field, h) {

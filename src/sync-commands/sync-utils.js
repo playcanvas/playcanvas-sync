@@ -26,11 +26,11 @@ const SyncUtils = {
         if (a.length) {
             console.log(`---- ${tag} ----`);
 
-            a = a.map(h => h.remotePath);
+            a = a.map((h) => h.remotePath);
 
             a.sort();
 
-            a.forEach(s => console.log(s));
+            a.forEach((s) => console.log(s));
         }
     },
 
@@ -85,9 +85,7 @@ const SyncUtils = {
         const h = await SyncUtils.reportDiffAll();
 
         if (h.anyDiffFound) {
-            const s = 'Differences found between local and remote. ' +
-                `Use 'pcsync' to fix${
-                    SyncUtils.forceMsg(canForce)}`;
+            const s = `Differences found between local and remote. Use 'pcsync' to fix${SyncUtils.forceMsg(canForce)}`;
 
             CUtils.throwFtError(s);
         }
@@ -96,9 +94,9 @@ const SyncUtils = {
     errorIfMultWatch: async function () {
         const a = await SyncUtils.getWatchProcs();
 
-        if (a.length > 1) { // 1 (this process) is expected
-            const s = `Other running watch instances detected. Stop them${
-                SyncUtils.forceMsg(true)}`;
+        if (a.length > 1) {
+            // 1 (this process) is expected
+            const s = `Other running watch instances detected. Stop them${SyncUtils.forceMsg(true)}`;
 
             CUtils.throwFtError(s);
         }
@@ -132,7 +130,7 @@ const SyncUtils = {
     },
 
     forceMsg: function (canForce) {
-        return canForce ? ' or use \'--force\' to skip this check' : '';
+        return canForce ? " or use '--force' to skip this check" : '';
     }
 };
 

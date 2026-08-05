@@ -55,13 +55,13 @@ const PathUtils = {
     rmEmptyFolders: function (data) {
         const paths = PathUtils.allFilePaths(data.files);
 
-        data.folders = data.folders.filter(h => paths[h.remotePath]);
+        data.folders = data.folders.filter((h) => paths[h.remotePath]);
     },
 
     allFilePaths: function (files) {
         const res = {};
 
-        files.forEach(h => PathUtils.addPathParts(h.remotePath, res));
+        files.forEach((h) => PathUtils.addPathParts(h.remotePath, res));
 
         return res;
     },
@@ -85,24 +85,25 @@ const PathUtils = {
 
         const stat = await PathUtils.fsWrap('stat', fullPath);
 
-        return stat ? {
-            itemName: name,
-            fullPath: fullPath,
-            remotePath: PathUtils.arToSlashForwPath(pathAr),
-            isFile: stat.isFile(),
-            isDirectory: stat.isDirectory(),
-            modTime: stat.mtime.getTime(),
-            hash: null,
-            pathArray: pathAr,
-            parentFull: PathUtils.pathArToFullLocal(rootDir, parentAr),
-            parentRemote: PathUtils.arToSlashForwPath(parentAr)
-        } : {};
+        return stat
+            ? {
+                  itemName: name,
+                  fullPath: fullPath,
+                  remotePath: PathUtils.arToSlashForwPath(pathAr),
+                  isFile: stat.isFile(),
+                  isDirectory: stat.isDirectory(),
+                  modTime: stat.mtime.getTime(),
+                  hash: null,
+                  pathArray: pathAr,
+                  parentFull: PathUtils.pathArToFullLocal(rootDir, parentAr),
+                  parentRemote: PathUtils.arToSlashForwPath(parentAr)
+              }
+            : {};
     },
 
     fsWrap: async function (method, fullPath) {
         try {
             return await fs[method](fullPath);
-
         } catch (e) {
             return null;
         }

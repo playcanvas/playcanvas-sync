@@ -32,16 +32,21 @@
     "gitignore-parser": "0.0.2"
   },
   "devDependencies": {
-    "@playcanvas/eslint-config": "3.0.0-beta.6",
+    "@playcanvas/eslint-config": "3.0.0-beta.8",
     "chai": "6.2.2",
     "eslint": "9.39.4",
+    "eslint-config-prettier": "10.1.8",
     "globals": "17.6.0",
     "mocha": "11.7.6",
     "nock": "14.0.15",
+    "prettier": "3.9.6",
     "sinon": "22.0.0"
   },
   "scripts": {
+    "fmt": "prettier --check src bin test",
+    "fmt:fix": "prettier --write src bin test",
     "lint": "eslint src bin test",
+    "lint:fix": "eslint src bin test --fix",
     "test": "mocha test/**/*.test.js",
     "test:unit": "mocha test/unit/**/*.test.js",
     "test:integration": "mocha test/integration/**/*.test.js"

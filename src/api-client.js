@@ -185,7 +185,7 @@ class ApiClient {
 
         const limiter = this.getDownloadLimiter();
 
-        return limiter.schedule({ }, async () => {
+        return limiter.schedule({}, async () => {
             const stream = await this.makeDownloadStream(h, conf.PLAYCANVAS_BRANCH_ID);
             return CUtils.streamToFile(stream, file);
         });
@@ -212,14 +212,12 @@ class ApiClient {
         const url = '/ratelimits';
         const resp = await this.methodGet(url, ASSETS_PREF, false);
 
-        this.limits = (JSON.parse(resp)).limits;
+        this.limits = JSON.parse(resp).limits;
         return this.limits;
     }
 
     async fetchAssets(projectId, branchId, skip, limit) {
-        const url = `/projects/${projectId}/assets?` +
-      `branchId=${branchId}&` +
-      `skip=${skip}&limit=${limit}`;
+        const url = `/projects/${projectId}/assets?branchId=${branchId}&skip=${skip}&limit=${limit}`;
 
         const resp = await this.methodGet(url, ASSETS_PREF, false);
 

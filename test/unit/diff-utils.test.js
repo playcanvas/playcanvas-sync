@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import DiffUtils from '../../src/diff/diff-utils.js';
 
 describe('DiffUtils', function () {
-
     describe('#computeDiffs', function () {
         it('should return empty diffs for identical strings', function () {
             const diffs = DiffUtils.computeDiffs('hello\nworld\n', 'hello\nworld\n');
@@ -13,22 +12,22 @@ describe('DiffUtils', function () {
         it('should detect added lines', function () {
             const diffs = DiffUtils.computeDiffs('line1\n', 'line1\nline2\n');
             // Should have diffs indicating addition
-            const hasAddition = diffs.some(d => d[0] === 1);
+            const hasAddition = diffs.some((d) => d[0] === 1);
             expect(hasAddition).to.be.true;
         });
 
         it('should detect removed lines', function () {
             const diffs = DiffUtils.computeDiffs('line1\nline2\n', 'line1\n');
             // Should have diffs indicating removal
-            const hasRemoval = diffs.some(d => d[0] === -1);
+            const hasRemoval = diffs.some((d) => d[0] === -1);
             expect(hasRemoval).to.be.true;
         });
 
         it('should detect changed lines', function () {
             const diffs = DiffUtils.computeDiffs('hello\n', 'world\n');
             // Should have both removal and addition
-            const hasRemoval = diffs.some(d => d[0] === -1);
-            const hasAddition = diffs.some(d => d[0] === 1);
+            const hasRemoval = diffs.some((d) => d[0] === -1);
+            const hasAddition = diffs.some((d) => d[0] === 1);
             expect(hasRemoval).to.be.true;
             expect(hasAddition).to.be.true;
         });
@@ -152,9 +151,7 @@ describe('DiffUtils', function () {
         });
 
         it('should handle multiline diff entries', function () {
-            const diffs = [
-                [0, 'line1\nline2\n']
-            ];
+            const diffs = [[0, 'line1\nline2\n']];
             const result = DiffUtils.diffsToLineObjs(diffs);
 
             expect(result).to.have.lengthOf(2);
@@ -223,29 +220,19 @@ describe('DiffUtils', function () {
 
     describe('#getChunkEnd', function () {
         it('should find end of changed chunk', function () {
-            const lines = [
-                { type: 'file_1_only' },
-                { type: 'file_2_only' },
-                { type: 'both_files' }
-            ];
+            const lines = [{ type: 'file_1_only' }, { type: 'file_2_only' }, { type: 'both_files' }];
             const result = DiffUtils.getChunkEnd(lines, 0);
             expect(result).to.equal(1);
         });
 
         it('should return last index if no both_files found', function () {
-            const lines = [
-                { type: 'file_1_only' },
-                { type: 'file_2_only' }
-            ];
+            const lines = [{ type: 'file_1_only' }, { type: 'file_2_only' }];
             const result = DiffUtils.getChunkEnd(lines, 0);
             expect(result).to.equal(1);
         });
 
         it('should handle starting at both_files', function () {
-            const lines = [
-                { type: 'both_files' },
-                { type: 'file_1_only' }
-            ];
+            const lines = [{ type: 'both_files' }, { type: 'file_1_only' }];
             const result = DiffUtils.getChunkEnd(lines, 0);
             expect(result).to.equal(-1);
         });
@@ -304,9 +291,7 @@ describe('DiffUtils', function () {
         });
 
         it('should return zero start and len when no matching lines', function () {
-            const chunk = [
-                { type: 'both_files', num_in_1: 1, num_in_2: 1 }
-            ];
+            const chunk = [{ type: 'both_files', num_in_1: 1, num_in_2: 1 }];
             const result = DiffUtils.getHeaderData(chunk, 'file_1_only');
             // When limitForFile finds only both_files, it should use that
             expect(result.start).to.equal(1);
@@ -322,31 +307,20 @@ describe('DiffUtils', function () {
     describe('#limitForFile', function () {
         it('should find first line matching type or both_files', function () {
             // The function returns the first line that matches the type OR is both_files
-            const lines = [
-                { type: 'file_1_only' },
-                { type: 'file_2_only' },
-                { type: 'both_files' }
-            ];
+            const lines = [{ type: 'file_1_only' }, { type: 'file_2_only' }, { type: 'both_files' }];
             const result = DiffUtils.limitForFile(lines, 'file_1_only');
             expect(result).to.equal(lines[0]);
         });
 
         it('should return both_files when it comes before matching type', function () {
-            const lines = [
-                { type: 'both_files' },
-                { type: 'file_1_only' },
-                { type: 'file_2_only' }
-            ];
+            const lines = [{ type: 'both_files' }, { type: 'file_1_only' }, { type: 'file_2_only' }];
             // both_files comes first, so it's returned even when looking for file_1_only
             const result = DiffUtils.limitForFile(lines, 'file_1_only');
             expect(result).to.equal(lines[0]);
         });
 
         it('should find both_files if specific type not present', function () {
-            const lines = [
-                { type: 'file_2_only' },
-                { type: 'both_files' }
-            ];
+            const lines = [{ type: 'file_2_only' }, { type: 'both_files' }];
             const result = DiffUtils.limitForFile(lines, 'file_1_only');
             expect(result).to.equal(lines[1]);
         });
@@ -375,5 +349,4 @@ describe('DiffUtils', function () {
             });
         });
     });
-
 });
