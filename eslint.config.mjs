@@ -1,8 +1,8 @@
-import legacyConfig from '@playcanvas/eslint-config/legacy';
+import javascriptConfig from '@playcanvas/eslint-config/javascript';
 import globals from 'globals';
 
 export default [
-    ...legacyConfig,
+    ...javascriptConfig,
     {
         files: ['**/*.js'],
         languageOptions: {
