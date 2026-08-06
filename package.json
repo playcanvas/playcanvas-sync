@@ -34,13 +34,13 @@
   "devDependencies": {
     "@playcanvas/eslint-config": "3.0.0-beta.8",
     "chai": "6.2.2",
-    "eslint": "9.39.4",
+    "eslint": "9.39.5",
     "eslint-config-prettier": "10.1.8",
-    "globals": "17.6.0",
-    "mocha": "11.7.6",
-    "nock": "14.0.15",
+    "globals": "17.9.0",
+    "mocha": "11.8.0",
+    "nock": "14.0.17",
     "prettier": "3.9.6",
-    "sinon": "22.0.0"
+    "sinon": "22.1.0"
   },
   "scripts": {
     "fmt": "prettier --check src bin test",
