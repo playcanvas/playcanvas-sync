@@ -21,15 +21,10 @@ export default [
         files: ['test/**/*.js'],
         languageOptions: {
             globals: {
-                ...globals.mocha,
                 ...globals.node
             }
         },
         rules: {
-            // Allow chai expect assertions
-            'no-unused-expressions': 'off',
-            // Allow function expressions for mocha (better stack traces)
-            'prefer-arrow-callback': 'off',
             // Relax import ordering for tests
             'import/order': 'off'
         }
