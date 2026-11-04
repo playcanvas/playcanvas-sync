@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 import { stub, restore } from 'sinon';
 import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import readline from 'readline';
 import { runInit } from '../../src/commands/init.js';
 
@@ -8,6 +10,15 @@ describe('init command', function () {
     let fsExistsStub;
     let fsWriteStub;
     let consoleLogStub;
+    let homeConfig;
+
+    const written = (file) => fsWriteStub.getCalls().find((c) => c.args[0].endsWith(file));
+
+    // what the CLI reads: ~/.pcconfig plus pcconfig.json
+    const both = () => ({
+        ...JSON.parse(written('.pcconfig').args[1]),
+        ...JSON.parse(written('pcconfig.json').args[1])
+    });
 
     // Helper to create a mock readline interface
     function createMockReadline(answers) {
@@ -24,6 +35,9 @@ describe('init command', function () {
         fsExistsStub = stub(fs, 'existsSync');
         fsWriteStub = stub(fs, 'writeFileSync');
         stub(process, 'cwd').returns('/test/dir');
+        stub(os, 'homedir').returns('/test/home');
+        homeConfig = '{}';
+        stub(fs, 'readFileSync').callsFake(() => homeConfig);
         consoleLogStub = stub(console, 'log');
     });
 
@@ -40,17 +54,80 @@ describe('init command', function () {
 
             await runInit();
 
-            expect(fsWriteStub.calledOnce).to.be.true;
-            const writtenContent = fsWriteStub.firstCall.args[1];
-            const config = JSON.parse(writtenContent);
+            expect(fsWriteStub.calledTwice).to.be.true;
 
-            expect(config).to.have.property('PLAYCANVAS_API_KEY', 'test-api-key');
-            expect(config).to.have.property('PLAYCANVAS_PROJECT_ID', 12345);
-            expect(config).to.have.property('PLAYCANVAS_BRANCH_ID', 'branch-uuid');
-            expect(config).to.have.property('PLAYCANVAS_TARGET_DIR', '/test/dir');
-            expect(config).to.have.property('PLAYCANVAS_BAD_FILE_REG', '^\\.|~$');
-            expect(config).to.have.property('PLAYCANVAS_BAD_FOLDER_REG', '\\.');
-            expect(config).to.have.property('PLAYCANVAS_CONVERT_TO_POW2', 0);
+            expect(both()).to.deep.equal({
+                PLAYCANVAS_API_KEY: 'test-api-key',
+                PLAYCANVAS_PROJECT_ID: 12345,
+                PLAYCANVAS_BRANCH_ID: 'branch-uuid',
+                PLAYCANVAS_TARGET_DIR: '/test/dir',
+                PLAYCANVAS_CONVERT_TO_POW2: 0
+            });
+        });
+
+        it('should keep the API key and target directory out of pcconfig.json', async function () {
+            fsExistsStub.returns(false);
+
+            const answers = ['test-api-key', '12345', 'branch-uuid', ''];
+            stub(readline, 'createInterface').returns(createMockReadline(answers));
+
+            await runInit();
+
+            const home = written('.pcconfig');
+            expect(home.args[0]).to.equal(path.join('/test/home', '.pcconfig'));
+            expect(home.args[2]).to.deep.equal({ mode: 0o600 });
+            expect(JSON.parse(home.args[1])).to.deep.equal({
+                PLAYCANVAS_API_KEY: 'test-api-key',
+                PLAYCANVAS_TARGET_DIR: '/test/dir'
+            });
+            expect(JSON.parse(written('pcconfig.json').args[1])).to.deep.equal({
+                PLAYCANVAS_PROJECT_ID: 12345,
+                PLAYCANVAS_BRANCH_ID: 'branch-uuid',
+                PLAYCANVAS_CONVERT_TO_POW2: 0
+            });
+        });
+
+        it('should merge into an existing ~/.pcconfig', async function () {
+            fsExistsStub.callsFake((p) => p.endsWith('.pcconfig'));
+            homeConfig = JSON.stringify({ PLAYCANVAS_BAD_FILE_REG: 'x', PLAYCANVAS_API_KEY: 'same-key' });
+
+            const answers = ['same-key', '1', 'branch', ''];
+            stub(readline, 'createInterface').returns(createMockReadline(answers));
+
+            await runInit();
+
+            expect(JSON.parse(written('.pcconfig').args[1])).to.deep.equal({
+                PLAYCANVAS_BAD_FILE_REG: 'x',
+                PLAYCANVAS_API_KEY: 'same-key',
+                PLAYCANVAS_TARGET_DIR: '/test/dir'
+            });
+        });
+
+        it('should keep existing ~/.pcconfig values unless the user confirms', async function () {
+            fsExistsStub.callsFake((p) => p.endsWith('.pcconfig'));
+            homeConfig = JSON.stringify({ PLAYCANVAS_API_KEY: 'old-key', PLAYCANVAS_TARGET_DIR: '/old' });
+
+            const answers = ['new-key', '1', 'branch', '/old', 'n'];
+            stub(readline, 'createInterface').returns(createMockReadline(answers));
+
+            await runInit();
+
+            expect(JSON.parse(written('.pcconfig').args[1])).to.deep.equal({
+                PLAYCANVAS_API_KEY: 'old-key',
+                PLAYCANVAS_TARGET_DIR: '/old'
+            });
+        });
+
+        it('should replace existing ~/.pcconfig values when the user confirms', async function () {
+            fsExistsStub.callsFake((p) => p.endsWith('.pcconfig'));
+            homeConfig = JSON.stringify({ PLAYCANVAS_API_KEY: 'old-key' });
+
+            const answers = ['new-key', '1', 'branch', '', 'y'];
+            stub(readline, 'createInterface').returns(createMockReadline(answers));
+
+            await runInit();
+
+            expect(JSON.parse(written('.pcconfig').args[1])).to.have.property('PLAYCANVAS_API_KEY', 'new-key');
         });
 
         it('should parse numeric project ID as integer', async function () {
@@ -61,7 +138,7 @@ describe('init command', function () {
 
             await runInit();
 
-            const config = JSON.parse(fsWriteStub.firstCall.args[1]);
+            const config = both();
             expect(config.PLAYCANVAS_PROJECT_ID).to.equal(999);
             expect(typeof config.PLAYCANVAS_PROJECT_ID).to.equal('number');
         });
@@ -74,7 +151,7 @@ describe('init command', function () {
 
             await runInit();
 
-            const config = JSON.parse(fsWriteStub.firstCall.args[1]);
+            const config = both();
             expect(config.PLAYCANVAS_PROJECT_ID).to.equal('not-a-number');
         });
 
@@ -86,8 +163,8 @@ describe('init command', function () {
 
             await runInit();
 
-            const writtenContent = fsWriteStub.firstCall.args[1];
-            expect(writtenContent.endsWith('\n')).to.be.true;
+            expect(written('pcconfig.json').args[1].endsWith('\n')).to.be.true;
+            expect(written('.pcconfig').args[1].endsWith('\n')).to.be.true;
         });
 
         it('should write to pcconfig.json in current directory', async function () {
@@ -98,8 +175,7 @@ describe('init command', function () {
 
             await runInit();
 
-            const writtenPath = fsWriteStub.firstCall.args[0];
-            expect(writtenPath).to.include('pcconfig.json');
+            expect(fsWriteStub.calledWith(path.join('/test/dir', 'pcconfig.json'))).to.be.true;
         });
     });
 
@@ -207,7 +283,7 @@ describe('init command', function () {
 
             await runInit();
 
-            const config = JSON.parse(fsWriteStub.firstCall.args[1]);
+            const config = both();
             expect(config.PLAYCANVAS_TARGET_DIR).to.equal('/test/dir');
         });
 
@@ -219,7 +295,7 @@ describe('init command', function () {
 
             await runInit();
 
-            const config = JSON.parse(fsWriteStub.firstCall.args[1]);
+            const config = both();
             expect(config.PLAYCANVAS_TARGET_DIR).to.equal('/custom/path');
         });
 
@@ -231,7 +307,7 @@ describe('init command', function () {
 
             await runInit();
 
-            const config = JSON.parse(fsWriteStub.firstCall.args[1]);
+            const config = both();
             expect(config.PLAYCANVAS_API_KEY).to.equal('key');
             expect(config.PLAYCANVAS_PROJECT_ID).to.equal(123);
             expect(config.PLAYCANVAS_BRANCH_ID).to.equal('branch');
@@ -246,7 +322,7 @@ describe('init command', function () {
 
             await runInit();
 
-            const config = JSON.parse(fsWriteStub.firstCall.args[1]);
+            const config = both();
             expect(config.PLAYCANVAS_API_KEY).to.equal('');
         });
 
@@ -258,7 +334,7 @@ describe('init command', function () {
 
             await runInit();
 
-            const config = JSON.parse(fsWriteStub.firstCall.args[1]);
+            const config = both();
             expect(config.PLAYCANVAS_BRANCH_ID).to.equal('');
         });
     });
