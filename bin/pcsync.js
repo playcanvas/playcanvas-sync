@@ -219,7 +219,7 @@ program
 
 program
     .command('init')
-    .description('create a pcconfig.json in the current directory')
+    .description('create a pcconfig.json in the current directory and add your API key to ~/.pcconfig')
     .action(async () => {
         const { runInit } = await import('../src/commands/init.js');
         await runInit();

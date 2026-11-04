@@ -8,7 +8,7 @@ In addition, if your project has a file called [`pcignore.txt`](#the-pcignoretxt
 
 `pcsync` is used to push or pull one or all files to or from PlayCanvas (overwriting existing files with the same name/path), to compare one or all local files to their remote (PlayCanvas) versions, and to watch for local changes and sync them in real time.
 
-Only the `pcsync pull` command (when downloading) and the `pcsync init` command (which creates or overwrites `pcconfig.json`) can change local files. All other `pcsync` commands change only remote files. Thus, apart from `pcconfig.json`, your local directory holds the authoritative version of your textual files.
+Only the `pcsync pull` command (when downloading) and the `pcsync init` command (which creates or overwrites `pcconfig.json` and updates `~/.pcconfig`) can change local files. All other `pcsync` commands change only remote files. Thus, apart from `pcconfig.json`, your local directory holds the authoritative version of your textual files.
 
 The only scenario we do not support is when developer A uses `pcsync watch`, while developer B is editing files of the *same PlayCanvas branch* in the browser code editor. B's work will be overwritten by A, if they edit the same file. Either B should start using local files, or A should stop `pcsync watch` and switch to the browser code editor.
 
@@ -24,7 +24,7 @@ The only scenario we do not support is when developer A uses `pcsync watch`, whi
   rm <path>                   remove a remote file or folder
   watch                       watch local directory and sync changes to remote in real-time
   ignore                      list assets matched by pcignore.txt
-  init                        create a pcconfig.json in the current directory
+  init                        create a pcconfig.json in the current directory and add your API key to ~/.pcconfig
 ```
 
 ## Global Options
