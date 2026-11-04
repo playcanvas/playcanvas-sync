@@ -118,7 +118,7 @@ List all assets matched by your current `pcignore.txt`. Useful for checking your
 
 ### `pcsync init`
 
-Interactive setup wizard that creates a `pcconfig.json` in the current directory. Prompts for API key, project ID, branch ID and target directory.
+Interactive setup wizard. Prompts for API key, project ID, branch ID and target directory. The project and branch IDs go into a `pcconfig.json` in the current directory; the API key and target directory are added to `.pcconfig` in your home directory (asking before replacing values already there).
 
 # Adding New Files as Script Components
 
@@ -214,6 +214,8 @@ pcsync pull
 
 Config variables can be set in a file called `.pcconfig` in your home directory, in `pcconfig.json` in your target directory (and your remote PlayCanvas branch), provided as environment variables, or passed as CLI options (which have the highest precedence).
 
+Because `pcconfig.json` is shared with everyone who works on the branch, it can only set project-level variables: `PLAYCANVAS_PROJECT_ID`, `PLAYCANVAS_BRANCH_ID`, `PLAYCANVAS_TARGET_SUBDIR` and `PLAYCANVAS_CONVERT_TO_POW2`. Any other variable in `pcconfig.json` is ignored with a warning; set it in `.pcconfig`, an environment variable or a CLI option instead. The same applies to a `pcconfig.json` or `.pcconfig` found in the current directory instead of the target or home directory.
+
 The precedence order (highest to lowest) is:
 
 1. CLI options (`--api-key`, `--project-id`, etc.)
@@ -265,13 +267,13 @@ A sample `.pcconfig` should look like this:
 }
 ```
 
-All listed key-value pairs are necessary. You can split them between `.pcconfig` (in your home directory), `pcconfig.json` (in your project target directory), and environment variables.
+All listed key-value pairs are necessary, except `PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG`, which default to the values shown. You can move the project and branch IDs to `pcconfig.json` (in your project target directory), and set any of them as environment variables.
 
-Alternatively, use `pcsync init` to generate a `pcconfig.json` interactively.
+Alternatively, use `pcsync init` to set them up interactively.
 
 `PLAYCANVAS_TARGET_DIR` can only be set in `.pcconfig`, an environment variable, or via `--target-dir`. You can also set `PLAYCANVAS_USE_CWD_AS_TARGET` to `1` in `.pcconfig` to use your current working directory as your target.
 
-For some workflows, it may be necessary to keep the `pcconfig.json` file at the top level in the target directory, but treat one of its subdirectories as the root of the local file hierarchy. In such cases `PLAYCANVAS_TARGET_SUBDIR` needs to be provided, e.g.
+For some workflows, it may be necessary to keep the `pcconfig.json` file at the top level in the target directory, but treat one of its subdirectories as the root of the local file hierarchy. In such cases `PLAYCANVAS_TARGET_SUBDIR` needs to be provided. It must be a directory inside the target directory, e.g.
 
 ```
 "PLAYCANVAS_TARGET_SUBDIR": "src"
@@ -283,7 +285,7 @@ Backslash characters should be written as `\\` (escaped).
 
 Many text editors and operating systems create local auxiliary files and directories that do not need to be automatically pushed to PlayCanvas.
 
-`PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG` contain RegExp strings (note the escapes) that tell `pcsync watch` which files and directories to ignore. In our sample `.pcconfig`, a bad file has a name that starts with a dot or ends with `~`. A bad folder is one that has a dot anywhere in its path relative to `PLAYCANVAS_TARGET_DIR`. The expressions provided are sufficient in most cases, and you can simply copy them into your `.pcconfig`.
+`PLAYCANVAS_BAD_FILE_REG` and `PLAYCANVAS_BAD_FOLDER_REG` contain RegExp strings (note the escapes) that tell `pcsync watch` which files and directories to ignore. In our sample `.pcconfig`, a bad file has a name that starts with a dot or ends with `~`. A bad folder is one that has a dot anywhere in its path relative to `PLAYCANVAS_TARGET_DIR`. The expressions provided are sufficient in most cases and are used when these variables are not set. They can be set in `.pcconfig` or environment variables, not in `pcconfig.json`.
 
 To determine which auxiliary files and folders your OS and text editor create, run `pcsync watch` with the `--verbose` and `--dry-run` flags, and create/edit some files.
 
